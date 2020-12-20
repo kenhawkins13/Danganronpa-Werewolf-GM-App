@@ -1,0 +1,11 @@
+TODO:
+
+make Kyoko Kirigiri's ability greyed out / striked-out until 4th day
+make font, buttons bigger
+label and button texts
+change voice to sound monokuma
+figure out who is left and right of the victim, to gift him an item
+use one boolean state and set everything else to local variables?
+Monomi song during her part at night? o.O
+make monomi playerBoxes disabled if she is not playing?
+don't ask if Vice was played if no kills left
