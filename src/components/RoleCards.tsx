@@ -1,63 +1,47 @@
 import React from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 
-// const images = {
-//   alterEgo: { uri: require('../assets/Role Cards/Alter Ego.png') },
-//   blackened: { uri: require('../assets/Role Cards/Blackened.png') },
-//   despairDiseasePatient: { uri: require('../assets/Role Cards/Despair Disease Patient.png') },
-//   monomi: { uri: require('../assets/Role Cards/Monomi.png') },
-//   spotless: { uri: require('../assets/Role Cards/Spotless.png') },
-//   traitor: { uri: require('../assets/Role Cards/Traitor.png') },
-//   ultimateDespair: { uri: require('../assets/Role Cards/Ultimate Despair.png') },
-// }
-
-export default function RoleCards({roles, count}: Props) {
-  // let imageSource = {}
-  // let source:NodeRequire[]
-  // roles.forEach(role => {
-  //   switch (role) {
-  //     case 'Alter Ego':
-  //       source = images.alterEgo.uri
-  //       break
-  //     case 'Blackened':
-  //       source = images.blackened.uri
-  //       break
-  //     case 'Despair Disease Patient':
-  //       source = images.despairDiseasePatient.uri
-  //       break
-  //     case 'Monomi':
-  //       source = images.monomi.uri
-  //       break
-  //     case 'Spotless':
-  //       source = images.spotless.uri
-  //       break
-  //     case 'Traitor':
-  //       source = images.traitor.uri
-  //       break
-  //     case 'Ultimate Despair':
-  //       source = images.ultimateDespair.uri
-  //       break
-  //   }
-  // });
-  const thumbnails = roles.map((role) =>
-    <View key={role}>
-      <Image
-        style={{width: 50, height: 70}}
-        source={require('../assets/RoleCards/Alter Ego.png')}
-      />
-      <Text>{role}</Text>
+export default function RoleCards({role}: Props) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-evenly' }}>
+      {getRoleCardImage(role)}
     </View>
   )
-  if (count > 0) {
-    return (
-      <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'grey' }}>
-        {thumbnails}
-        <Text style={{ fontSize: 20 }}>x {count}</Text>
-      </View>
-    )
-  } else {
-    return (<></>)
-  }
 }
 
-type Props = {roles:string[], count:number}
+function getRoleCardImage(role:string) {
+  let image:JSX.Element = <></>
+  switch (role) {
+    case 'Alter Ego':
+      image = <Image key='Alter Ego' style={styles.image} source={require('../assets/RoleCards/Alter-Ego.png')}/>
+      break
+    case 'Blackened':
+      image = <Image key='Blackened' style={styles.image} source={require('../assets/RoleCards/Blackened.png')}/>
+      break
+    case 'Despair Disease Patient':
+      image = <Image key='Despair Disease Patient' style={styles.image} source={require('../assets/RoleCards/Despair-Disease-Patient.png')}/>
+      break
+    case 'Monomi':
+      image = <Image key='Monomi' style={styles.image} source={require('../assets/RoleCards/Monomi.png')}/>
+      break
+    case 'Spotless':
+      image = <Image key='Spotless' style={styles.image} source={require('../assets/RoleCards/Spotless.png')}/>
+      break
+    case 'Traitor':
+      image = <Image key='Traitor' style={styles.image} source={require('../assets/RoleCards/Traitor.png')}/>
+      break
+    case 'Ultimate Despair':
+      image = <Image key='Ultimate Despair' style={styles.image} source={require('../assets/RoleCards/Ultimate-Despair.png')}/>
+      break
+  }
+  return image
+}
+
+type Props = {role:string}
+
+
+const styles = StyleSheet.create({
+  image: {
+    flex: 1, resizeMode: 'contain', alignSelf: 'center', margin: '2.5%'
+  }
+})

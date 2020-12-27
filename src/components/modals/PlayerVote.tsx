@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react"
 import { Modal, View, Text, TouchableHighlight } from "react-native"
 import { modalStyles } from "../../styles/styles"
 import { Picker } from '@react-native-picker/picker'
-import { GameContext } from "../../../App"
 import { GameContextType } from "../../types/types"
+import { GameContext } from "../../../AppContext"
 
 export default function PlayerVoteModal({visible, setVisible, onOk}:Props) {
   const gameContext = useContext(GameContext)
@@ -19,7 +19,7 @@ export default function PlayerVoteModal({visible, setVisible, onOk}:Props) {
             </Picker>
             <View style={{flexDirection: 'row'}}>
               <TouchableHighlight
-                style={{ ...modalStyles.button, backgroundColor: "#2196F3" }}
+                style={{...modalStyles.button}}
                 onPress={() => {
                   setVisible(false)
                   onOk(playerVote)

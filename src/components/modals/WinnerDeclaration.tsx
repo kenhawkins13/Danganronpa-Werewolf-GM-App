@@ -1,67 +1,121 @@
-import { useNavigation } from "@react-navigation/native"
-import React, { useContext, useState } from "react"
-import { Modal, View, Text, TouchableHighlight, DevSettings } from "react-native"
-import { GameContext } from "../../../App"
-import { modalStyles } from "../../styles/styles"
-import PlayersModal from "./Players"
+import { useIsFocused } from "@react-navigation/native"
+import React, { useContext, useEffect, useState } from "react"
+import { Modal, View, Text, TouchableHighlight, DevSettings, ImageBackground } from "react-native"
+import { GameContext } from "../../../AppContext"
+import { blackTransparent, blueTransparent, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../../styles/colors"
+import { appStyle } from "../../styles/styles"
+import PlayersPage from "../PlayersPage"
+import RevealRoleModal from "./RevealRole"
 
-export default function WinnerDeclarationModal({visible, setVisible, winnerSide}:Props) {
+export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
   const gameContext = useContext(GameContext)
-  const [playerVisible, setPlayerVisible] = useState(false)
-  if (visible) {    
-    return (
-      <View>
+  const [playersPageVisible, setPlayersPageVisible] = useState(false)
+  const [playerIndex, setPlayerIndex] = useState(0)
+  const [revealRoleModalVisible, setRevealRoleModalVisible] = useState(false)
+
+  if (visible) {
+    if (!playersPageVisible) {
+      return (
         <Modal animationType="slide" transparent={true} visible={visible}>
-          <View style={modalStyles.centeredView}>
-            <View style={modalStyles.modalView}>
-              <Text style={modalStyles.modalText}>{winnerSide} wins!</Text>
-              <TouchableHighlight
-                style={{ ...modalStyles.button, backgroundColor: "#2196F3" }}
-                onPress={() => { 
-                  setVisible(false)
-                  setPlayerVisible(true)
-                   }}>
-                <Text style={modalStyles.textStyle}>Reveal Roles</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
+          {BackgroundImage()}
         </Modal>
-      </View>
-    )
-  } else if (playerVisible) {
-    gameContext.playersInfo.forEach(playerInfo => {
-      playerInfo.alive = true // to prevent playerBox background from being pink
-      switch (playerInfo.role) {
-        case 'Alter Ego':
-          playerInfo.colorScheme = 'green'
-          break
-        case 'Blackened':
-          playerInfo.colorScheme = 'black'
-          break
-        case 'Spotless':
-          playerInfo.colorScheme = 'white'
-          break
-        case 'Despair Disease Patient':
-        case 'Monomi':
-          playerInfo.colorScheme = 'lightblue'
-          break
-        case 'Traitor':
-          playerInfo.colorScheme = 'grey'
-          break
-        case 'Ultimate Despair':
-          playerInfo.colorScheme = '#cc0066'
-          break
-      }
-    })
-    return (
-      <PlayersModal visible={playerVisible} setVisible={setPlayerVisible} modal={<></>} onPlayerTouch={() => {}} 
-        continueVisible={true} disableContinue={false} onContinue={() => {
-          DevSettings.reload()
-      }}/>
-    )
+      )
+    } 
+    else {
+      gameContext.playersInfo.forEach(playerInfo => {
+        playerInfo.alive = true
+        switch (playerInfo.role) {
+          case 'Spotless':
+            playerInfo.backgroundColor = whiteTransparent
+            playerInfo.borderColor = 'white'
+            break
+          case 'Alter Ego':
+            playerInfo.backgroundColor = greenTransparent
+            playerInfo.borderColor = 'white'
+            break
+          case 'Blackened':
+            playerInfo.backgroundColor = blackTransparent
+            playerInfo.borderColor = pink
+            break
+          case 'Traitor':
+            playerInfo.backgroundColor = greyTransparent
+            playerInfo.borderColor = 'black'
+            break
+          case 'Despair Disease Patient':
+          case 'Monomi':
+            playerInfo.backgroundColor = blueTransparent 
+            playerInfo.borderColor = 'white'
+            break
+          case 'Ultimate Despair':
+            playerInfo.backgroundColor = pinkTransparent
+            playerInfo.borderColor = 'black'
+            break
+        }      
+      })
+      return (
+        <View style={{flex: 1}}>
+          <Modal animationType="slide" transparent={true} visible={visible}>
+            <PlayersPage middleSection={RestartButton()} onPlayerClick={(playerIndex) => {
+              setPlayerIndex(playerIndex)
+              setRevealRoleModalVisible(true)
+            }}/>
+          </Modal>
+          <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex}
+            abilityOrItem='Reveal Roles'/>
+        </View>
+      ) 
+    }
   } else {
     return (<></>)
   }
+
+  function BackgroundImage() {
+    setTimeout(() => { setPlayersPageVisible(true) }, 10000)
+    if (winnerSide === 'Hope') {
+      return (
+        <View style={{flex: 1}}>
+          <ImageBackground style={{flex: 1}} source={require('../../assets/background/Hope-Victory.png')}>
+            <TouchableHighlight style={{flex: 1}} onPress={() => setPlayersPageVisible(true)}>
+              <View style={{flex: 1}}/>
+            </TouchableHighlight>
+          </ImageBackground>
+        </View>
+      )
+    } else if (winnerSide === 'Despair') {
+      return (
+        <View style={{flex: 1}}>
+          <ImageBackground style={{flex: 1}} source={require('../../assets/background/Despair-Victory.png')}>
+            <TouchableHighlight style={{flex: 1}} onPress={() => setPlayersPageVisible(true)}>
+              <View style={{flex: 1}}/>
+            </TouchableHighlight>
+          </ImageBackground>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <ImageBackground style={{flex: 1}} source={require('../../assets/background/Ultimate-Despair-Victory.png')}>
+            <TouchableHighlight style={{flex: 1}} onPress={() => setPlayersPageVisible(true)}>
+              <View style={{flex: 1}}/>
+            </TouchableHighlight>
+          </ImageBackground>
+        </View>
+      )
+    }
+  }
+
+  function RestartButton() {
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{...appStyle.frame, height: '25%', minWidth: '25%'}}>
+          <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
+          disabled={false} onPress={() => { DevSettings.reload() }}>
+            <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>Restart</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    )
+  }
 }
 
-type Props = {visible:boolean, setVisible:React.Dispatch<any>, winnerSide:string}
+type Props = {visible:boolean, winnerSide:string}

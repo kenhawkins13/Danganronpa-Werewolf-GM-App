@@ -5,21 +5,23 @@ export type PlayerInfo = {
   role:string,
   side:string,
   alive:boolean,
-  colorScheme:string,
+  backgroundColor:string,
+  borderColor:string,
   useAbility:string,
   useItem:string
 }
 export type GameContextType = {
   mode:string,
   playerCount:number,
-  killsRequired:number,
+  killsLeft:number,
   roleCounts:RoleCount[],
   playersInfo:PlayerInfo[],
   dayNumber:number,
+  stage:string,
   blackenedAttack:number,
   alterEgoAlive:boolean,
   monomiExploded:boolean,
   monomiProtect:number,
   vicePlayed:boolean,
-  currentPlayerIndex:number
+  currentPlayerIndex:number // TODO: remove
 }

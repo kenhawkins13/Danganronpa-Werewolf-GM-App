@@ -88,18 +88,16 @@ const randomRolesNormal = {
 
 /*
 EXTREME MODE
-  # of Players |  4   5   6   7   8   9   10  11  12  13  14  15  16 
-  ------------------------------------------------------------------
-  Alter Ego    |  1   1   1   1   1   1   1   1   1   1   1   1   1 
-  Spotless     | 1~2 2~3  3   3  3~4 4~5  5  5~6 6~7 6~7 7~8 8~9 8~9
-  Monomi       |  -   -   -  0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1
-  Despair Dis-
-  ease Patient | 0~1 0~1  1   -   -   -   -   -   -   -   -   -   -
-  Blackened    |  1   1   1   1   1   1   1   1   1   1   1   1   1 
-  Traitor      |  -   -   -  0~1 0~1 0~1 1~2 1~2 1~2 2~3 2~3 2~3 3~4
-  Ultimate
-  Despair      |  -   -   -  0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1
-  # of Kills   |  1   1   1   2   2   2   3   3   3   4   4   4   5
+  # of Players            |  4   5   6   7   8   9   10  11  12  13  14  15  16 
+  -----------------------------------------------------------------------------
+  Alter Ego               |  1   1   1   1   1   1   1   1   1   1   1   1   1 
+  Spotless                | 1~2 2~3  3   3  3~4 4~5  5  5~6 6~7 6~7 7~8 8~9 8~9
+  Monomi                  |  -   -   -  0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1
+  Despair Disease Patient | 0~1 0~1  1   -   -   -   -   -   -   -   -   -   -
+  Blackened               |  1   1   1   1   1   1   1   1   1   1   1   1   1 
+  Traitor                 |  -   -   -  0~1 0~1 0~1 1~2 1~2 1~2 2~3 2~3 2~3 3~4
+  UltimateDespair         |  -   -   -  0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1 0~1
+  # of Kills              |  1   1   1   2   2   2   3   3   3   4   4   4   5
 */
 const alterEgoExtreme = {4:1, 5:1, 6:1, 7:1, 8:1, 9:1, 10:1, 11:1, 12:1, 13:1, 14:1, 15:1, 16:1}
 const spotlessExtreme = {4:1, 5:2, 6:2, 7:3, 8:3, 9:3, 10:4, 11:5, 12:6, 13:6, 14:7, 15:8, 16:8}
@@ -121,7 +119,7 @@ const randomRolesExtreme = {
   7:{number: 2, roles: ["Monomi", "Traitor", "Ultimate Despair"]},
   8:{number: 3, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair"]},
   9:{number: 3, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair"]},
-  10:{number: 2, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair"]},
+  10:{number: 2, roles: ["Monomi", "Traitor", "Ultimate Despair"]},
   11:{number: 3, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair"]},
   12:{number: 3, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair"]},
   13:{number: 3, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair"]},

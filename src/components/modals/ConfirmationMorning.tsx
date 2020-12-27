@@ -9,13 +9,13 @@ export default function ConfirmationMorning({visible, setVisible, text, onYes, o
         <View style={modalStyles.modalView}>
           <Text style={modalStyles.modalText}>{text}</Text>
           <View style={{flexDirection: 'row'}}>
-            <TouchableHighlight style={{ ...modalStyles.button, backgroundColor: "#2196F3" }} onPress={() => {
+            <TouchableHighlight style={{...modalStyles.button}} onPress={() => {
                 setVisible(false)
                 onYes()
               }}>
               <Text style={modalStyles.textStyle}>Yes</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={{ ...modalStyles.button, backgroundColor: "#2196F3" }} onPress={() => { 
+            <TouchableHighlight style={{...modalStyles.button}} onPress={() => { 
                 setVisible(false)
                 onNo()
               }}>
@@ -33,7 +33,7 @@ function AmuletOfTakejinButton({visible, setModalVisible, onAmulet}:AmuletOfTake
   if (visible) {
     return (
       <View>
-        <TouchableHighlight style={{ ...modalStyles.button, backgroundColor: "#2196F3", width: 150}} onPress={() => { 
+        <TouchableHighlight style={{...modalStyles.button, width: 150}} onPress={() => { 
           setModalVisible(false)
           onAmulet()
           }}>

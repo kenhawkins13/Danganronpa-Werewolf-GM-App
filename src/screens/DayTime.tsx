@@ -2,16 +2,20 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import * as Speech from 'expo-speech'
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
-import { GameContext } from '../../App';
+import { GameContext } from '../../AppContext'
 import CountdownTimer from '../components/CountdownTimer'
-import DiscussionOrVoteModal from '../components/modals/DiscussionOrVote';
+import DiscussionOrVoteModal from '../components/modals/DiscussionOrVote'
 import PlayerVoteModal from '../components/modals/PlayerVote'
 import WinnerDeclarationModal from '../components/modals/WinnerDeclaration'
+import PlayersPage from '../components/PlayersPage'
+import { blackTransparent, darkGrey, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
+import { appStyle } from '../styles/styles'
 
 let stage = 'daySpeech'
 let speech = ''
 let winnerSide = ''
 let votedPlayerIndex = -1
+let discussionTime = 180
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen() {
@@ -19,10 +23,12 @@ export default function DayTimeScreen() {
   const gameContext = useContext(GameContext)
   const [timerVisible, setTimerVisible] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
-  const [buttonVisible, setButtonVisible] = useState(false)
   const [playerVoteVisible, setPlayerVoteVisible] = useState(false)
   const [discussionOrVoteVisible, setDiscussionOrVoteVisible] = useState(false)
   const [winnerDeclarationVisible, setWinnerDeclarationVisible] = useState(false)
+  const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
+  const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
+  const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
 
   // Returns true if screen is focused
   const isFocused = useIsFocused()
@@ -31,36 +37,96 @@ export default function DayTimeScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'yellow' }}>
-        <Text>Day Time of Day {gameContext.dayNumber}</Text>
-      </View>
-      <View style={{ flex: 10 }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#cc0066' }}>
-          <Text>Some label</Text>
-          {Timer(timerKey, timerVisible, () => { if (gameContext.mode === 'extreme') { setButtonVisible(true) }})}
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center' }}>
-          {Add3MinutesButton(buttonVisible, setButtonVisible, timerKey, setTimerKey)}
-          <TouchableHighlight style={{ width: buttonVisible == true ? '50%' : '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }} 
-            onPress={() => { dayTimeLogic() }}>
-            <Text>Button</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
+      <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
       <PlayerVoteModal visible={playerVoteVisible} setVisible={setPlayerVoteVisible} onOk={(playerVote) => { 
         votedPlayerIndex = playerVote
         dayTimeLogic()
       }}/>
       <DiscussionOrVoteModal visible={discussionOrVoteVisible} setVisible={setDiscussionOrVoteVisible} onDiscussion={() => {
         stage = 'discussion'
+        discussionTime = 60
         dayTimeLogic()
       }} onVote={() => {
         stage = 'trial'
         dayTimeLogic()
       }}/>
-      <WinnerDeclarationModal visible={winnerDeclarationVisible} setVisible={setWinnerDeclarationVisible} winnerSide={winnerSide}/>
+      <WinnerDeclarationModal visible={winnerDeclarationVisible} winnerSide={winnerSide}/>
     </View>
   )
+
+  function PlayersPageMiddleSection() {
+    if (timerVisible) {
+      return (
+        <View style={{flex: 1}}>
+          <View style={{flex: 2}}/>
+          <View style={{flex: 4, alignItems: 'center', justifyContent: 'center'}}>
+            {DayTimeLabel()}
+          </View>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 10, flexDirection: 'row'}}>
+            <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
+              <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableHighlight style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }} 
+                  onPress={() => { setTimerKey(timerKey + 1) }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Restart{"\n"}Timer</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={() => {
+                if (timerVisible) { Speech.speak("Time is up") }
+              }}/>
+            </View>
+            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
+              <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
+                  onPress={() => { 
+                    setTimerVisible(false)
+                    dayTimeLogic() 
+                  }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>End{"\n"}Discussion</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </View>
+          <View style={{flex: 1}}/>
+        </View>
+      )      
+    } else {
+      return (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
+          {DayTimeLabel()}
+          <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
+            <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
+              disabled={continueButtonDisabled} onPress={() => { dayTimeLogic() }}>
+              <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      )
+    }
+  }
+
+  function DayTimeLabel() {
+    const trialStages = ['discussion', 'abilitiesOrItemsTrial', 'trial', 'vote', 'execution']
+    if (trialStages.includes(stage) && gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1) {
+      return (
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
+          <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
+            Class trial{"\n"}of Day {gameContext.dayNumber}
+          </Text>
+        </View>
+      )      
+    } else {
+      return (
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: yellowTransparent}}>
+          <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
+            Daytime{"\n"}of Day {gameContext.dayNumber}
+          </Text>
+        </View>
+      )
+    }
+  }
 
   async function dayTimeLogic() {
     switch (stage) {
@@ -68,24 +134,26 @@ export default function DayTimeScreen() {
         if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1) {
           speech = 'It is day time. A body has been discovered! Now then, after a certain amount of time has passed, the class trial will begin!'
         } else {
-          speech = 'Mm, ahem, this is a school announcement. It is now the day time. Please make your way to the briefing room.'
+          speech = 'Mm, ahem, it is now the day time.'
         }
         await speakThenPause(speech, 1)
         stage = 'abilitiesOrItems'
         dayTimeLogic()
         break
       case 'abilitiesOrItems':
-        stage = 'discussion'
         if (gameContext.mode === 'extreme') {
-          await speakThenPause('Would anybody like to use a day time ability or item?')
+          await speakThenPause('Would anybody like to use an ability or item?')
+          enableContinueButton()
+          stage = 'discussion'
         } else {
+          stage = 'discussion'
           dayTimeLogic()
         }
         break
       case 'discussion':
-        await speakThenPause('Discuss anything you would like, starting now.')
-        // Speech.speak('You may now start the Non-stop debate. The standard time limit is 3 minutes.')
+        await speakThenPause('Discussion starts now.')
         setTimerVisible(true)
+        // Speech.speak('You may now start the Non-stop debate. The standard time limit is 3 minutes.')
         if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1) {
           stage = 'abilitiesOrItemsTrial'
         } else {
@@ -93,18 +161,17 @@ export default function DayTimeScreen() {
         }
         break
       case 'abilitiesOrItemsTrial':
-        setTimerVisible(false)
-        setButtonVisible(false)
+        enableContinueButton()
         stage = 'trial'
         if (gameContext.mode === 'extreme') {
-          await speakThenPause('We will start voting shortly. Please raise your hand if you would like to use a class trial ability or item.')
+          await speakThenPause('Would anybody like to use an ability or item before voting?')
         } else {
           dayTimeLogic()
         }
         break
       case 'trial':
         stage = 'vote'
-        await speakThenPause('Voting will begin. Make sure everybody is ready to vote.')
+        await speakThenPause('The countdown to vote will occur next. Click Continue when everybody is ready to vote.')
         break
       case 'vote':
         stage = 'execution'
@@ -121,25 +188,24 @@ export default function DayTimeScreen() {
           if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
             gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
           }
-          const deadPlayersCount = gameContext.playersInfo.filter((value) => value.alive === false).length
           if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
             winnerSide = 'Hope'
             setWinnerDeclarationVisible(true)
           } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
             winnerSide = 'Ultimate Despair'
             setWinnerDeclarationVisible(true)
-          } else if (deadPlayersCount / 2 === gameContext.killsRequired) {
+          } else if (gameContext.killsLeft === 0) {
             winnerSide = 'Despair'
             setWinnerDeclarationVisible(true)
           } else {
-            const killOrKills = (gameContext.killsRequired - (deadPlayersCount / 2)) === 1 ? 'kill' : 'kills'
+            const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
             if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
               gameContext.alterEgoAlive = false
               await speakThenPause('U pu pu pu. ' + votedPlayer + ' was the Alter Ego. The game continues and the Blackened needs ' + 
-              (gameContext.killsRequired - (deadPlayersCount / 2))  + ' more ' + killOrKills + 'to win.', 1)
+              gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1)
             } else {
               await speakThenPause(votedPlayer + ' was not the Blackened player. The game continues and the Blackened needs ' + 
-              (gameContext.killsRequired - (deadPlayersCount / 2))  + ' more ' + killOrKills + 'to win.', 1)
+              gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1)
             }
             stage = 'nightTime'
             dayTimeLogic()
@@ -152,40 +218,11 @@ export default function DayTimeScreen() {
         break
     }
   }
-}
 
-function Timer(timerKey:number, timerVisible:boolean, callback?:() => void) {
-  if (timerVisible === true) {
-    return (
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-        <CountdownTimer timerKey={timerKey.toString()} duration={10} callback={() => {
-          Speech.speak('Time is up.')
-          if (callback) { callback() }
-        }}/>
-      </View>
-    )
-  } else {
-    return (
-      <></>
-    )
-  }
-}
-
-function Add3MinutesButton(buttonVisible:boolean, setButtonVisible:React.Dispatch<any>, timerKey:number, setTimerKey:React.Dispatch<any>) {
-  if (buttonVisible === true) {
-    return (
-      <TouchableHighlight style={{ width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center' }} 
-        onPress={() => { 
-          setButtonVisible(false)
-          setTimerKey(timerKey + 1)
-        }}>
-        <Text>Add 3 minutes</Text>
-      </TouchableHighlight>
-    )
-  } else {
-    return (
-      <></>
-    )
+  function enableContinueButton() {
+    setContinueButtonColor(blackTransparent)
+    setContinueButtonTextColor('white')
+    setContinueButtonDisabled(false)
   }
 }
 

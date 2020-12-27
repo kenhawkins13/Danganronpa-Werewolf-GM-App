@@ -1,45 +1,58 @@
 import React, { useContext, useState } from "react"
 import { Modal, TouchableHighlight, View, Text } from "react-native"
 import { Picker } from '@react-native-picker/picker'
-import { GameContext } from "../../../App"
 import { TextInput } from "react-native-gesture-handler"
 import { modalStyles } from "../../styles/styles"
 import { GameContextType } from "../../types/types"
+import { GameContext } from "../../../AppContext"
+import { darkGrey } from "../../styles/colors"
 
-export default function PlayerInfoModal({visible, setVisible}:Props) {
+export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props) {
   const gameContext = useContext(GameContext)
-  const [playerRole, setPlayerRole] = useState(gameContext.playersInfo[gameContext.currentPlayerIndex].role)
+  const [playerRole, setPlayerRole] = useState(gameContext.playersInfo[playerIndex].role)
   return (
     <Modal animationType='slide' transparent={true} visible={visible}>
       <View style={modalStyles.centeredView}>
         <View style={modalStyles.modalView}>
-          <Text style={modalStyles.modalText}>Name:</Text>
-          <TextInput style={modalStyles.modalTextInput} placeholder={gameContext.playersInfo[gameContext.currentPlayerIndex].name} 
-            onChangeText={(text) => gameContext.playersInfo[gameContext.currentPlayerIndex].name=text}/>
-          <Picker style={{width: 200}} selectedValue={playerRole} onValueChange={(value) => {setPlayerRole(value.toString())}}>
-            {getPickerItems(gameContext)}
-          </Picker>
+          <View style={{flexDirection: 'row', alignItems: 'center', margin: 10}}>
+            <Text style={{...modalStyles.modalText, width: 75, margin: 0}}>Name:</Text>
+            <TextInput style={modalStyles.modalTextInput} placeholder={gameContext.playersInfo[playerIndex].name}
+              placeholderTextColor='black' onChangeText={(text) => gameContext.playersInfo[playerIndex].name=text}/>
+          </View>
+          <View style={{borderWidth: 1, borderColor: 'black', margin: 10}}>
+            <Picker style={{width: 200}} itemStyle={{fontFamily: 'goodbyeDespair'}} dropdownIconColor='#ffffff' 
+            selectedValue={playerRole}  onValueChange={(value) => {setPlayerRole(value.toString())}}>
+              {getPickerItems(gameContext)}
+            </Picker>
+          </View>
           <View style={{flexDirection: 'row'}}>
             <TouchableHighlight
-              style={{ ...modalStyles.button, backgroundColor: '#2196F3'}}
+              style={{ ...modalStyles.button}}
               onPress={() => {
-                gameContext.playersInfo[gameContext.currentPlayerIndex].role = playerRole
-                gameContext.playersInfo[gameContext.currentPlayerIndex].side = 
-                  ['Spotless', 'Alter Ego', 'Ultimate Despair'].indexOf(playerRole) !== -1 ? 'Hope' : 'Despair'
-                gameContext.playersInfo[gameContext.currentPlayerIndex].colorScheme = 'blue'
-                setVisible(false)
+                if (playerRole !== '') {
+                  gameContext.playersInfo[playerIndex].role = playerRole
+                  gameContext.playersInfo[playerIndex].side = 
+                    ['Spotless', 'Alter Ego', 'Ultimate Despair'].indexOf(playerRole) !== -1 ? 'Hope' : 'Despair'
+                  gameContext.playersInfo[playerIndex].borderColor = darkGrey
+                } else {
+                  gameContext.playersInfo[playerIndex].role = ''
+                  gameContext.playersInfo[playerIndex].side = ''
+                  gameContext.playersInfo[playerIndex].borderColor = 'white'
+                }
                 setPlayerRole('')
+                setVisible(false)
               }}>
               <Text style={modalStyles.textStyle}>Save</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              style={{ ...modalStyles.button, backgroundColor: '#2196F3'}}
+              style={{ ...modalStyles.button}}
               onPress={() => {
-                  gameContext.playersInfo[gameContext.currentPlayerIndex].name = 'Player ' + (gameContext.currentPlayerIndex + 1).toString()
-                  gameContext.playersInfo[gameContext.currentPlayerIndex].role = ''
-                  gameContext.playersInfo[gameContext.currentPlayerIndex].side = ''
-                  gameContext.playersInfo[gameContext.currentPlayerIndex].colorScheme = 'lightblue'
+                  gameContext.playersInfo[playerIndex].name = 'Player ' + (playerIndex + 1).toString()
+                  gameContext.playersInfo[playerIndex].role = ''
+                  gameContext.playersInfo[playerIndex].side = ''
+                  gameContext.playersInfo[playerIndex].borderColor = 'white'
                   setVisible(false)
+                  setPlayerRole('')
                 }}>
               <Text style={modalStyles.textStyle}>Clear</Text>
             </TouchableHighlight>
@@ -66,4 +79,4 @@ function getPickerItems(gameContext:GameContextType) {
   return pickerItems
 }
 
-type Props = {visible: boolean, setVisible: React.Dispatch<any>}
+type Props = {visible: boolean, setVisible: React.Dispatch<any>, playerIndex:number}

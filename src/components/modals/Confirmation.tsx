@@ -9,13 +9,13 @@ export default function Confirmation({visible, setVisible, text, onYes, onNo}:Pr
         <View style={modalStyles.modalView}>
           <Text style={modalStyles.modalText}>{text}</Text>
           <View style={{flexDirection: 'row'}}>
-            <TouchableHighlight style={{ ...modalStyles.button, backgroundColor: "#2196F3" }} onPress={() => {
+            <TouchableHighlight style={{...modalStyles.button}} onPress={() => {
                 setVisible(false)
                 onYes() 
               }}>
               <Text style={modalStyles.textStyle}>Yes</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={{ ...modalStyles.button, backgroundColor: "#2196F3" }} onPress={() => { 
+            <TouchableHighlight style={{...modalStyles.button}} onPress={() => { 
                 setVisible(false)
                 onNo()
               }}>

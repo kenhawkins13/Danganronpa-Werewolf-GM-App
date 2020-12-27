@@ -1,24 +1,43 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, TouchableHighlight } from 'react-native'
-import { GameContext } from '../../App'
-import PlayersModal from '../components/modals/Players'
+import { Text, TouchableHighlight, View } from 'react-native'
 import { roleInPlay } from '../data/Table'
-import { speechSchoolAnnouncement1, speechSchoolAnnouncement2, speechToAlterEgoAwake, speechToAlterEgoSleep, speechToBlackenedAwake1, speechToBlackenedAwake2, speechToBlackenedSleep, speechToBlackenedVice, speechToMonomiAwake, speechToMonomiSleep, speechToTraitorsAwake, speechToTraitorsSleep } from "../data/NightTimeDialogue"
+import { speechSchoolAnnouncement1, speechSchoolAnnouncement2, speechSchoolAnnouncement3, speechToAlterEgoAwake, speechToAlterEgoSleep, speechToBlackenedAwake1, speechToBlackenedAwake2, speechToBlackenedSleep, speechToBlackenedVice, speechToMonomiAwake, speechToMonomiSleep, speechToTraitorsAwake, speechToTraitorsSleep } from "../data/NightTimeDialogue"
 import * as Speech from 'expo-speech'
 import NightTimeAbilitiesItemsModal from '../components/modals/NightTimeAbilitiesItem'
 import RevealRoleModal from '../components/modals/RevealRole'
+import { GameContext } from '../../AppContext'
+import PlayersPage from '../components/PlayersPage'
+import DingDongBingBongModal from '../components/modals/DingDongBingBong'
+import SchoolAnnouncementModal from '../components/modals/SchoolAnnouncement'
+import { blackTransparent, blueTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { appStyle } from '../styles/styles'
+import CountdownTimer from '../components/CountdownTimer'
 
-let stage = 'schoolAnnouncement'
+let stage = 'schoolBell'
 let abilityOrItem = ''
-let modalType = ''
+let currentPlayerIndex = 0
 let previousPlayerIndex = -1
+let timerDuration = 0
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
+let onPlayerClick = (playerIndex:number) => {}
+let onContinue = () => {}
 
 export default function NightTimeScreen() {
   const gameContext = useContext(GameContext)
   const { push } = useNavigation<any>()
-  const [playersModalVisible, setPlayersModalVisible] = useState(false)
+  const [nightTimeAbilitiesItemsModallVisible, setNightTimeAbilitiesItemsModallVisible] = useState(false)
+  const [dingDongBingBongModalVisible, setDingDongBingBongModalVisible] = useState(false)
+  const [schoolAnnouncementVisible, setSchoolAnnouncementVisible] = useState(false)
+  const [revealRoleModalVisible, setRevealRoleModalVisible] = useState(false)
+  const [timerVisible, setTimerVisible] = useState(false)
+  const [nightTimeLabelVisible, setNightTimeLabelVisible] = useState(false)
+  const [continueButtonText, setContinueButtonText] = useState('')
+  const [continueButtonColor, setContinueButtonColor] = useState(blackTransparent)
+  const [continueButtonTextColor, setContinueButtonTextColor] = useState(blackTransparent)
+  const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
+  const [disabledPlayerIndexes, setDisabledPlayerIndexes] = useState([] as number[])
+  const [playerIndex, setPlayerIndex] = useState(0)
 
   // Check if screen is focused
   const isFocused = useIsFocused()
@@ -26,106 +45,255 @@ export default function NightTimeScreen() {
   useEffect(() => { if (isFocused) { nightTimeLogic() }}, [isFocused])
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'lightblue' }}>
-        <Text>Night Time of Day {gameContext.dayNumber}</Text>
-      </View>
-      <View style={{ flex: 10 }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#cc0066' }}>
-          <Text>Some text</Text>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'white' }}>
-          <TouchableHighlight style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}
-            onPress={() => { nightTimeLogic() }}>
-            <Text>Button</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-      {PlayersModalCustomized(modalType, playersModalVisible, setPlayersModalVisible, nightTimeLogic)}
+    <View style={{flex: 1}}>
+      <PlayersPage disabledPlayerIndexes={disabledPlayerIndexes} middleSection={PlayersPageMiddleSection()} 
+        onPlayerClick={(playerIndex) => {
+          setPlayerIndex(playerIndex)
+          onPlayerClick(playerIndex)
+      }}/>
+      <DingDongBingBongModal visible={dingDongBingBongModalVisible} setVisible={setDingDongBingBongModalVisible} onDone={() => {
+        stage = 'schoolAnnouncement'
+        nightTimeLogic()
+      }}/>
+      <SchoolAnnouncementModal visible={schoolAnnouncementVisible}/>
+      <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={playerIndex}/>
+      <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex} abilityOrItem={abilityOrItem}
+        onOk={() => {
+          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+          nightTimeLogic()
+          setDisabledPlayerIndexes([])
+      }}/>
     </View>
   )
 
+  function PlayersPageMiddleSection() {
+    if (timerVisible) {
+      return (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <CountdownTimer timerKey={'0'} duration={timerDuration} onDone={() => { nightTimeLogic() }}/>          
+        </View>
+      )
+    } else {
+      return (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
+          {NightTimeLabel()}
+          <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
+            <TouchableHighlight style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} 
+              disabled={continueButtonDisabled} onPress={() => { onContinue() }}>
+              <Text style={{...appStyle.text, color: continueButtonTextColor, textAlign: 'center', margin: 10}}>{continueButtonText}</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      )
+    }
+  }
+
+  function NightTimeLabel() {
+    if (nightTimeLabelVisible) {
+      return (
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: blueTransparent}}>
+          <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
+            Nighttime{"\n"}of Day {gameContext.dayNumber}
+          </Text>
+        </View>
+      )      
+    } else {
+      return (<></>)
+    }
+  }
+
   async function nightTimeLogic() {
-    // Speech.stop()
     switch (stage) {
-      case 'schoolAnnouncement':
-        gameContext.blackenedAttack = -1
-        if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
-          stage = 'abilitiesOrItems'
-          await speakThenPause(speechSchoolAnnouncement2)
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.colorScheme = 'white' })
-          modalType = 'nightTimeAbilitiesItems'
-          setPlayersModalVisible(true)
+      case 'schoolBell':
+        setNightTimeLabelVisible(true)
+        if (gameContext.dayNumber === 0) {
+          setDingDongBingBongModalVisible(true)
         } else {
-          await speakThenPause(speechSchoolAnnouncement1, 2)
-          stage = 'traitor'
+          stage = 'schoolAnnouncement'
           nightTimeLogic()
         }
         break
-      case 'abilitiesOrItems':
-        await abilitiesAndItemsSpeech()
+      case 'schoolAnnouncement':
+        gameContext.blackenedAttack = -1
+        setContinueButtonText('Continue')
+        disableContinueButton()
+        setDisabledPlayerIndexes([])
+        onPlayerClick = () => {}
+        onContinue = () => {}
+        if (gameContext.dayNumber === 0) {
+          setNightTimeLabelVisible(false)
+          setSchoolAnnouncementVisible(true)
+          await speakThenPause(speechSchoolAnnouncement1, 2)
+          setSchoolAnnouncementVisible(false)
+          stage = 'traitor'
+          nightTimeLogic()
+        } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
+          setContinueButtonColor(blackTransparent)
+          setContinueButtonTextColor('white')
+          setContinueButtonDisabled(false)
+          onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
+          onContinue = () => {
+            setNightTimeLabelVisible(false)
+            gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
+            setDisabledPlayerIndexes([])
+            nightTimeLogic()
+          }
+          stage = 'abilitiesOrItemsSleep'
+          await speakThenPause(speechSchoolAnnouncement2, 1)
+        } else {
+          setNightTimeLabelVisible(false)
+          await speakThenPause(speechSchoolAnnouncement3, 2)
+          stage = 'alterEgo'
+          nightTimeLogic()
+        }
+        break
+      case 'abilitiesOrItemsSleep':
+        disableContinueButton()
+        setDisabledPlayerIndexes([])
+        onPlayerClick  = () => {}
+        onContinue = () => {}
+        await abilitiesAndItemsSleep()
+        break
+      case 'abilitiesOrItemsAwake':
+        setContinueButtonText('Investigate')
+        disableContinueButton()
+        onPlayerClick = (playerIndex) => {
+          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+          gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
+          setPlayerIndex(playerIndex)
+          setContinueButtonColor(pinkTransparent)
+          setContinueButtonTextColor('white')
+          setContinueButtonDisabled(false)
+        } // move to onContinue
+        onContinue = () => {
+          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+          setRevealRoleModalVisible(true)
+        }
+        await abilitiesAndItemsAwake()
         break
       case 'traitor':
         if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
           gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.role === 'Blackened') { playerInfo.colorScheme = 'black' }
-            else if (playerInfo.role === 'Traitor') { playerInfo.colorScheme = 'grey' }
-            else { playerInfo.colorScheme = 'white' }
+            if (playerInfo.role === 'Blackened') { playerInfo.backgroundColor = pinkTransparent }
+            else if (playerInfo.role === 'Traitor') { playerInfo.backgroundColor = greyTransparent }
+            else { playerInfo.backgroundColor = blackTransparent }
           })
-          setPlayersModalVisible(true)
-          await speakThenPause(speechToTraitorsAwake, 5)
-          setPlayersModalVisible(false)
-          await speakThenPause(speechToTraitorsSleep, 2)
+          setContinueButtonText('Continue')
+          disableContinueButton()
+          setDisabledPlayerIndexes([])
+          onPlayerClick = () => {}
+          onContinue = () => {}
+          await speakThenPause(speechToTraitorsAwake)
+          timerDuration = 5
+          setTimerVisible(true)
+          stage = 'traitorSleep'
+        } else {
+          stage = 'blackened'
+          nightTimeLogic()
         }
-        stage = 'monomi'
+        break
+      case 'traitorSleep':
+        gameContext.playersInfo.forEach(playerInfo => {playerInfo.backgroundColor = blackTransparent})
+        setTimerVisible(false)
+        await speakThenPause(speechToTraitorsSleep, 2)
+        stage = 'blackened'
         nightTimeLogic()
         break
       case 'monomi':
         if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
-          modalType = 'monomi'
           abilityOrItem = 'Protect'
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.colorScheme = 'white' })
-          setPlayersModalVisible(true)
-          await speakThenPause(speechToMonomiAwake, 10)
-          setPlayersModalVisible(false)
-          await speakThenPause(speechToMonomiSleep, 1)
+          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+          setContinueButtonText('Continue')
+          disableContinueButton()
+          setDisabledPlayerIndexes([])
+          onContinue = () => {}
+          onPlayerClick = (playerIndex) => {
+            const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
+            if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+              if (playerIndex !== gameContext.monomiProtect) {
+                gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
+                gameContext.monomiProtect = playerIndex
+              } else {
+                gameContext.monomiProtect = -1
+              }              
+            }
+          }
+          await speakThenPause(speechToMonomiAwake)
+          timerDuration = 10
+          setTimerVisible(true)
+          stage = 'monomiSleep'
+        } else {
+          stage = 'alterEgo'
+          nightTimeLogic()
         }
-        stage = 'alterEgo'
-        nightTimeLogic()
         break
+      case 'monomiSleep':
+        gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+        onContinue = () => {}
+        onPlayerClick = () => {}
+        setTimerVisible(false)
+        await speakThenPause(speechToMonomiSleep, 1)
       case 'alterEgo':
         if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
-          stage = 'alterEgoSleep'
-          await speakThenPause(speechToAlterEgoAwake)
-          modalType = 'revealRole'
           abilityOrItem = 'Alter Ego'
           gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.role === 'Alter Ego') { playerInfo.colorScheme = 'grey' }
-            else { playerInfo.colorScheme = 'white' }
+            if (playerInfo.role === 'Alter Ego') { setDisabledPlayerIndexes([playerInfo.playerIndex]) }
+            else { playerInfo.backgroundColor = blackTransparent }
           })
-          setPlayersModalVisible(true)
+          setContinueButtonText('Investigate')
+          disableContinueButton()
+          onPlayerClick = (playerIndex) => {
+            gameContext.playersInfo.forEach(playerInfo => {playerInfo.backgroundColor = blackTransparent})
+            gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
+            setContinueButtonColor(pinkTransparent)
+            setContinueButtonTextColor('white')
+            setContinueButtonDisabled(false) 
+          }
+          onContinue = () => { 
+            stage = 'alterEgoSleep'
+            setRevealRoleModalVisible(true) 
+          }
+          await speakThenPause(speechToAlterEgoAwake, 1)
         } else {
           stage = 'blackened'
           nightTimeLogic()
         }
         break
       case 'alterEgoSleep':
+        setContinueButtonText('Investigate')
+        disableContinueButton()
+        setDisabledPlayerIndexes([])
+        onContinue = () => {}
+        onPlayerClick = () => {}
         await speakThenPause(speechToAlterEgoSleep, 2)
         stage = 'blackened'
         nightTimeLogic()
         break
       case 'blackened':
-        stage = 'blackenedSleep'
         if ((gameContext.dayNumber === 0 && gameContext.mode === 'extreme' || gameContext.dayNumber > 0) && !gameContext.vicePlayed) {
-          if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
-            await speakThenPause(speechToBlackenedAwake1)
-          } else if (gameContext.dayNumber > 0) {
-            await speakThenPause(speechToBlackenedAwake2)
-          }
-          modalType = 'blackened'
           abilityOrItem = 'Attack'
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.colorScheme = 'white' })
-          setPlayersModalVisible(true)
+          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+          setContinueButtonText('Attack')
+          disableContinueButton()
+          setDisabledPlayerIndexes([])
+          onPlayerClick = (playerIndex) => {
+            gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+            gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
+            gameContext.blackenedAttack = playerIndex
+            setContinueButtonColor(pinkTransparent)
+            setContinueButtonTextColor('white')
+            setContinueButtonDisabled(false)
+          }
+          onContinue = () => {
+            stage = 'blackenedSleep'
+            nightTimeLogic()
+          }
+          if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
+            await speakThenPause(speechToBlackenedAwake1, 1)
+          } else if (gameContext.dayNumber > 0) {
+            await speakThenPause(speechToBlackenedAwake2, 1)
+          }
         } else {
           if (gameContext.vicePlayed === true) { await speakThenPause(speechToBlackenedVice, 1) }
           stage = 'morningTime'
@@ -133,140 +301,95 @@ export default function NightTimeScreen() {
         }
         break
       case 'blackenedSleep':
+        gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+        setContinueButtonText('Attack')
+        disableContinueButton()
+        setDisabledPlayerIndexes([])
+        onContinue = () => {}
+        onPlayerClick = () => {}
         await speakThenPause(speechToBlackenedSleep, 2)
       case 'morningTime':
-        stage = 'schoolAnnouncement'
+        stage = 'schoolBell'
         gameContext.dayNumber += 1
         push('MorningTimeScreen')
-  
     }
   }
 
-  async function abilitiesAndItemsSpeech() {
-    let speech = ''
+  async function abilitiesAndItemsSleep() {
     if (previousPlayerIndex === -1) {
       await speakThenPause('Everyone, go to sleep.', 2)
     }
   
     for (let i = 0; i <= gameContext.playerCount; i++) {
-      // No one declared an investigative Ability or Item 
+      // No one declared an investigative Ability or Item
       if (i === gameContext.playerCount && previousPlayerIndex === -1) {
-        setPlayersModalVisible(false)
-        gameContext.currentPlayerIndex = 0
+        currentPlayerIndex  = 0 // probably can delete
         previousPlayerIndex = -1
         await speakThenPause('Everyone should now be asleep.', 2)
-        stage= 'monomi'
+        stage = 'monomi'
         nightTimeLogic()
         return
       }
       // No more investigative Ability or Item
       else if (i === gameContext.playerCount && previousPlayerIndex !== -1) {
-        speech = gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.'
-        gameContext.currentPlayerIndex = 0
+        await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2)
+        currentPlayerIndex = 0
         previousPlayerIndex = -1
-        await speakThenPause(speech, 2)
-        setPlayersModalVisible(false)
-        stage= 'monomi'
+        stage = 'monomi'
         nightTimeLogic()
         return
-      // Someone declared an investigative Ability or Item  
+      // Someone declared an investigative Ability or Item
       } else if (gameContext.playersInfo[i].useAbility !== '' || gameContext.playersInfo[i].useItem !== '') {
-        gameContext.currentPlayerIndex = i
+        currentPlayerIndex = i
+        if (currentPlayerIndex !== previousPlayerIndex && previousPlayerIndex !== -1) {
+          await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2)
+        }
+        stage = 'abilitiesOrItemsAwake'
+        nightTimeLogic()
+        setDisabledPlayerIndexes([currentPlayerIndex])
         break
       }
     }
-    
-    gameContext.playersInfo.forEach(playerInfo => { playerInfo.colorScheme = 'white' })
-    gameContext.playersInfo[gameContext.currentPlayerIndex].colorScheme = 'grey'
-    
-    if (previousPlayerIndex === -1) { 
-      speech = gameContext.playersInfo[gameContext.currentPlayerIndex].name + ', wake up.'
-      await speakThenPause(speech)
-    } else if (gameContext.currentPlayerIndex !== previousPlayerIndex) {
-      speech = gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep. ' 
-      + gameContext.playersInfo[gameContext.currentPlayerIndex].name + ', wake up.'
-      await speakThenPause(speech)
+  }
+
+  async function abilitiesAndItemsAwake() {
+    if (previousPlayerIndex !== currentPlayerIndex) {
+      await speakThenPause(gameContext.playersInfo[currentPlayerIndex].name + ', wake up.')
     }
   
-    if (gameContext.playersInfo[gameContext.currentPlayerIndex].useAbility === "Kyoko Kirigiri") {
+    let speech = ''        
+    if (gameContext.playersInfo[currentPlayerIndex].useAbility === "Kyoko Kirigiri") {
       abilityOrItem = "Kyoko Kirigiri"
-      gameContext.playersInfo[gameContext.currentPlayerIndex].useAbility = ''
+      gameContext.playersInfo[currentPlayerIndex].useAbility = ''
       speech = 'Click the player you would like to investigate whether they are on the side of hope or despair.'
-    } else if (gameContext.playersInfo[gameContext.currentPlayerIndex].useAbility === "Yasuhiro Hagakure") {
+    } else if (gameContext.playersInfo[currentPlayerIndex].useAbility === "Yasuhiro Hagakure") {
       abilityOrItem = "Yasuhiro Hagakure"
-      gameContext.playersInfo[gameContext.currentPlayerIndex].useAbility = ''
+      gameContext.playersInfo[currentPlayerIndex].useAbility = ''
       const role = gameContext.playerCount < 7 ? 'the despair disease patient' : 'monomi'
       speech =  'Click the player you would like to investigate whether they are ' + role + ' or not ' + role
-    } else if (gameContext.playersInfo[gameContext.currentPlayerIndex].useItem === 'Glasses') {
+    } else if (gameContext.playersInfo[currentPlayerIndex].useItem === 'Glasses') {
       abilityOrItem = 'Glasses'
-      gameContext.playersInfo[gameContext.currentPlayerIndex].useItem = ''
+      gameContext.playersInfo[currentPlayerIndex].useItem = ''
       speech = 'Click the player you would like to investigate whether they are on the side of hope or despair.'
-    } else if (gameContext.playersInfo[gameContext.currentPlayerIndex].useItem === "Someone's Graduation Album") {
+    } else if (gameContext.playersInfo[currentPlayerIndex].useItem === "Someone's Graduation Album") {
       abilityOrItem = "Someone's Graduation Album"
-      gameContext.playersInfo[gameContext.currentPlayerIndex].useItem = ''
+      gameContext.playersInfo[currentPlayerIndex].useItem = ''
       speech = 'Click the player you would like to investigate whether they are a traitor or not a traitor.'
-    } else if (gameContext.playersInfo[gameContext.currentPlayerIndex].useItem === 'Silent Receiver') {
+    } else if (gameContext.playersInfo[currentPlayerIndex].useItem === 'Silent Receiver') {
       abilityOrItem = 'Silent Receiver'
-      gameContext.playersInfo[gameContext.currentPlayerIndex].useItem = ''
+      gameContext.playersInfo[currentPlayerIndex].useItem = ''
       speech = 'Click the player you would like to investigate whether they are a spotless or not a spotless.'
     }
-    previousPlayerIndex = gameContext.currentPlayerIndex
-    modalType='revealRole'
-    stage = 'abilitiesOrItems'
+    previousPlayerIndex = currentPlayerIndex
+    stage = 'abilitiesOrItemsSleep'
     await speakThenPause(speech)
-    setPlayersModalVisible(true)
   }
-}
 
-function PlayersModalCustomized(modalType:string, PlayersModalVisible:boolean, setPlayersModalVisible:React.Dispatch<any>, nightTimeLogic:() => void) {
-  const gameContext = useContext(GameContext)
-  const [subModalVisible, setSubModalVisible] = useState(false)
-  const [disableContinueButton, setDisableContinueButton] = useState(true)
-  let continueButtonVisible = false
-  let onPlayerTouch = (playerIndex:number) => {}
-  let subModal = <></>
-
-  if (modalType === 'nightTimeAbilitiesItems') {
-    continueButtonVisible = true
-    if (disableContinueButton === true) { setDisableContinueButton(false) }
-    onPlayerTouch = (playerIndex:number) => { setSubModalVisible(true) }
-    subModal = <NightTimeAbilitiesItemsModal visible={subModalVisible} setVisible={setSubModalVisible}/>
-  } else if (modalType === 'revealRole') {
-    continueButtonVisible = false
-    if (disableContinueButton === false) { setDisableContinueButton(true) }
-    onPlayerTouch = (playerIndex:number) => { setSubModalVisible(true) }
-    subModal = <RevealRoleModal visible={subModalVisible} setVisible={setSubModalVisible} abilityOrItem={abilityOrItem} callback={() => {
-      setPlayersModalVisible(false)
-      nightTimeLogic()
-    }}/>
-  } else if (modalType === 'monomi') {
-    continueButtonVisible = false
-    if (disableContinueButton === false) { setDisableContinueButton(true) }
-    onPlayerTouch = (playerIndex:number) => {
-      gameContext.playersInfo.forEach(playerInfo => { playerInfo.colorScheme = 'white' })
-      if (playerIndex !== gameContext.monomiProtect) {
-        gameContext.playersInfo[playerIndex].colorScheme = 'lightblue'
-        gameContext.monomiProtect = playerIndex
-      } else {
-        gameContext.monomiProtect = -1
-      }
-    }
-  } else if (modalType === 'blackened') {
-    // disableContinueButton must equal true before coming into here. Can't set it false here otherwise 
-    // onPlayerTouch() setting it to false will get overwritten as it re-renders and reruns this method
-    continueButtonVisible = true
-    onPlayerTouch = (playerIndex:number) => {
-      gameContext.playersInfo.forEach(playerInfo => { playerInfo.colorScheme = 'white' })
-      gameContext.playersInfo[playerIndex].colorScheme = '#cc0066'
-      gameContext.blackenedAttack = playerIndex
-      setDisableContinueButton(false)
-    }
+  function disableContinueButton() {
+    setContinueButtonColor(greyTransparent)
+    setContinueButtonTextColor(darkGrey)
+    setContinueButtonDisabled(true)
   }
-  
-  return (
-    <PlayersModal visible={PlayersModalVisible} setVisible={setPlayersModalVisible} modal={subModal} continueVisible={continueButtonVisible}
-    disableContinue={disableContinueButton} onPlayerTouch={onPlayerTouch} onContinue={() => nightTimeLogic()}/>
-  )
 }
 
 async function speakThenPause(speech:string, seconds:number=0) {
