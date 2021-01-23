@@ -30,14 +30,13 @@ export default function StartScreen () {
     gameContext.killsLeft = 0
     gameContext.roleCounts = []
     gameContext.playersInfo = []
-    gameContext.dayNumber = 1,
-    gameContext.stage = ''
+    gameContext.dayNumber = 0
     gameContext.blackenedAttack = -1
     gameContext.alterEgoAlive = true
     gameContext.monomiExploded = false
-    gameContext.monomiProtect = -1,
-    gameContext.vicePlayed = false,
-    gameContext.currentPlayerIndex = 0
+    gameContext.monomiProtect = -1
+    gameContext.vicePlayed = false
+    gameContext.tieVote = false
     setGameMode(0)
     setPlayerCount(4)
     playMusic()

@@ -65,6 +65,28 @@ export default function App() {
       require('./src/assets/sounds/Ding-Dong-Bing-Bong.mp3'),
       require('./src/assets/sounds/Revolver.mp3'),
       require('./src/assets/video/Ding-Dong-Bing-Bong.mp4'),
+      require("./src/assets/music/DaytimeCalm/Beautiful-Days.mp3"),
+      require("./src/assets/music/DaytimeCalm/Beautiful-Days-[Piano-Arrangement].mp3"),
+      require("./src/assets/music/DaytimeCalm/Beautiful-Dead.mp3"),
+      require("./src/assets/music/DaytimeCalm/Beautiful-Morning.mp3"),
+      require("./src/assets/music/DaytimeCalm/Beautiful-Ruin.mp3"),
+      require("./src/assets/music/DaytimeAggressive/Box-15.mp3"),
+      require("./src/assets/music/DaytimeAggressive/Box-16.mp3"),
+      require("./src/assets/music/DaytimeAggressive/Ekoroshia.mp3"),
+      require("./src/assets/music/DaytimeAggressive/Ikoroshia.mp3"),
+      require("./src/assets/music/ClassTrial/Discussion-BREAK.mp3"),
+      require("./src/assets/music/ClassTrial/Discussion-HEAT-UP.mp3"),
+      require("./src/assets/music/ClassTrial/Discussion-HOPE-VS-DESPAIR.mp3"),
+      require("./src/assets/music/ClassTrial/Discussion-MIX.mp3"),
+      require("./src/assets/music/NightTime/A-Dead-End-to-the-Ocean's-Aroma.mp3"),
+      require("./src/assets/music/NightTime/Desire-for-Execution.mp3"),
+      require("./src/assets/music/NightTime/Despair-Syndrome-1.mp3"),
+      require("./src/assets/music/NightTime/Despair-Syndrome-2.mp3"),
+      require("./src/assets/music/NightTime/Mr.-Monokuma's-Lesson.mp3"),
+      require("./src/assets/music/NightTime/Mr.-Monokuma's-Tutoring.mp3"),
+      require("./src/assets/music/NightTime/Weekly-Despair-Magazine.mp3"),
+      require("./src/assets/music/NightTime/Welcome-to-Despair-Academy.mp3"),
+      require("./src/assets/music/End/Climax-Reasoning.mp3")
     ]
     const cachedImages = assets.map(asset => { Asset.fromModule(asset).downloadAsync() })
     const cachedFonts = [Font.loadAsync({goodbyeDespair: require('./src/assets/fonts/goodbyeDespair.ttf')})]

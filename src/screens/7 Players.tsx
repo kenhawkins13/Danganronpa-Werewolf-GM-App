@@ -10,9 +10,9 @@ import { darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { appStyle } from '../styles/styles'
+import * as Speech from 'expo-speech'
 
 export default function PlayersScreen() {
-  // modal.props.setVisisble(true) Is this possible so I don't need to pass in setModalVisible
   const gameContext = useContext(GameContext)
   const { push } = useNavigation<any>()
   const [startButtonColor, setStartButtonColor] = useState(greyTransparent)
@@ -67,8 +67,9 @@ export default function PlayersScreen() {
         </View>
         <View style={{...appStyle.frame, height: '25%', width: '25%', margin: '2.5%', backgroundColor: startButtonColor}}>
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
-            disabled={startButtonDisabled} onPress={() => { 
+            disabled={startButtonDisabled} onPress={() => {
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
+              Speech.speak('U pu pu pu')
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
               push('NightTimeScreen')
             } else {

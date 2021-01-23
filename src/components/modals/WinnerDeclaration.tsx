@@ -1,11 +1,11 @@
-import { useIsFocused } from "@react-navigation/native"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Modal, View, Text, TouchableHighlight, DevSettings, ImageBackground } from "react-native"
 import { GameContext } from "../../../AppContext"
 import { blackTransparent, blueTransparent, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../../styles/colors"
 import { appStyle } from "../../styles/styles"
 import PlayersPage from "../PlayersPage"
 import RevealRoleModal from "./RevealRole"
+import { Audio } from 'expo-av'
 
 export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
   const gameContext = useContext(GameContext)
@@ -15,6 +15,7 @@ export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
 
   if (visible) {
     if (!playersPageVisible) {
+      playMusic()
       return (
         <Modal animationType="slide" transparent={true} visible={visible}>
           {BackgroundImage()}
@@ -119,3 +120,11 @@ export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
 }
 
 type Props = {visible:boolean, winnerSide:string}
+
+async function playMusic() {
+  const music = require("../../assets/music/End/Climax-Reasoning.mp3")
+  const { sound } = await Audio.Sound.createAsync(music)
+  await sound.playAsync()
+  await sound.setVolumeAsync(.5)
+  await sound.setIsLoopingAsync(true)
+}

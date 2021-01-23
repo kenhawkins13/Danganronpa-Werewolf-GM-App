@@ -46,7 +46,7 @@ export default function MorningTimeScreen() {
         text={confirmationText} amuletVisible={amuletVisible}
         onYes={() => {
           stage = 'dayTime'
-          gameContext.blackenedAttack = -1
+          gameContext.blackenedAttack = -2
           morningTimeLogic()
         }}
         onNo={() => {
@@ -112,7 +112,7 @@ export default function MorningTimeScreen() {
           if (gameContext.blackenedAttack === gameContext.monomiProtect) {
             const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
             gameContext.monomiExploded = true
-            gameContext.blackenedAttack = monomi // TODO: remove line? doesn't do anything but still theoretically correct
+            gameContext.blackenedAttack = monomi
             gameContext.playersInfo[monomi].alive = false
             gameContext.killsLeft -= 1
             speech = 'Yes, she did. ' + gameContext.playersInfo[monomi].name + ' explodes and dies to protect ' + victim.name
@@ -233,6 +233,6 @@ function goodMorningSpeech(dayNumber:number) {
 
 async function speakThenPause(speech:string, seconds:number=0) {
   Speech.speak(speech)
-  while (await Speech.isSpeakingAsync()) {}
+  do {} while (await Speech.isSpeakingAsync())
   await sleep(seconds * 1000)
 }

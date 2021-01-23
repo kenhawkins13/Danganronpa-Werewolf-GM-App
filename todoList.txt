@@ -1,7 +1,6 @@
 TODO:
 
-play music at night and trials
-Monomi song during her part at night? o.O
-
 somehow need to distinguish a label from a button in PlayersPage (and possibly the entire app)
- - darkGrey border on PlayerBoxes if onPlayerClick() => {}?
+  - darkGrey border on PlayerBoxes if onPlayerClick() => {}?
+if player does nothing for 15 seconds, repeat command
+remove scrum debate?

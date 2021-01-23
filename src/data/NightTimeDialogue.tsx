@@ -1,6 +1,6 @@
 export const speechSchoolAnnouncement1 = "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
 Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone should now be asleep."
-export const speechSchoolAnnouncement2 = "It is now officially nighttime. Would anyone like to use an ability or item? \
+export const speechSchoolAnnouncement2 = "It is now nighttime. Would anyone like to use an ability or item? \
 Click on the player and enter any investigative abilities or items."
 export const speechSchoolAnnouncement3 = "It is now nighttime. Everybody go to sleep. Everyone should now be asleep."
 export const speechToEveryoneSleep = "Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone should now be asleep."

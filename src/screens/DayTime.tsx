@@ -10,12 +10,17 @@ import WinnerDeclarationModal from '../components/modals/WinnerDeclaration'
 import PlayersPage from '../components/PlayersPage'
 import { blackTransparent, darkGrey, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
 import { appStyle } from '../styles/styles'
+import { Audio } from 'expo-av'
+import { GameContextType } from '../types/types'
 
 let stage = 'daySpeech'
 let speech = ''
 let winnerSide = ''
 let votedPlayerIndex = -1
 let discussionTime = 180
+let backgroundMusic:Audio.Sound
+let isMusicPlaying = false
+const updateMusicStatus = status => { isMusicPlaying = status.isPlaying }
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen() {
@@ -67,20 +72,27 @@ export default function DayTimeScreen() {
             <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
               <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableHighlight style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }} 
-                  onPress={() => { setTimerKey(timerKey + 1) }}>
+                  onPress={async () => { 
+                      await backgroundMusic.setVolumeAsync(.5)
+                      setTimerKey(timerKey + 1) 
+                    }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Restart{"\n"}Timer</Text>
                 </TouchableHighlight>
               </View>
             </View>
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={() => {
-                if (timerVisible) { Speech.speak("Time is up") }
+              <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
+                if (timerVisible) { 
+                  await backgroundMusic.setVolumeAsync(.1)
+                  Speech.speak("Time is up")
+                }
               }}/>
             </View>
             <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
               <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
-                  onPress={() => { 
+                  onPress={async () => {
+                    await backgroundMusic.unloadAsync()
                     setTimerVisible(false)
                     dayTimeLogic() 
                   }}>
@@ -109,7 +121,7 @@ export default function DayTimeScreen() {
 
   function DayTimeLabel() {
     const trialStages = ['discussion', 'abilitiesOrItemsTrial', 'trial', 'vote', 'execution']
-    if (trialStages.includes(stage) && gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1) {
+    if (trialStages.includes(stage) && gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
       return (
         <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
           <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
@@ -131,7 +143,7 @@ export default function DayTimeScreen() {
   async function dayTimeLogic() {
     switch (stage) {
       case 'daySpeech':
-        if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1) {
+        if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
           speech = 'It is day time. A body has been discovered! Now then, after a certain amount of time has passed, the class trial will begin!'
         } else {
           speech = 'Mm, ahem, it is now the day time.'
@@ -151,10 +163,11 @@ export default function DayTimeScreen() {
         }
         break
       case 'discussion':
+        backgroundMusic = await playMusic(gameContext)
         await speakThenPause('Discussion starts now.')
         setTimerVisible(true)
         // Speech.speak('You may now start the Non-stop debate. The standard time limit is 3 minutes.')
-        if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1) {
+        if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
           stage = 'abilitiesOrItemsTrial'
         } else {
           stage = 'nightTime'
@@ -180,8 +193,10 @@ export default function DayTimeScreen() {
         break
       case 'execution':
         if (votedPlayerIndex === -1) { // Tie vote
+          gameContext.tieVote = true
           setDiscussionOrVoteVisible(true)
         } else {
+          gameContext.tieVote = false
           const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
           gameContext.playersInfo[votedPlayerIndex].alive = false
           await speakThenPause(votedPlayer + ' has received the most votes and has been executed.', 1)
@@ -227,7 +242,72 @@ export default function DayTimeScreen() {
 }
 
 async function speakThenPause(speech:string, seconds:number=0) {
+  if (isMusicPlaying) { await backgroundMusic.setVolumeAsync(.1) }
   Speech.speak(speech)
-  while (await Speech.isSpeakingAsync()) {}
+  do {} while (await Speech.isSpeakingAsync())
   await sleep(seconds * 1000)
+  if (isMusicPlaying) { await backgroundMusic.setVolumeAsync(.5) }
+}
+
+async function playMusic(gameContext:GameContextType) {
+  let music:any
+  if (gameContext.dayNumber === 1 || gameContext.blackenedAttack === -1) {
+    const randomNum = Math.floor(Math.random() * 5)
+    switch (randomNum) {
+      case 0:
+        music = require("../assets/music/DaytimeCalm/Beautiful-Days.mp3")
+        break
+      case 1:
+        music = require("../assets/music/DaytimeCalm/Beautiful-Days-[Piano-Arrangement].mp3")
+        break
+      case 2:
+        music = require("../assets/music/DaytimeCalm/Beautiful-Dead.mp3")
+        break
+      case 3:
+        music = require("../assets/music/DaytimeCalm/Beautiful-Morning.mp3")
+        break
+      case 4:
+        music = require("../assets/music/DaytimeCalm/Beautiful-Ruin.mp3")
+        break
+    }
+  } else if (gameContext.blackenedAttack === -2) {
+    const randomNum = Math.floor(Math.random() * 4)
+    switch (randomNum) {
+      case 0:
+        music = require("../assets/music/DaytimeAggressive/Box-15.mp3")
+        break
+      case 1:
+        music = require("../assets/music/DaytimeAggressive/Box-16.mp3")
+        break
+      case 2:
+        music = require("../assets/music/DaytimeAggressive/Ekoroshia.mp3")
+        break
+      case 3:
+        music = require("../assets/music/DaytimeAggressive/Ikoroshia.mp3")
+        break
+    }
+  } else if (gameContext.tieVote === true) {
+    music = require("../assets/music/ClassTrial/Scrum-Debate.mp3")
+  } else {
+    const randomNum = Math.floor(Math.random() * 4)
+    switch (randomNum) {
+      case 0:
+        music = require("../assets/music/ClassTrial/Discussion-BREAK.mp3")
+        break
+      case 1:
+        music = require("../assets/music/ClassTrial/Discussion-HEAT-UP.mp3")
+        break
+      case 2:
+        music = require("../assets/music/ClassTrial/Discussion-HOPE-VS-DESPAIR.mp3")
+        break
+      case 3:
+        music = require("../assets/music/ClassTrial/Discussion-MIX.mp3")
+        break
+    }
+  }
+  const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
+  await sound.playAsync()
+  await sound.setVolumeAsync(.5)
+  await sound.setIsLoopingAsync(true)
+  return sound
 }

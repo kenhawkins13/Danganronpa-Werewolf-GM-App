@@ -13,6 +13,7 @@ import SchoolAnnouncementModal from '../components/modals/SchoolAnnouncement'
 import { blackTransparent, blueTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
 import { appStyle } from '../styles/styles'
 import CountdownTimer from '../components/CountdownTimer'
+import { Audio } from 'expo-av'
 
 let stage = 'schoolBell'
 let abilityOrItem = ''
@@ -22,6 +23,10 @@ let timerDuration = 0
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 let onPlayerClick = (playerIndex:number) => {}
 let onContinue = () => {}
+let backgroundMusic:Audio.Sound
+let monomiBackgroundMusic:Audio.Sound
+let isMusicPlaying = false
+const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 
 export default function NightTimeScreen() {
   const gameContext = useContext(GameContext)
@@ -125,6 +130,7 @@ export default function NightTimeScreen() {
           setSchoolAnnouncementVisible(true)
           await speakThenPause(speechSchoolAnnouncement1, 2)
           setSchoolAnnouncementVisible(false)
+          await playMusic()
           stage = 'traitor'
           nightTimeLogic()
         } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
@@ -132,10 +138,11 @@ export default function NightTimeScreen() {
           setContinueButtonTextColor('white')
           setContinueButtonDisabled(false)
           onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
-          onContinue = () => {
+          onContinue = async () => {
             setNightTimeLabelVisible(false)
             gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
             setDisabledPlayerIndexes([])
+            await playMusic()
             nightTimeLogic()
           }
           stage = 'abilitiesOrItemsSleep'
@@ -143,6 +150,7 @@ export default function NightTimeScreen() {
         } else {
           setNightTimeLabelVisible(false)
           await speakThenPause(speechSchoolAnnouncement3, 2)
+          await playMusic()
           stage = 'alterEgo'
           nightTimeLogic()
         }
@@ -201,6 +209,12 @@ export default function NightTimeScreen() {
         break
       case 'monomi':
         if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
+          const monomiMusic = require("../assets/music/NightTime/Miss-Monomi's-Practice-Lesson.mp3")
+          const { sound } = await Audio.Sound.createAsync(monomiMusic, {}, updateMusicStatus)
+          monomiBackgroundMusic = sound
+          await backgroundMusic.pauseAsync()
+          await monomiBackgroundMusic.playAsync()
+          await monomiBackgroundMusic.setVolumeAsync(.5)
           abilityOrItem = 'Protect'
           gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           setContinueButtonText('Continue')
@@ -234,6 +248,8 @@ export default function NightTimeScreen() {
         onPlayerClick = () => {}
         setTimerVisible(false)
         await speakThenPause(speechToMonomiSleep, 1)
+        await monomiBackgroundMusic.pauseAsync()
+        await backgroundMusic.playAsync()
       case 'alterEgo':
         if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
           abilityOrItem = 'Alter Ego'
@@ -309,6 +325,7 @@ export default function NightTimeScreen() {
         onPlayerClick = () => {}
         await speakThenPause(speechToBlackenedSleep, 2)
       case 'morningTime':
+        await backgroundMusic.unloadAsync()
         stage = 'schoolBell'
         gameContext.dayNumber += 1
         push('MorningTimeScreen')
@@ -393,7 +410,47 @@ export default function NightTimeScreen() {
 }
 
 async function speakThenPause(speech:string, seconds:number=0) {
+  if (backgroundMusic && isMusicPlaying) { await backgroundMusic.setVolumeAsync(.1) }
+  if (monomiBackgroundMusic && isMusicPlaying) { await monomiBackgroundMusic.setVolumeAsync(.1) }
   Speech.speak(speech)
-  while (await Speech.isSpeakingAsync()) {}
+  do {} while (await Speech.isSpeakingAsync())
   await sleep(seconds * 1000)
+  if (backgroundMusic && isMusicPlaying) {  await backgroundMusic.setVolumeAsync(.5) }
+  if (monomiBackgroundMusic && isMusicPlaying) { await monomiBackgroundMusic.setVolumeAsync(.5) }
+}
+
+async function playMusic() {
+  const randomNum = Math.floor(Math.random() * 8)
+  let music:any
+  switch (randomNum) {
+    case 0:
+      music = require("../assets/music/NightTime/A-Dead-End-to-the-Ocean's-Aroma.mp3")
+      break
+    case 1:
+      music = require("../assets/music/NightTime/Desire-for-Execution.mp3")
+      break
+    case 2:
+      music = require("../assets/music/NightTime/Despair-Syndrome-1.mp3")
+      break
+    case 3:
+      music = require("../assets/music/NightTime/Despair-Syndrome-2.mp3")
+      break
+    case 4:
+      music = require("../assets/music/NightTime/Mr.-Monokuma's-Lesson.mp3")
+      break
+    case 5:
+      music = require("../assets/music/NightTime/Mr.-Monokuma's-Tutoring.mp3")
+      break
+    case 6:
+      music = require("../assets/music/NightTime/Weekly-Despair-Magazine.mp3")
+      break
+    case 7:
+      music = require("../assets/music/NightTime/Welcome-to-Despair-Academy.mp3")
+      break
+  }
+  const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
+  backgroundMusic = sound
+  await backgroundMusic.playAsync()
+  await backgroundMusic.setVolumeAsync(.5)
+  await backgroundMusic.setIsLoopingAsync(true)
 }

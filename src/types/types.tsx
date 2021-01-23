@@ -17,11 +17,10 @@ export type GameContextType = {
   roleCounts:RoleCount[],
   playersInfo:PlayerInfo[],
   dayNumber:number,
-  stage:string,
   blackenedAttack:number,
   alterEgoAlive:boolean,
   monomiExploded:boolean,
   monomiProtect:number,
   vicePlayed:boolean,
-  currentPlayerIndex:number // TODO: remove
+  tieVote:boolean
 }
