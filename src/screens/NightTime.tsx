@@ -84,7 +84,14 @@ export default function NightTimeScreen() {
           {NightTimeLabel()}
           <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
             <TouchableHighlight style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} 
-              disabled={continueButtonDisabled} onPress={() => { onContinue() }}>
+              disabled={continueButtonDisabled} onPress={() => {
+                onContinue()
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
+                disableContinueButton()
+                setDisabledPlayerIndexes([])
+                onContinue = () => {}
+                onPlayerClick = () => {}
+              }}>
               <Text style={{...appStyle.text, color: continueButtonTextColor, textAlign: 'center', margin: 10}}>{continueButtonText}</Text>
             </TouchableHighlight>
           </View>
@@ -128,43 +135,40 @@ export default function NightTimeScreen() {
         if (gameContext.dayNumber === 0) {
           setNightTimeLabelVisible(false)
           setSchoolAnnouncementVisible(true)
-          await speakThenPause(speechSchoolAnnouncement1, 2)
-          setSchoolAnnouncementVisible(false)
-          await playMusic()
-          stage = 'traitor'
-          nightTimeLogic()
+          await speakThenPause(speechSchoolAnnouncement1, 2, async() => {
+            setSchoolAnnouncementVisible(false)
+            await playMusic()
+            stage = 'traitor'  
+            nightTimeLogic()
+          })        
         } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
-          setContinueButtonColor(blackTransparent)
-          setContinueButtonTextColor('white')
-          setContinueButtonDisabled(false)
           onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
           onContinue = async () => {
-            setNightTimeLabelVisible(false)
             gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
-            setDisabledPlayerIndexes([])
+            setNightTimeLabelVisible(false)
             await playMusic()
+            stage = 'abilitiesOrItemsSleep'
             nightTimeLogic()
           }
-          stage = 'abilitiesOrItemsSleep'
-          await speakThenPause(speechSchoolAnnouncement2, 1)
+          await speakThenPause(speechSchoolAnnouncement2, 0, () => {
+            setContinueButtonColor(blackTransparent)
+            setContinueButtonTextColor('white')
+            setContinueButtonDisabled(false)
+          })
         } else {
           setNightTimeLabelVisible(false)
-          await speakThenPause(speechSchoolAnnouncement3, 2)
-          await playMusic()
-          stage = 'alterEgo'
-          nightTimeLogic()
+          await speakThenPause(speechSchoolAnnouncement3, 2, async () => {
+            await playMusic()
+            stage = 'alterEgo'
+            nightTimeLogic()
+          })
         }
         break
       case 'abilitiesOrItemsSleep':
-        disableContinueButton()
-        setDisabledPlayerIndexes([])
-        onPlayerClick  = () => {}
-        onContinue = () => {}
         await abilitiesAndItemsSleep()
         break
       case 'abilitiesOrItemsAwake':
         setContinueButtonText('Investigate')
-        disableContinueButton()
         onPlayerClick = (playerIndex) => {
           gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
@@ -172,9 +176,8 @@ export default function NightTimeScreen() {
           setContinueButtonColor(pinkTransparent)
           setContinueButtonTextColor('white')
           setContinueButtonDisabled(false)
-        } // move to onContinue
+        }
         onContinue = () => {
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           setRevealRoleModalVisible(true)
         }
         await abilitiesAndItemsAwake()
@@ -187,14 +190,11 @@ export default function NightTimeScreen() {
             else { playerInfo.backgroundColor = blackTransparent }
           })
           setContinueButtonText('Continue')
-          disableContinueButton()
-          setDisabledPlayerIndexes([])
-          onPlayerClick = () => {}
-          onContinue = () => {}
-          await speakThenPause(speechToTraitorsAwake)
-          timerDuration = 5
-          setTimerVisible(true)
-          stage = 'traitorSleep'
+          await speakThenPause(speechToTraitorsAwake, 0 , () => {
+            timerDuration = 5
+            stage = 'traitorSleep'
+            setTimerVisible(true)
+          })
         } else {
           stage = 'blackened'
           nightTimeLogic()
@@ -203,9 +203,8 @@ export default function NightTimeScreen() {
       case 'traitorSleep':
         gameContext.playersInfo.forEach(playerInfo => {playerInfo.backgroundColor = blackTransparent})
         setTimerVisible(false)
-        await speakThenPause(speechToTraitorsSleep, 2)
         stage = 'blackened'
-        nightTimeLogic()
+        await speakThenPause(speechToTraitorsSleep, 2, nightTimeLogic)
         break
       case 'monomi':
         if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
@@ -216,11 +215,7 @@ export default function NightTimeScreen() {
           await monomiBackgroundMusic.playAsync()
           await monomiBackgroundMusic.setVolumeAsync(.5)
           abilityOrItem = 'Protect'
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           setContinueButtonText('Continue')
-          disableContinueButton()
-          setDisabledPlayerIndexes([])
-          onContinue = () => {}
           onPlayerClick = (playerIndex) => {
             const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
             if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
@@ -233,23 +228,25 @@ export default function NightTimeScreen() {
               }              
             }
           }
-          await speakThenPause(speechToMonomiAwake)
-          timerDuration = 10
-          setTimerVisible(true)
-          stage = 'monomiSleep'
+          await speakThenPause(speechToMonomiAwake, 0, () => {
+            timerDuration = 10
+            stage = 'monomiSleep'
+            setTimerVisible(true)
+          })
         } else {
           stage = 'alterEgo'
           nightTimeLogic()
         }
         break
       case 'monomiSleep':
-        gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
-        onContinue = () => {}
-        onPlayerClick = () => {}
         setTimerVisible(false)
-        await speakThenPause(speechToMonomiSleep, 1)
-        await monomiBackgroundMusic.pauseAsync()
-        await backgroundMusic.playAsync()
+        await speakThenPause(speechToMonomiSleep, 1, async () => {
+          await monomiBackgroundMusic.pauseAsync()
+          await backgroundMusic.playAsync()
+          stage = 'alterEgo'
+          nightTimeLogic()
+        })
+        break
       case 'alterEgo':
         if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
           abilityOrItem = 'Alter Ego'
@@ -258,7 +255,6 @@ export default function NightTimeScreen() {
             else { playerInfo.backgroundColor = blackTransparent }
           })
           setContinueButtonText('Investigate')
-          disableContinueButton()
           onPlayerClick = (playerIndex) => {
             gameContext.playersInfo.forEach(playerInfo => {playerInfo.backgroundColor = blackTransparent})
             gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
@@ -277,22 +273,13 @@ export default function NightTimeScreen() {
         }
         break
       case 'alterEgoSleep':
-        setContinueButtonText('Investigate')
-        disableContinueButton()
-        setDisabledPlayerIndexes([])
-        onContinue = () => {}
-        onPlayerClick = () => {}
-        await speakThenPause(speechToAlterEgoSleep, 2)
         stage = 'blackened'
-        nightTimeLogic()
+        await speakThenPause(speechToAlterEgoSleep, 2, nightTimeLogic)
         break
       case 'blackened':
         if ((gameContext.dayNumber === 0 && gameContext.mode === 'extreme' || gameContext.dayNumber > 0) && !gameContext.vicePlayed) {
           abilityOrItem = 'Attack'
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           setContinueButtonText('Attack')
-          disableContinueButton()
-          setDisabledPlayerIndexes([])
           onPlayerClick = (playerIndex) => {
             gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
             gameContext.playersInfo[playerIndex].backgroundColor = pinkTransparent
@@ -311,19 +298,19 @@ export default function NightTimeScreen() {
             await speakThenPause(speechToBlackenedAwake2, 1)
           }
         } else {
-          if (gameContext.vicePlayed === true) { await speakThenPause(speechToBlackenedVice, 1) }
           stage = 'morningTime'
-          nightTimeLogic()
+          if (gameContext.vicePlayed === true) { 
+            await speakThenPause(speechToBlackenedVice, 1, nightTimeLogic) 
+          } else {
+            nightTimeLogic()
+          }
         }
         break
       case 'blackenedSleep':
-        gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
         setContinueButtonText('Attack')
-        disableContinueButton()
-        setDisabledPlayerIndexes([])
-        onContinue = () => {}
-        onPlayerClick = () => {}
-        await speakThenPause(speechToBlackenedSleep, 2)
+        stage = 'morningTime'
+        await speakThenPause(speechToBlackenedSleep, 2, nightTimeLogic)
+        break
       case 'morningTime':
         await backgroundMusic.unloadAsync()
         stage = 'schoolBell'
@@ -332,70 +319,74 @@ export default function NightTimeScreen() {
     }
   }
 
-  async function abilitiesAndItemsSleep() {
-    if (previousPlayerIndex === -1) {
-      await speakThenPause('Everyone, go to sleep.', 2)
-    }
-  
+  async function abilitiesAndItemsSleep() {  
     for (let i = 0; i <= gameContext.playerCount; i++) {
       // No one declared an investigative Ability or Item
       if (i === gameContext.playerCount && previousPlayerIndex === -1) {
         currentPlayerIndex  = 0 // probably can delete
         previousPlayerIndex = -1
-        await speakThenPause('Everyone should now be asleep.', 2)
         stage = 'monomi'
-        nightTimeLogic()
+        await speakThenPause('Everyone should now be asleep.', 2, nightTimeLogic)
         return
       }
       // No more investigative Ability or Item
       else if (i === gameContext.playerCount && previousPlayerIndex !== -1) {
-        await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2)
-        currentPlayerIndex = 0
-        previousPlayerIndex = -1
-        stage = 'monomi'
-        nightTimeLogic()
+        await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2, () => {
+          currentPlayerIndex = 0
+          previousPlayerIndex = -1
+          stage = 'monomi'
+          nightTimeLogic()
+        })
         return
       // Someone declared an investigative Ability or Item
       } else if (gameContext.playersInfo[i].useAbility !== '' || gameContext.playersInfo[i].useItem !== '') {
         currentPlayerIndex = i
-        if (currentPlayerIndex !== previousPlayerIndex && previousPlayerIndex !== -1) {
-          await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2)
+        let speech = ''
+        if (previousPlayerIndex === -1) {
+          speech = 'Everyone go to sleep.'
+        } else if (currentPlayerIndex !== previousPlayerIndex && previousPlayerIndex !== -1) {
+          speech = gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.'
+        } else {
+          stage = 'abilitiesOrItemsAwake'
+          nightTimeLogic()
         }
-        stage = 'abilitiesOrItemsAwake'
-        nightTimeLogic()
-        setDisabledPlayerIndexes([currentPlayerIndex])
+        await speakThenPause(speech, 2, () => {
+          setDisabledPlayerIndexes([currentPlayerIndex])
+          stage = 'abilitiesOrItemsAwake'
+          nightTimeLogic()
+        })
         break
       }
     }
   }
 
   async function abilitiesAndItemsAwake() {
+    let speech = ''
     if (previousPlayerIndex !== currentPlayerIndex) {
-      await speakThenPause(gameContext.playersInfo[currentPlayerIndex].name + ', wake up.')
+      speech += gameContext.playersInfo[currentPlayerIndex].name + ', wake up. '
     }
-  
-    let speech = ''        
+        
     if (gameContext.playersInfo[currentPlayerIndex].useAbility === "Kyoko Kirigiri") {
       abilityOrItem = "Kyoko Kirigiri"
       gameContext.playersInfo[currentPlayerIndex].useAbility = ''
-      speech = 'Click the player you would like to investigate whether they are on the side of hope or despair.'
+      speech += 'Click the player you would like to investigate whether they are on the side of hope or despair.'
     } else if (gameContext.playersInfo[currentPlayerIndex].useAbility === "Yasuhiro Hagakure") {
       abilityOrItem = "Yasuhiro Hagakure"
       gameContext.playersInfo[currentPlayerIndex].useAbility = ''
       const role = gameContext.playerCount < 7 ? 'the despair disease patient' : 'monomi'
-      speech =  'Click the player you would like to investigate whether they are ' + role + ' or not ' + role
+      speech +=  'Click the player you would like to investigate whether they are ' + role + ' or not ' + role
     } else if (gameContext.playersInfo[currentPlayerIndex].useItem === 'Glasses') {
       abilityOrItem = 'Glasses'
       gameContext.playersInfo[currentPlayerIndex].useItem = ''
-      speech = 'Click the player you would like to investigate whether they are on the side of hope or despair.'
+      speech += 'Click the player you would like to investigate whether they are on the side of hope or despair.'
     } else if (gameContext.playersInfo[currentPlayerIndex].useItem === "Someone's Graduation Album") {
       abilityOrItem = "Someone's Graduation Album"
       gameContext.playersInfo[currentPlayerIndex].useItem = ''
-      speech = 'Click the player you would like to investigate whether they are a traitor or not a traitor.'
+      speech += 'Click the player you would like to investigate whether they are a traitor or not a traitor.'
     } else if (gameContext.playersInfo[currentPlayerIndex].useItem === 'Silent Receiver') {
       abilityOrItem = 'Silent Receiver'
       gameContext.playersInfo[currentPlayerIndex].useItem = ''
-      speech = 'Click the player you would like to investigate whether they are a spotless or not a spotless.'
+      speech += 'Click the player you would like to investigate whether they are a spotless or not a spotless.'
     }
     previousPlayerIndex = currentPlayerIndex
     stage = 'abilitiesOrItemsSleep'
@@ -407,50 +398,52 @@ export default function NightTimeScreen() {
     setContinueButtonTextColor(darkGrey)
     setContinueButtonDisabled(true)
   }
-}
 
-async function speakThenPause(speech:string, seconds:number=0) {
-  if (backgroundMusic && isMusicPlaying) { await backgroundMusic.setVolumeAsync(.1) }
-  if (monomiBackgroundMusic && isMusicPlaying) { await monomiBackgroundMusic.setVolumeAsync(.1) }
-  Speech.speak(speech)
-  do {} while (await Speech.isSpeakingAsync())
-  await sleep(seconds * 1000)
-  if (backgroundMusic && isMusicPlaying) {  await backgroundMusic.setVolumeAsync(.5) }
-  if (monomiBackgroundMusic && isMusicPlaying) { await monomiBackgroundMusic.setVolumeAsync(.5) }
-}
-
-async function playMusic() {
-  const randomNum = Math.floor(Math.random() * 8)
-  let music:any
-  switch (randomNum) {
-    case 0:
-      music = require("../assets/music/NightTime/A-Dead-End-to-the-Ocean's-Aroma.mp3")
-      break
-    case 1:
-      music = require("../assets/music/NightTime/Desire-for-Execution.mp3")
-      break
-    case 2:
-      music = require("../assets/music/NightTime/Despair-Syndrome-1.mp3")
-      break
-    case 3:
-      music = require("../assets/music/NightTime/Despair-Syndrome-2.mp3")
-      break
-    case 4:
-      music = require("../assets/music/NightTime/Mr.-Monokuma's-Lesson.mp3")
-      break
-    case 5:
-      music = require("../assets/music/NightTime/Mr.-Monokuma's-Tutoring.mp3")
-      break
-    case 6:
-      music = require("../assets/music/NightTime/Weekly-Despair-Magazine.mp3")
-      break
-    case 7:
-      music = require("../assets/music/NightTime/Welcome-to-Despair-Academy.mp3")
-      break
+  async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
+    if (backgroundMusic && isMusicPlaying) { await backgroundMusic.setVolumeAsync(.1) }
+    if (monomiBackgroundMusic) { await monomiBackgroundMusic.setVolumeAsync(.1) }
+    const callback = async(seconds:number) => {
+      if (backgroundMusic && isMusicPlaying) {  await backgroundMusic.setVolumeAsync(.5) }
+      if (monomiBackgroundMusic) { await monomiBackgroundMusic.setVolumeAsync(.5) }
+      await sleep(seconds * 1000)
+      if (onDone) { onDone() }
+    }
+    Speech.speak(speech, {onDone: () => {callback(seconds)}})
   }
-  const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
-  backgroundMusic = sound
-  await backgroundMusic.playAsync()
-  await backgroundMusic.setVolumeAsync(.5)
-  await backgroundMusic.setIsLoopingAsync(true)
+  
+  async function playMusic() {
+    const randomNum = Math.floor(Math.random() * 8)
+    let music:any
+    switch (randomNum) {
+      case 0:
+        music = require("../assets/music/NightTime/A-Dead-End-to-the-Ocean's-Aroma.mp3")
+        break
+      case 1:
+        music = require("../assets/music/NightTime/Desire-for-Execution.mp3")
+        break
+      case 2:
+        music = require("../assets/music/NightTime/Despair-Syndrome-1.mp3")
+        break
+      case 3:
+        music = require("../assets/music/NightTime/Despair-Syndrome-2.mp3")
+        break
+      case 4:
+        music = require("../assets/music/NightTime/Mr.-Monokuma's-Lesson.mp3")
+        break
+      case 5:
+        music = require("../assets/music/NightTime/Mr.-Monokuma's-Tutoring.mp3")
+        break
+      case 6:
+        music = require("../assets/music/NightTime/Weekly-Despair-Magazine.mp3")
+        break
+      case 7:
+        music = require("../assets/music/NightTime/Welcome-to-Despair-Academy.mp3")
+        break
+    }
+    const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
+    backgroundMusic = sound
+    await backgroundMusic.playAsync()
+    await backgroundMusic.setVolumeAsync(.5)
+    await backgroundMusic.setIsLoopingAsync(true)
+  }
 }

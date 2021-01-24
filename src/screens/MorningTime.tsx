@@ -97,52 +97,53 @@ export default function MorningTimeScreen() {
     switch (stage) {
       case 'morningSpeech':
         gameContext.vicePlayed = false
-        await speakThenPause(goodMorningSpeech(gameContext.dayNumber), 1)
+        stage = 'announceAttack'
+        await speakThenPause(goodMorningSpeech(gameContext.dayNumber), 1, morningTimeLogic)
+        break
       case 'announceAttack':
         if (gameContext.blackenedAttack !== -1) {
           victim = gameContext.playersInfo[gameContext.blackenedAttack]
           gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           victim.backgroundColor = pinkTransparent
           setArray([])
-          await speakThenPause(victim.name + ', was attacked by the Blackened last night.', 1)
+          stage = 'monomi'
+          await speakThenPause(victim.name + ', was attacked by the Blackened last night.', 1, morningTimeLogic)
+          break
         }
       case 'monomi':
         if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 1 && gameContext.monomiExploded === false  && gameContext.blackenedAttack !== -1) {
-          await speakThenPause('Did Monomi protect' + victim.name + ' last night?', 1)
+          let speech = 'Did Monomi protect' + victim.name + ' last night? '
           if (gameContext.blackenedAttack === gameContext.monomiProtect) {
             const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
             gameContext.monomiExploded = true
             gameContext.blackenedAttack = monomi
             gameContext.playersInfo[monomi].alive = false
             gameContext.killsLeft -= 1
-            speech = 'Yes, she did. ' + gameContext.playersInfo[monomi].name + ' explodes and dies to protect ' + victim.name
+            speech += 'Yes, she did. ' + gameContext.playersInfo[monomi].name + ' explodes and dies to protect ' + victim.name
             stage = 'dayTime'
           } else {          
-            speech = 'No, she did not.'
+            speech += 'No, she did not.'
             stage = 'victim'
           }
-          await speakThenPause(speech, 1)
-        } else {
-          stage = 'victim'
+          await speakThenPause(speech, 1, morningTimeLogic)
+          break
         }
-        morningTimeLogic()
-        break
       case 'victim':
         if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber === 1 && gameContext.mode === 'extreme') {
           victim = gameContext.playersInfo[gameContext.blackenedAttack]
-          await speakThenPause(victim.name + ', discard one Item card.')
           stage = 'dayTime'
-          enableContinueButton()
+          await speakThenPause(victim.name + ', discard one Item card.', 0, enableContinueButton)
         } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'extreme') {
           victim = gameContext.playersInfo[gameContext.blackenedAttack]
           gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
           victim.backgroundColor = pinkTransparent
           setArray([]) // to re-render screen
-          await speakThenPause(victim.name + ', would you like to use an ability or item to prevent your death?')
           confirmationText = 'Did ' + victim.name + ' protect himself?'
           amuletVisible = true
           stage = 'playersAbilities'
-          setConfirmationMorningVisible(true)
+          await speakThenPause(victim.name + ', would you like to use an ability or item to prevent your death?', 0, () => {
+            setConfirmationMorningVisible(true)
+          })          
         } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'normal') {
           stage = 'bodyDiscovery'
           morningTimeLogic()
@@ -152,11 +153,12 @@ export default function MorningTimeScreen() {
         }
         break
       case 'playersAbilities':
-        await speakThenPause('Would anybody like to use an ability to protect ' + victim.name + '?')
         confirmationText = 'Did somebody protect ' + victim.name + '\nwith a character ability?'
         amuletVisible = false
         stage = 'giveItems'
-        setConfirmationMorningVisible(true)
+        await speakThenPause('Would anybody like to use an ability to protect ' + victim.name + '?', 0, () => {
+          setConfirmationMorningVisible(true)
+        })
         break
       case 'giveItems':
         let indexRight = victim.playerIndex
@@ -171,42 +173,43 @@ export default function MorningTimeScreen() {
         } while (!gameContext.playersInfo[indexLeft].alive)
         speech = gameContext.playersInfo[indexLeft].name + ' and ' + gameContext.playersInfo[indexRight].name + 
           ', would either of you like to give an item to ' + victim.name + '?'
-        await speakThenPause(speech)
         confirmationText = 'Did ' + victim.name + ' protect himself?'
         stage = 'bodyDiscovery'
         amuletVisible = true
-        setConfirmationMorningVisible(true)
+        await speakThenPause(speech, 0, () => { setConfirmationMorningVisible(true) })
         break
       case 'bodyDiscovery':
-        await speakThenPause(victim.name + ' has been killed.', 1)
+        stage = 'useAbilityOrItem'
         gameContext.playersInfo[gameContext.blackenedAttack].alive = false
         gameContext.killsLeft -= 1
-        if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
-          gameContext.alterEgoAlive = false
-          await speakThenPause('U pu pu pu. ' + victim.name + ' was the Alter Ego.', 1)
-        } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
-          await speakThenPause('How disappointing. ' + victim.name + ' was the Blackened', 1)
-          setWinnerDeclarationVisible(true)
-          break
-        }
+        await speakThenPause(victim.name + ' has been killed.', 1, async () => {
+          if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
+            gameContext.alterEgoAlive = false
+            await speakThenPause('U pu pu pu. ' + victim.name + ' was the Alter Ego.')
+            morningTimeLogic()
+          } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
+            await speakThenPause('How disappointing. ' + victim.name + ' was the Blackened')
+            setWinnerDeclarationVisible(true)
+          } else {
+            morningTimeLogic()
+          }
+        })
+        break
       case 'useAbilityOrItem':
         if (gameContext.mode === 'extreme') {
           stage = 'viceConfirmation'
-          await speakThenPause('Would anybody like to use an ability or item before moving on to day time?')
-          enableContinueButton()
+          await speakThenPause('Would anybody like to use an ability or item before moving on to day time?', 0, enableContinueButton)
         } else {
           stage = 'dayTime'
           morningTimeLogic()
         }
         break
       case 'viceConfirmation':
-        stage = 'dayTime'
         if (gameContext.killsLeft !== 0) {
-          setConfirmationVisible(true)          
-        } else {
-          morningTimeLogic()
+          stage = 'dayTime'
+          setConfirmationVisible(true)
+          break
         }
-        break
       case 'dayTime':
         gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
         push('DayTimeScreen')
@@ -231,8 +234,10 @@ function goodMorningSpeech(dayNumber:number) {
   }
 }
 
-async function speakThenPause(speech:string, seconds:number=0) {
-  Speech.speak(speech)
-  do {} while (await Speech.isSpeakingAsync())
-  await sleep(seconds * 1000)
+async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
+  const callback = async(seconds:number) => {
+    await sleep(seconds * 1000)
+    if (onDone) { onDone() }
+  }
+  Speech.speak(speech, {onDone: () => {callback(seconds)}})
 }

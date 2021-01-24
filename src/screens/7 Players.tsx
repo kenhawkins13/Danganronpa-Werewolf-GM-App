@@ -69,7 +69,6 @@ export default function PlayersScreen() {
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
             disabled={startButtonDisabled} onPress={() => {
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
-              Speech.speak('U pu pu pu')
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
               push('NightTimeScreen')
             } else {
