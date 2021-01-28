@@ -1,8 +1,6 @@
 import React from "react"
-import { View } from "react-native"
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer"
 import Animated from "react-native-reanimated"
-import { greyTransparent } from "../styles/colors"
 import { appStyle } from "../styles/styles"
 
 export default function CountdownTimer({timerKey, duration, onDone}:Props) {

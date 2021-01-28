@@ -113,13 +113,12 @@ export default function App() {
           roleCounts: [],
           playersInfo: [],
           dayNumber: 0,
-          stage: '',
           blackenedAttack: -1,
           alterEgoAlive: true,
           monomiExploded: false,
           monomiProtect: -1,
           vicePlayed: false,
-          currentPlayerIndex: 0
+          tieVote: false
           }}>
           <NavigationContainer>
             <RootStack.Navigator>

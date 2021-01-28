@@ -1,4 +1,4 @@
-export const blackTransparent = 'rgba(0, 0, 0, 0.5)'
+export const blackTransparent = 'rgba(0, 0, 0, 0.75)'
 export const whiteTransparent = 'rgba(255, 255, 255, 0.75)'
 export const pink = 'rgb(217, 48, 152)' // Hex: D93098
 export const pinkTransparent = 'rgba(217, 48, 152, 0.75)'

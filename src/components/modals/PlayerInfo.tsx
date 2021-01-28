@@ -5,7 +5,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { modalStyles } from "../../styles/styles"
 import { GameContextType } from "../../types/types"
 import { GameContext } from "../../../AppContext"
-import { darkGrey } from "../../styles/colors"
+import { blackTransparent, greyTransparent } from "../../styles/colors"
 
 export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props) {
   const gameContext = useContext(GameContext)
@@ -29,32 +29,32 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
             <TouchableHighlight
               style={{ ...modalStyles.button}}
               onPress={() => {
+                  gameContext.playersInfo[playerIndex].name = 'Player ' + (playerIndex + 1).toString()
+                  gameContext.playersInfo[playerIndex].role = ''
+                  gameContext.playersInfo[playerIndex].side = ''
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
+                  setVisible(false)
+                  setPlayerRole('')
+                }}>
+              <Text style={modalStyles.textStyle}>Clear</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={{ ...modalStyles.button}}
+              onPress={() => {
                 if (playerRole !== '') {
                   gameContext.playersInfo[playerIndex].role = playerRole
                   gameContext.playersInfo[playerIndex].side = 
                     ['Spotless', 'Alter Ego', 'Ultimate Despair'].indexOf(playerRole) !== -1 ? 'Hope' : 'Despair'
-                  gameContext.playersInfo[playerIndex].borderColor = darkGrey
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = greyTransparent
                 } else {
                   gameContext.playersInfo[playerIndex].role = ''
                   gameContext.playersInfo[playerIndex].side = ''
-                  gameContext.playersInfo[playerIndex].borderColor = 'white'
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
                 }
                 setPlayerRole('')
                 setVisible(false)
               }}>
               <Text style={modalStyles.textStyle}>Save</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={{ ...modalStyles.button}}
-              onPress={() => {
-                  gameContext.playersInfo[playerIndex].name = 'Player ' + (playerIndex + 1).toString()
-                  gameContext.playersInfo[playerIndex].role = ''
-                  gameContext.playersInfo[playerIndex].side = ''
-                  gameContext.playersInfo[playerIndex].borderColor = 'white'
-                  setVisible(false)
-                  setPlayerRole('')
-                }}>
-              <Text style={modalStyles.textStyle}>Clear</Text>
             </TouchableHighlight>
             </View>
         </View>

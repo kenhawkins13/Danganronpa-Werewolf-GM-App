@@ -25,20 +25,6 @@ export default function StartScreen () {
   // Listen for isFocused. If useFocused changes, force re-render by setting state
   useEffect(() => { if (isFocused) {
     ScreenOrientation.lockAsync(OrientationLock.PORTRAIT)
-    gameContext.mode = 'normal'
-    gameContext.playerCount = 4
-    gameContext.killsLeft = 0
-    gameContext.roleCounts = []
-    gameContext.playersInfo = []
-    gameContext.dayNumber = 0
-    gameContext.blackenedAttack = -1
-    gameContext.alterEgoAlive = true
-    gameContext.monomiExploded = false
-    gameContext.monomiProtect = -1
-    gameContext.vicePlayed = false
-    gameContext.tieVote = false
-    setGameMode(0)
-    setPlayerCount(4)
     playMusic()
   }}, [isFocused])
 
@@ -101,6 +87,7 @@ export default function StartScreen () {
                   require('../assets/sounds/Revolver.mp3')
                 )
                 await sound.playAsync()
+                await sound.setVolumeAsync(.1)
                 await stopMusic(music)
                 fillContextInfo(gameContext)
                 navigation.navigate('DisclaimerScreen')
@@ -136,10 +123,9 @@ function fillContextInfo(gameContext:GameContextType) {
       side: '',
       role: '',
       alive: true,
-      backgroundColor: blackTransparent,
-      borderColor: 'white',
       useAbility: '',
-      useItem: ''
+      useItem: '',
+      playerButtonStyle: {disabled: false, textColor: 'white', backgroundColor: blackTransparent, borderColor: 'white'}
     })
   }
   return true
@@ -148,6 +134,7 @@ function fillContextInfo(gameContext:GameContextType) {
 async function playMusic() {
   const { sound } = await Audio.Sound.createAsync(require('../assets/sounds/Dangan-Ronpa!.mp3'))
   await sound.playAsync()
+  await sound.setVolumeAsync(.1)
   music = sound
 }
 

@@ -33,7 +33,7 @@ export const modalStyles = StyleSheet.create({
     elevation: 5
   },
   button: {
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    backgroundColor: 'rgba(0,0,0,0.9)',
     borderRadius: 20,
     width: 100,
     margin: 10,

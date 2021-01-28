@@ -1,13 +1,13 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight, ImageBackground } from 'react-native'
 import { GameContext } from '../../AppContext'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
-import { darkGrey, greyTransparent } from '../styles/colors'
 import { PlayerInfo } from '../types/types'
+import { greyTransparent } from '../styles/colors'
 
-export default function PlayersPage({middleSection, onPlayerClick, disabledPlayerIndexes=[]}:Props) {
+export default function PlayersPage({middleSection, onPlayerClick}:Props) {
   // modal.props.setVisisble(true) Is this possible so I don't need to pass in setModalVisible
   const gameContext = useContext(GameContext)
   const [bool, setBool] = useState(false)
@@ -21,9 +21,9 @@ export default function PlayersPage({middleSection, onPlayerClick, disabledPlaye
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} source={require('../assets/background/Trial-Room.png')} resizeMode='cover'>
+      <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} source={require('../assets/background/Setup.png')} resizeMode='cover'>
         <View style={{ flex: 1 }}>
-          {PlayersBoxes(boxIndexes(gameContext.playerCount))}
+          {PlayerButtons(boxIndexes(gameContext.playerCount))}
           <View style={{ height: '60%', width: '60%', left: '20%', top: '20%', position: 'absolute' }}>
             {middleSection}
           </View>
@@ -32,27 +32,28 @@ export default function PlayersPage({middleSection, onPlayerClick, disabledPlaye
     </View>
   )
   
-  function PlayersBoxes(boxIndexes:number[]) {
+  function PlayerButtons(boxIndexes:number[]) {
     return (
       boxIndexes.map((value, index) => (
         <View key={'box' + value} style={boxPosition(value).playerBox}>
-          {PlayerBox(index)}
+          {PlayerButton(index)}
         </View>
       ))
     )
   }
   
-  function PlayerBox(playerIndex:number) {
+  function PlayerButton(playerIndex:number) {
     return (
       <View key={'player' + playerIndex} style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
         <TouchableHighlight key={'player' + playerIndex + 1} 
-          style={playerBoxStyle(gameContext.playersInfo[playerIndex], disabledPlayerIndexes).boxStyle}
-          disabled={disabledPlayerIndexes.includes(playerIndex) || gameContext.playersInfo[playerIndex].alive === false ? true : false}
+          style={{...playerBoxStyle(gameContext.playersInfo[playerIndex]).boxStyle}}
+          disabled={gameContext.playersInfo[playerIndex].playerButtonStyle.disabled === true || 
+            gameContext.playersInfo[playerIndex].alive === false}
           onPress={() => { 
             onPlayerClick(playerIndex)
             setBool(!bool)
           }}>
-          <Text adjustsFontSizeToFit style={playerBoxStyle(gameContext.playersInfo[playerIndex], disabledPlayerIndexes).textStyle}>
+          <Text adjustsFontSizeToFit style={playerBoxStyle(gameContext.playersInfo[playerIndex]).textStyle}>
             {gameContext.playersInfo[playerIndex].name}
           </Text>
         </TouchableHighlight>
@@ -61,13 +62,16 @@ export default function PlayersPage({middleSection, onPlayerClick, disabledPlaye
   }
 }
 
-type Props = {middleSection:JSX.Element, onPlayerClick:(playerIndex:number) => void, disabledPlayerIndexes?:number[]}
+type Props = {middleSection:JSX.Element, onPlayerClick:(playerIndex:number) => void}
 
-function playerBoxStyle(playerInfo:PlayerInfo, disabledPlayerIndexes:number[]) {
-  let textColor = 'white'
-  if (!playerInfo.alive || disabledPlayerIndexes.includes(playerInfo.playerIndex)) {
-    textColor = darkGrey
-    playerInfo.backgroundColor = greyTransparent
+function playerBoxStyle(playerInfo:PlayerInfo) {
+  let textColor = playerInfo.playerButtonStyle.textColor
+  let backgroundColor = playerInfo.playerButtonStyle.backgroundColor
+  let borderColor = playerInfo.playerButtonStyle.borderColor
+  if (!playerInfo.alive) {
+    textColor = greyTransparent
+    backgroundColor = greyTransparent
+    borderColor = greyTransparent
   }
   return StyleSheet.create({
     boxStyle: {
@@ -75,17 +79,17 @@ function playerBoxStyle(playerInfo:PlayerInfo, disabledPlayerIndexes:number[]) {
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: playerInfo.backgroundColor,
+      backgroundColor: backgroundColor,
       borderRadius: 20,
       borderWidth: 3,
-      borderColor: playerInfo.borderColor,
+      borderColor: borderColor,
       padding: '2.5%'
     }, 
     textStyle: {
       color: textColor,
       fontSize: 50,
       marginVertical: '5%',
-      textAlign: 'center'
+      textAlign: 'center',
     }
   })
 }

@@ -33,7 +33,7 @@ function getText(mode:string) {
             {"\n"}
           </Text>
           <Text style={appStyle.text}>
-            Randomly draw and distrivute two item cards for each player. Every player has the option to mulligan both their
+            Randomly draw and distribute two item cards to each player. Everyone has the option to mulligan both their
             cards and redraw a new set. You cannot redraw just one card, it must be both.
             {"\n"}
           </Text>

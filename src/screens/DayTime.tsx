@@ -12,6 +12,7 @@ import { blackTransparent, darkGrey, greyTransparent, pinkTransparent, yellowTra
 import { appStyle } from '../styles/styles'
 import { Audio } from 'expo-av'
 import { GameContextType } from '../types/types'
+import { disablePlayerButton } from '../styles/playerButtonStyles'
 
 let stage = 'daySpeech'
 let speech = ''
@@ -19,8 +20,6 @@ let winnerSide = ''
 let votedPlayerIndex = -1
 let discussionTime:number
 let backgroundMusic:Audio.Sound
-let isMusicPlaying = false
-const updateMusicStatus = status => { isMusicPlaying = status.isPlaying }
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen() {
@@ -34,11 +33,17 @@ export default function DayTimeScreen() {
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
+  const [state, setState] = useState([])
 
   // Returns true if screen is focused
   const isFocused = useIsFocused()
   // Listen for isFocused. If useFocused changes, force re-render by setting state
-  useEffect(() => { if (isFocused) { dayTimeLogic() }}, [isFocused])
+  useEffect(() => { if (isFocused) {
+    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+    setState([]) // re-render screen
+    dayTimeLogic() 
+  }}, [isFocused])
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -180,7 +185,8 @@ export default function DayTimeScreen() {
         }
       case 'trial':
         stage = 'vote'
-        await speakThenPause('The countdown to vote will occur next. Click Continue when everybody is ready to vote.', 0, enableContinueButton)
+        await speakThenPause('Up next is the voting segment where each player points to who they think is the Blackened.\
+        Click Continue when everyone is ready to vote.', 0, enableContinueButton)
         break
       case 'vote':
         stage = 'execution'
@@ -246,9 +252,7 @@ export default function DayTimeScreen() {
 }
 
 async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
-  if (isMusicPlaying) { await backgroundMusic.setVolumeAsync(.1) }
   const callback = async(seconds:number) => {
-    if (isMusicPlaying) {  await backgroundMusic.setVolumeAsync(.5) }
     await sleep(seconds * 1000)
     if (onDone) { onDone() }
   }
@@ -311,9 +315,9 @@ async function playMusic(gameContext:GameContextType) {
         break
     }
   }
-  const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
+  const { sound } = await Audio.Sound.createAsync(music)
   await sound.playAsync()
-  await sound.setVolumeAsync(.5)
+  await sound.setVolumeAsync(.1)
   await sound.setIsLoopingAsync(true)
   return sound
 }

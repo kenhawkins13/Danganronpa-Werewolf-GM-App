@@ -19,7 +19,7 @@ export default function DisclaimerScreen() {
             <Text style={appStyle.text}>
               This app replaces the Monokuma (Gamemaster) role in the Danganronpa 1·2 Ultimate High School Werewolf 
               card game. So now, all the players can participate in the fun killing game. The cards from the original 
-              game are still required to play this game and they can be found here:
+              game are still required to play this game and they can be found here: {"\n"}
             </Text>
             <Text style={{...appStyle.text, color: 'lightblue'}} onPress={() => Linking.openURL('https://boardgamegeek.com/filepage/193245/translated-cards-print-play')}>
               https://boardgamegeek.com/filepage/193245/translated-cards-print-play

@@ -32,10 +32,13 @@ export default function IntroductionScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='DisclaimerScreen' nextPage='RolesScreen' onNext={() => {
+          <NavigationBar previousPage='DisclaimerScreen' nextPage='RolesScreen' onPrevious={() => {
             Speech.stop()
             return true
-          }}></NavigationBar>
+          }} onNext={() => {
+            Speech.stop()
+            return true
+          }}/>
         </View>
       </ImageBackground>
     </View>
@@ -44,6 +47,6 @@ export default function IntroductionScreen() {
 
 const text1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adoorable headmaster, Monokuma!"
 const text2 = "Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
-I would be failing in my role as headmaster. Instead, to strenthen your bond as students of this \
+I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
 academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
-Werewolf for the ultimate students. How exciting!"
+Werewolf for the ultimate students.\n\nHow exciting!"

@@ -1,14 +1,14 @@
 export type RoleCount = {roles:string[], count:number}
+export type PlayerButtonStyle = {disabled: boolean, textColor:string, backgroundColor:string, borderColor:string}
 export type PlayerInfo = {
   playerIndex:number,
   name:string,
   role:string,
   side:string,
   alive:boolean,
-  backgroundColor:string,
-  borderColor:string,
   useAbility:string,
-  useItem:string
+  useItem:string,
+  playerButtonStyle:PlayerButtonStyle
 }
 export type GameContextType = {
   mode:string,

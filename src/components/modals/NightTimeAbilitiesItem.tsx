@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react"
 import { Modal, View, Text, TouchableHighlight } from "react-native"
-import { appStyle, modalStyles } from "../../styles/styles"
+import { modalStyles } from "../../styles/styles"
 import { Picker } from '@react-native-picker/picker'
 import { GameContext } from "../../../AppContext"
-import { blackTransparent, blueTransparent, darkGrey } from "../../styles/colors"
+import { blackTransparent, greyTransparent } from "../../styles/colors"
 
 export default function NightTimeAbilitiesItemsModal({visible, setVisible, playerIndex}:Props) {
   const gameContext = useContext(GameContext)
@@ -35,31 +35,31 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
             <View style={{flexDirection: 'row'}}>
               <TouchableHighlight
                 style={{...modalStyles.button}}
+                onPress={() => { 
+                  gameContext.playersInfo[playerIndex].useAbility = ''
+                  gameContext.playersInfo[playerIndex].useItem = ''
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
+                  setPlayerAbility('')
+                  setItemCard('')
+                  setVisible(!visible) 
+                }}>
+                <Text style={modalStyles.textStyle}>Clear</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{...modalStyles.button}}
                 onPress={() => {
                   gameContext.playersInfo[playerIndex].useAbility = playerAbility
                   gameContext.playersInfo[playerIndex].useItem = itemCard
                   if (playerAbility !== '' || itemCard !== '') {
-                    gameContext.playersInfo[playerIndex].borderColor = darkGrey
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = greyTransparent
                   } else {
-                    gameContext.playersInfo[playerIndex].borderColor = 'white'
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
                   }
                   setPlayerAbility('')
                   setItemCard('')
                   setVisible(!visible)
                 }}>
                 <Text style={modalStyles.textStyle}>OK</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{...modalStyles.button}}
-                onPress={() => { 
-                  gameContext.playersInfo[playerIndex].useAbility = ''
-                  gameContext.playersInfo[playerIndex].useItem = ''
-                  gameContext.playersInfo[playerIndex].borderColor = 'white'
-                  setPlayerAbility('')
-                  setItemCard('')
-                  setVisible(!visible) 
-                }}>
-                <Text style={modalStyles.textStyle}>Clear</Text>
               </TouchableHighlight>
             </View>
           </View>

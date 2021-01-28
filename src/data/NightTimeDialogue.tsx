@@ -9,7 +9,7 @@ Blackened, while keeping your eyes closed, raise your hand or give a signal to l
 Additionally, the screen reveals the traitors and the Blackened player."
 export const speechToTraitorsSleep = 'Traitors, go back to sleep.'
 export const speechToMonomiAwake = 'Monomi, wake up. Click the player you would like to protect. You do not have to protect somebody. \
-I will automatically move on in 10 seconds.'
+I will automatically move on in 15 seconds.'
 export const speechToMonomiSleep = 'Monomi, go back to sleep.'
 export const speechToAlterEgoAwake = 'Alter ego, wake up. Click the player you would like to investigate.'
 export const speechToAlterEgoSleep = 'Alter ego, go back to sleep.'

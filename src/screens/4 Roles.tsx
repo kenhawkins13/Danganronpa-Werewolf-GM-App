@@ -22,9 +22,10 @@ export default function RolesScreen() {
               </Text>
               <Text style={{...appStyle.text}}>
                 {"\n"}
-                Prepare one character card and one role card for each player according to the chart below.
-                Keep the roles hidden but have everyone introduce their character's name, gender, ultimate title, 
-                {(extraText(gameContext.mode))} and quotes.
+                Prepare one character card for each player then have everyone introduce their character's name, gender, ultimate title, 
+                {(extraText(gameContext.mode))} and quotes. 
+                {"\n"}
+                Shuffle the role cards shown in the chart below and secrety distribute one role card to each player.
               </Text>
             </View>
             <View style={{ borderBottomColor: 'white', borderBottomWidth: 2, marginVertical: 10 }}/>
@@ -125,7 +126,7 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: 1}}/>
-            <View style={{ flex: 1, justifyContent: 'center'}}>
+            <View style={{flex: 1, justifyContent: 'center', height: '100%'}}>
               <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
             </View>
             <View style={{flex: 1}}>
@@ -143,7 +144,7 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: 1}}/>
-            <View style={{ flex: 2, justifyContent: 'center' }}>
+            <View style={{flex: 2, justifyContent: 'center', height: '100%'}}>
               <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
             </View>
             <View style={{flex: 2}}>
@@ -163,8 +164,8 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
       return (
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
+            <View style={{flex: 1, justifyContent: 'center', height: '100%'}}>
+              <Text style={{...appStyle.text, textAlign: 'center'}}>Draw {specialRoles.count}</Text>
             </View>
             <View style={{flex: 1}}>
               <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>

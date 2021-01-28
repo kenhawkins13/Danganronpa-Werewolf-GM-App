@@ -25,31 +25,42 @@ export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
     else {
       gameContext.playersInfo.forEach(playerInfo => {
         playerInfo.alive = true
+        playerInfo.playerButtonStyle.disabled = false
         switch (playerInfo.role) {
           case 'Spotless':
-            playerInfo.backgroundColor = whiteTransparent
-            playerInfo.borderColor = 'white'
+            playerInfo.playerButtonStyle.textColor = 'white'
+            playerInfo.playerButtonStyle.backgroundColor = whiteTransparent
+            playerInfo.playerButtonStyle.borderColor = 'white'
             break
           case 'Alter Ego':
-            playerInfo.backgroundColor = greenTransparent
-            playerInfo.borderColor = 'white'
+            playerInfo.playerButtonStyle.textColor = greenTransparent
+            playerInfo.playerButtonStyle.backgroundColor = whiteTransparent
+            playerInfo.playerButtonStyle.borderColor = 'white'
             break
           case 'Blackened':
-            playerInfo.backgroundColor = blackTransparent
-            playerInfo.borderColor = pink
+            playerInfo.playerButtonStyle.textColor = pinkTransparent
+            playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+            playerInfo.playerButtonStyle.borderColor = 'black'
             break
           case 'Traitor':
-            playerInfo.backgroundColor = greyTransparent
-            playerInfo.borderColor = 'black'
+            playerInfo.playerButtonStyle.textColor = greyTransparent
+            playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+            playerInfo.playerButtonStyle.borderColor = 'black'
             break
           case 'Despair Disease Patient':
+            playerInfo.playerButtonStyle.textColor = blueTransparent
+            playerInfo.playerButtonStyle.backgroundColor = whiteTransparent 
+            playerInfo.playerButtonStyle.borderColor = 'white'
+            break
           case 'Monomi':
-            playerInfo.backgroundColor = blueTransparent 
-            playerInfo.borderColor = 'white'
+            playerInfo.playerButtonStyle.textColor = pinkTransparent
+            playerInfo.playerButtonStyle.backgroundColor = whiteTransparent 
+            playerInfo.playerButtonStyle.borderColor = 'white'
             break
           case 'Ultimate Despair':
-            playerInfo.backgroundColor = pinkTransparent
-            playerInfo.borderColor = 'black'
+            playerInfo.playerButtonStyle.textColor = 'black'
+            playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+            playerInfo.playerButtonStyle.borderColor = pink
             break
         }      
       })
@@ -125,6 +136,6 @@ async function playMusic() {
   const music = require("../../assets/music/End/Climax-Reasoning.mp3")
   const { sound } = await Audio.Sound.createAsync(music)
   await sound.playAsync()
-  await sound.setVolumeAsync(.5)
+  await sound.setVolumeAsync(.1)
   await sound.setIsLoopingAsync(true)
 }

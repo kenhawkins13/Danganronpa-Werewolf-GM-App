@@ -1,5 +1,5 @@
 import React from "react"
-import { Modal, View, Image } from "react-native"
+import { Modal, Image } from "react-native"
 
 export default function SchoolAnnouncementModal({visible}:Props) {
   return (

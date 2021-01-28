@@ -9,6 +9,7 @@ import WinnerDeclarationModal from '../components/modals/WinnerDeclaration'
 import PlayersPage from '../components/PlayersPage'
 import { roleInPlay } from '../data/Table'
 import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { appStyle } from '../styles/styles'
 import { PlayerInfo } from '../types/types'
 
@@ -32,12 +33,15 @@ export default function MorningTimeScreen() {
   // Returns true if screen is focused
   const isFocused = useIsFocused()
   // Listen for isFocused. If useFocused changes, force re-render by setting state
-  useEffect(() => { if (isFocused) { morningTimeLogic() }}, [isFocused])
+  useEffect(() => { if (isFocused) {
+    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+    morningTimeLogic()
+  }}, [isFocused])
 
   return (
     <View style={{ flex: 1 }}>
       <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
-      <Confirmation visible={confirmationVisible} setVisible={setConfirmationVisible} text='Was Vice Played?'
+      <Confirmation visible={confirmationVisible} setVisible={setConfirmationVisible} text='Was the Item Card "Vice" Played?'
       onYes={() => { 
         morningTimeLogic()
         gameContext.vicePlayed = true 
@@ -59,6 +63,15 @@ export default function MorningTimeScreen() {
               gameContext.blackenedAttack = gameContext.playerCount - 1
             }       
           } while (!gameContext.playersInfo[gameContext.blackenedAttack].alive)
+          gameContext.playersInfo.forEach(playerInfo => {
+            if (playerInfo.playerIndex === gameContext.blackenedAttack) {
+              playerInfo.playerButtonStyle.textColor = 'white'
+              playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+            } else {
+              playerInfo.playerButtonStyle.textColor = darkGrey
+              playerInfo.playerButtonStyle.backgroundColor = greyTransparent
+            }
+          })
           stage = 'victim'
           morningTimeLogic()
         }}
@@ -103,8 +116,16 @@ export default function MorningTimeScreen() {
       case 'announceAttack':
         if (gameContext.blackenedAttack !== -1) {
           victim = gameContext.playersInfo[gameContext.blackenedAttack]
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
-          victim.backgroundColor = pinkTransparent
+          gameContext.playersInfo.forEach(playerInfo => {
+            if (playerInfo === victim) {
+              victim.playerButtonStyle.textColor = 'white'
+              victim.playerButtonStyle.backgroundColor = pinkTransparent
+              playerInfo.playerButtonStyle.borderColor = 'white'
+              playerInfo.playerButtonStyle.disabled = true
+            } else {
+              disablePlayerButton(playerInfo)
+            }
+          })
           setArray([])
           stage = 'monomi'
           await speakThenPause(victim.name + ', was attacked by the Blackened last night.', 1, morningTimeLogic)
@@ -135,10 +156,7 @@ export default function MorningTimeScreen() {
           await speakThenPause(victim.name + ', discard one Item card.', 0, enableContinueButton)
         } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'extreme') {
           victim = gameContext.playersInfo[gameContext.blackenedAttack]
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
-          victim.backgroundColor = pinkTransparent
-          setArray([]) // to re-render screen
-          confirmationText = 'Did ' + victim.name + ' protect himself?'
+          confirmationText = 'Does ' + victim.name + ' protect themselves?'
           amuletVisible = true
           stage = 'playersAbilities'
           await speakThenPause(victim.name + ', would you like to use an ability or item to prevent your death?', 0, () => {
@@ -185,11 +203,9 @@ export default function MorningTimeScreen() {
         await speakThenPause(victim.name + ' has been killed.', 1, async () => {
           if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
             gameContext.alterEgoAlive = false
-            await speakThenPause('U pu pu pu. ' + victim.name + ' was the Alter Ego.')
-            morningTimeLogic()
+            await speakThenPause('U pu pu pu. ' + victim.name + ' was the Alter Ego.', 2, () => { morningTimeLogic() })
           } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
-            await speakThenPause('How disappointing. ' + victim.name + ' was the Blackened')
-            setWinnerDeclarationVisible(true)
+            await speakThenPause('How disappointing. ' + victim.name + ' was the Blackened', 0, () => { setWinnerDeclarationVisible(true) })
           } else {
             morningTimeLogic()
           }
@@ -211,7 +227,6 @@ export default function MorningTimeScreen() {
           break
         }
       case 'dayTime':
-        gameContext.playersInfo.forEach(playerInfo => { playerInfo.backgroundColor = blackTransparent })
         push('DayTimeScreen')
         stage = 'morningSpeech'
         break

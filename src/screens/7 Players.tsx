@@ -6,11 +6,10 @@ import { GameContextType, RoleCount } from '../types/types'
 import AlertModal from '../components/modals/Alert'
 import PlayerInfoModal from '../components/modals/PlayerInfo'
 import PlayersPage from '../components/PlayersPage'
-import { darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { appStyle } from '../styles/styles'
-import * as Speech from 'expo-speech'
 
 export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
@@ -59,7 +58,8 @@ export default function PlayersScreen() {
         <View style={{...appStyle.frame, height: '25%', width: '25%', margin: '2.5%'}}>
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} onPress={() => { 
             gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-            gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
+            gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+            gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
             push('DirectionScreen')
             }}> 
             <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
@@ -69,11 +69,11 @@ export default function PlayersScreen() {
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
             disabled={startButtonDisabled} onPress={() => {
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
               push('NightTimeScreen')
             } else {
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.borderColor = 'white' })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
               setAlertModalVisible(true)
             }
           }}>
