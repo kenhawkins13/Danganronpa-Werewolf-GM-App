@@ -6,6 +6,7 @@ import { appStyle } from "../../styles/styles"
 import PlayersPage from "../PlayersPage"
 import RevealRoleModal from "./RevealRole"
 import { Audio } from 'expo-av'
+import { endMusic } from "../../assets/music/music"
 
 export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
   const gameContext = useContext(GameContext)
@@ -133,8 +134,8 @@ export default function WinnerDeclarationModal({visible, winnerSide}:Props) {
 type Props = {visible:boolean, winnerSide:string}
 
 async function playMusic() {
-  const music = require("../../assets/music/End/Climax-Reasoning.mp3")
-  const { sound } = await Audio.Sound.createAsync(music)
+  const randomNum = Math.floor(Math.random() * endMusic.length)
+  const { sound } = await Audio.Sound.createAsync(endMusic[randomNum])
   await sound.playAsync()
   await sound.setVolumeAsync(.1)
   await sound.setIsLoopingAsync(true)

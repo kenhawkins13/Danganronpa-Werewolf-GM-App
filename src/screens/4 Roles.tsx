@@ -1,12 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, ImageBackground, Image } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import RoleCards from '../components/RoleCards'
 import { GameContextType } from '../types/types'
 import { appStyle } from '../styles/styles'
 import { GameContext } from '../../AppContext'
+import { useIsFocused } from '@react-navigation/native'
+import * as ScreenOrientation from 'expo-screen-orientation'
+import { Audio } from 'expo-av'
+import { daytimeCalmMusic } from '../assets/music/music'
+
+let backgroundMusic:Audio.Sound
 
 export default function RolesScreen() {
+  
+  const isFocused = useIsFocused()
+  useEffect(() => { if (isFocused) {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+    playMusic()
+  }}, [isFocused])
+
   const gameContext = useContext(GameContext)
   return (
     <View style={{ flex: 1 }}>
@@ -38,7 +51,13 @@ export default function RolesScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='IntroductionScreen' nextPage='ItemsScreen'/>
+          <NavigationBar previousPage='IntroductionScreen' nextPage='ItemsScreen'onPrevious={() => {
+            backgroundMusic.unloadAsync()
+            return true
+          }} onNext={() => {
+            backgroundMusic.unloadAsync()
+            return true
+          }}/>
         </View>
       </ImageBackground>
     </View>
@@ -194,4 +213,12 @@ function extraText(Mode:string) {
   } else if (Mode === 'extreme') {
     return ' character ability,'
   }
+}
+
+async function playMusic() {
+  const randomNum = Math.floor(Math.random() * 5)
+  const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum])
+  await sound.playAsync()
+  await sound.setVolumeAsync(.1)
+  backgroundMusic = sound
 }

@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, ImageBackground, Image, TouchableHighlight } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
+import { useIsFocused } from '@react-navigation/native'
+import * as ScreenOrientation from 'expo-screen-orientation'
+import { Audio } from 'expo-av'
+import { monokumaMusic } from '../assets/music/music'
 
-export default function IntroductionScreen() {  
+let backgroundMusic:Audio.Sound
+
+export default function IntroductionScreen() {
+  
+  const isFocused = useIsFocused()
+  useEffect(() => { if (isFocused) {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+    playMusic()
+  }}, [isFocused])
+  
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1, padding: '2.5%'}} source={require('../assets/background/Setup.png')}>
@@ -33,9 +46,11 @@ export default function IntroductionScreen() {
         </View>
         <View style={{ flex: 1 }}>
           <NavigationBar previousPage='DisclaimerScreen' nextPage='RolesScreen' onPrevious={() => {
+            backgroundMusic.unloadAsync()
             Speech.stop()
             return true
           }} onNext={() => {
+            backgroundMusic.unloadAsync()
             Speech.stop()
             return true
           }}/>
@@ -43,6 +58,13 @@ export default function IntroductionScreen() {
       </ImageBackground>
     </View>
   )
+}
+
+async function playMusic() {
+  const { sound } = await Audio.Sound.createAsync(monokumaMusic[0])
+  await sound.playAsync()
+  await sound.setVolumeAsync(.1)
+  backgroundMusic = sound
 }
 
 const text1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adoorable headmaster, Monokuma!"

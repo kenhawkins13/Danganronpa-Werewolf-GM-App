@@ -11,8 +11,9 @@ import { Audio } from 'expo-av'
 import { blackTransparent } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
+import { startMusic } from '../assets/music/music';
 
-let music:Audio.Sound
+let backgroundMusic:Audio.Sound
 
 export default function StartScreen () {
   const gameContext = useContext(GameContext)
@@ -88,7 +89,7 @@ export default function StartScreen () {
                 )
                 await sound.playAsync()
                 await sound.setVolumeAsync(.1)
-                await stopMusic(music)
+                await stopMusic(backgroundMusic)
                 fillContextInfo(gameContext)
                 navigation.navigate('DisclaimerScreen')
                 }}>
@@ -132,10 +133,10 @@ function fillContextInfo(gameContext:GameContextType) {
 }
 
 async function playMusic() {
-  const { sound } = await Audio.Sound.createAsync(require('../assets/sounds/Dangan-Ronpa!.mp3'))
+  const { sound } = await Audio.Sound.createAsync(startMusic[0])
   await sound.playAsync()
   await sound.setVolumeAsync(.1)
-  music = sound
+  backgroundMusic = sound
 }
 
 async function stopMusic(sound:Audio.Sound) {

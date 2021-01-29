@@ -13,6 +13,7 @@ import { appStyle } from '../styles/styles'
 import { Audio } from 'expo-av'
 import { GameContextType } from '../types/types'
 import { disablePlayerButton } from '../styles/playerButtonStyles'
+import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 
 let stage = 'daySpeech'
 let speech = ''
@@ -169,7 +170,7 @@ export default function DayTimeScreen() {
           break
         }
       case 'discussion':
-        backgroundMusic = await playMusic(gameContext)
+        await playMusic(gameContext)
         if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
           stage = 'abilitiesOrItemsTrial'
         } else {
@@ -260,64 +261,20 @@ async function speakThenPause(speech:string, seconds:number=0, onDone?:() => voi
 }
 
 async function playMusic(gameContext:GameContextType) {
-  let music:any
+  let music:any[]
   if (gameContext.dayNumber === 1 || gameContext.blackenedAttack === -1) {
-    const randomNum = Math.floor(Math.random() * 5)
-    switch (randomNum) {
-      case 0:
-        music = require("../assets/music/DaytimeCalm/Beautiful-Days.mp3")
-        break
-      case 1:
-        music = require("../assets/music/DaytimeCalm/Beautiful-Days-[Piano-Arrangement].mp3")
-        break
-      case 2:
-        music = require("../assets/music/DaytimeCalm/Beautiful-Dead.mp3")
-        break
-      case 3:
-        music = require("../assets/music/DaytimeCalm/Beautiful-Morning.mp3")
-        break
-      case 4:
-        music = require("../assets/music/DaytimeCalm/Beautiful-Ruin.mp3")
-        break
-    }
+    music = daytimeCalmMusic
   } else if (gameContext.blackenedAttack === -2) {
-    const randomNum = Math.floor(Math.random() * 4)
-    switch (randomNum) {
-      case 0:
-        music = require("../assets/music/DaytimeAggressive/Box-15.mp3")
-        break
-      case 1:
-        music = require("../assets/music/DaytimeAggressive/Box-16.mp3")
-        break
-      case 2:
-        music = require("../assets/music/DaytimeAggressive/Ekoroshia.mp3")
-        break
-      case 3:
-        music = require("../assets/music/DaytimeAggressive/Ikoroshia.mp3")
-        break
-    }
+    music = daytimeAggressiveMusic
   } else if (gameContext.tieVote === true) {
-    music = require("../assets/music/ClassTrial/Scrum-Debate.mp3")
+    music = scrumMusic
   } else {
-    const randomNum = Math.floor(Math.random() * 4)
-    switch (randomNum) {
-      case 0:
-        music = require("../assets/music/ClassTrial/Discussion-BREAK.mp3")
-        break
-      case 1:
-        music = require("../assets/music/ClassTrial/Discussion-HEAT-UP.mp3")
-        break
-      case 2:
-        music = require("../assets/music/ClassTrial/Discussion-HOPE-VS-DESPAIR.mp3")
-        break
-      case 3:
-        music = require("../assets/music/ClassTrial/Discussion-MIX.mp3")
-        break
-    }
+    music = classTrialMusic
   }
-  const { sound } = await Audio.Sound.createAsync(music)
+  const randomNum = Math.floor(Math.random() * music.length)
+  const { sound } = await Audio.Sound.createAsync(music[randomNum])
   await sound.playAsync()
   await sound.setVolumeAsync(.1)
   await sound.setIsLoopingAsync(true)
-  return sound
+  backgroundMusic = sound
 }

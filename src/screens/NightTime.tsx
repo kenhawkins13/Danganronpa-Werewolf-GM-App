@@ -15,6 +15,7 @@ import { appStyle } from '../styles/styles'
 import CountdownTimer from '../components/CountdownTimer'
 import { Audio } from 'expo-av'
 import { disablePlayerButton, enablePlayerButton } from '../styles/playerButtonStyles'
+import { monomiMusic, nighttimeMusic } from '../assets/music/music'
 
 let stage = 'schoolBell'
 let abilityOrItem = ''
@@ -432,38 +433,13 @@ export default function NightTimeScreen() {
   }
   
   async function playMusic(monomi:boolean=false) {
-    const randomNum = Math.floor(Math.random() * 8)
     let music:any
     if (monomi) {
-      music = require("../assets/music/NightTime/Miss-Monomi's-Practice-Lesson.mp3")
+      music = monomiMusic[0]
     } else {
-      switch (randomNum) {
-        case 0:
-          music = require("../assets/music/NightTime/A-Dead-End-to-the-Ocean's-Aroma.mp3")
-          break
-        case 1:
-          music = require("../assets/music/NightTime/Desire-for-Execution.mp3")
-          break
-        case 2:
-          music = require("../assets/music/NightTime/Despair-Syndrome-1.mp3")
-          break
-        case 3:
-          music = require("../assets/music/NightTime/Despair-Syndrome-2.mp3")
-          break
-        case 4:
-          music = require("../assets/music/NightTime/Mr.-Monokuma's-Lesson.mp3")
-          break
-        case 5:
-          music = require("../assets/music/NightTime/Mr.-Monokuma's-Tutoring.mp3")
-          break
-        case 6:
-          music = require("../assets/music/NightTime/Weekly-Despair-Magazine.mp3")
-          break
-        case 7:
-          music = require("../assets/music/NightTime/Welcome-to-Despair-Academy.mp3")
-          break
-        }
-      }
+      const randomNum = Math.floor(Math.random() * nighttimeMusic.length)
+      music = nighttimeMusic[randomNum]
+    }
     const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
     backgroundMusic = sound
     await backgroundMusic.playAsync()

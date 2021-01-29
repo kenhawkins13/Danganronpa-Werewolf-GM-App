@@ -7,19 +7,14 @@ try to remove black rectangle when you click buttons. Doesn't appear on Next or 
 make WinnerDeclaration a screen instead of modal
 switch DingDongBingBong to image + music, set volume to .1
 add speech-to-text on all settings pages
-music during settings. check out music links in krita file
-button sounds when you click Previous or Next
-body discovery sound
+
 Info inco that respeaks speech on during each stage to remind what needs to happen
 transition music better
-add more music (*if file size is not a problem), compress music files
 when picking who received most votes, use PlayerBoxes
-WinnerDeclaration, put role instead of names. Despair roles as black. Hope as white. Ultimate Despair pink
 when switching from nighttime, daytime, morningtime, background flickers. prevent it by have static background for all three screens
 
-PlayersPage try out different colors when player enters info
-consider different class trial songs, 
+add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc
+  body discovery sound, button sounds when you click Previous or Next
 3 hung trials leads to despair victory
 if player does nothing for 15 seconds, repeat command
 make quotes more characteristic of Monokuma and Monomi
-remove PlayerButton when player is dead?
