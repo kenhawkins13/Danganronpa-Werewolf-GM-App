@@ -2,14 +2,12 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Text, TouchableHighlight, View } from 'react-native'
 import { roleInPlay } from '../data/Table'
-import { speechSchoolAnnouncement1, speechSchoolAnnouncement2, speechSchoolAnnouncement3, speechToAlterEgoAwake, speechToAlterEgoSleep, speechToBlackenedAwake1, speechToBlackenedAwake2, speechToBlackenedSleep, speechToBlackenedVice, speechToMonomiAwake, speechToMonomiSleep, speechToTraitorsAwake, speechToTraitorsSleep } from "../data/NightTimeDialogue"
+import { speechSchoolAnnouncement2, speechSchoolAnnouncement3, speechToAlterEgoAwake, speechToAlterEgoSleep, speechToBlackenedAwake1, speechToBlackenedAwake2, speechToBlackenedSleep, speechToBlackenedVice, speechToMonomiAwake, speechToMonomiSleep, speechToTraitorsAwake, speechToTraitorsSleep } from "../data/NightTimeDialogue"
 import * as Speech from 'expo-speech'
 import NightTimeAbilitiesItemsModal from '../components/modals/NightTimeAbilitiesItem'
 import RevealRoleModal from '../components/modals/RevealRole'
 import { GameContext } from '../../AppContext'
 import PlayersPage from '../components/PlayersPage'
-import DingDongBingBongModal from '../components/modals/DingDongBingBong'
-import SchoolAnnouncementModal from '../components/modals/SchoolAnnouncement'
 import { blackTransparent, blueTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
 import { appStyle } from '../styles/styles'
 import CountdownTimer from '../components/CountdownTimer'
@@ -17,7 +15,7 @@ import { Audio } from 'expo-av'
 import { disablePlayerButton, enablePlayerButton } from '../styles/playerButtonStyles'
 import { monomiMusic, nighttimeMusic } from '../assets/music/music'
 
-let stage = 'schoolBell'
+let stage = 'schoolAnnouncement'
 let abilityOrItem = ''
 let currentPlayerIndex = 0
 let previousPlayerIndex = -1
@@ -60,11 +58,6 @@ export default function NightTimeScreen() {
         setPlayerIndex(playerIndex)
         onPlayerClick(playerIndex)
         }}/>
-      <DingDongBingBongModal visible={dingDongBingBongModalVisible} setVisible={setDingDongBingBongModalVisible} onDone={() => {
-        stage = 'schoolAnnouncement'
-        nightTimeLogic()
-        }}/>
-      <SchoolAnnouncementModal visible={schoolAnnouncementVisible}/>
       <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={playerIndex}/>
       <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex} abilityOrItem={abilityOrItem}
         onOk={() => {
@@ -118,15 +111,6 @@ export default function NightTimeScreen() {
 
   async function nightTimeLogic() {
     switch (stage) {
-      case 'schoolBell':
-        setNightTimeLabelVisible(true)
-        if (gameContext.dayNumber === 0) {
-          setDingDongBingBongModalVisible(true)
-        } else {
-          stage = 'schoolAnnouncement'
-          nightTimeLogic()
-        }
-        break
       case 'schoolAnnouncement':    
         gameContext.blackenedAttack = -1
         setContinueButtonText('Continue')
@@ -135,13 +119,9 @@ export default function NightTimeScreen() {
         onContinue = () => {}
         if (gameContext.dayNumber === 0) {
           setNightTimeLabelVisible(false)
-          setSchoolAnnouncementVisible(true)
-          await speakThenPause(speechSchoolAnnouncement1, 2, async() => {
-            setSchoolAnnouncementVisible(false)
-            await playMusic()
-            stage = 'traitor'  
-            nightTimeLogic()
-          })        
+          await playMusic()
+          stage = 'traitor'
+          nightTimeLogic()
         } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
           onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
           onContinue = async () => {
@@ -328,7 +308,7 @@ export default function NightTimeScreen() {
         break
       case 'morningTime':
         await backgroundMusic.unloadAsync()
-        stage = 'schoolBell'
+        stage = 'schoolAnnouncement'
         gameContext.dayNumber += 1
         push('MorningTimeScreen')
     }

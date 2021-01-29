@@ -69,7 +69,7 @@ export default function PlayersScreen() {
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
             disabled={startButtonDisabled} onPress={() => {
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
-              push('NightTimeScreen')
+              push('SchoolAnnouncementScreen')
             } else {
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
