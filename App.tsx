@@ -17,9 +17,10 @@ import ItemsScreen from './src/screens/5 Items'
 import DirectionScreen from './src/screens/6 Direction'
 import PlayersScreen from './src/screens/7 Players'
 import SchoolAnnouncementScreen from './src/screens/8 SchoolAnnouncement'
-import NightTimeScreen from './src/screens/NightTime'
-import MorningTimeScreen from './src/screens/MorningTime'
-import DayTimeScreen from './src/screens/DayTime'
+import NightTimeScreen from './src/screens/9 NightTime'
+import MorningTimeScreen from './src/screens/9 MorningTime'
+import DayTimeScreen from './src/screens/9 DayTime'
+import WinnerDeclarationScreen from './src/screens/10 WinnerDeclaration'
 
 export type RootStackParamList = {
   StartScreen: undefined
@@ -33,6 +34,7 @@ export type RootStackParamList = {
   NightTimeScreen: undefined
   MorningTimeScreen: undefined
   DayTimeScreen: undefined
+  WinnerDeclarationScreen:undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -99,7 +101,8 @@ export default function App() {
           monomiExploded: false,
           monomiProtect: -1,
           vicePlayed: false,
-          tieVote: false
+          tieVote: false,
+          winnerSide: ''
           }}>
           <NavigationContainer>
             <RootStack.Navigator>
@@ -114,6 +117,7 @@ export default function App() {
               <RootStack.Screen name="NightTimeScreen" component={NightTimeScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="MorningTimeScreen" component={MorningTimeScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="DayTimeScreen" component={DayTimeScreen} options={{ headerShown: false }}/>
+              <RootStack.Screen name="WinnerDeclarationScreen" component={WinnerDeclarationScreen} options={{ headerShown: false }}/>
             </RootStack.Navigator>
           </NavigationContainer>
         </GameContext.Provider>

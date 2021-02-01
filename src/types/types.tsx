@@ -22,5 +22,6 @@ export type GameContextType = {
   monomiExploded:boolean,
   monomiProtect:number,
   vicePlayed:boolean,
-  tieVote:boolean
+  tieVote:boolean,
+  winnerSide:string
 }

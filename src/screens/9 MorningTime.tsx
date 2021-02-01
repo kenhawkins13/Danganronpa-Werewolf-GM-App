@@ -5,7 +5,6 @@ import { View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import Confirmation from '../components/modals/Confirmation'
 import ConfirmationMorning from '../components/modals/ConfirmationMorning'
-import WinnerDeclarationModal from '../components/modals/WinnerDeclaration'
 import PlayersPage from '../components/PlayersPage'
 import { roleInPlay } from '../data/Table'
 import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
@@ -24,7 +23,6 @@ export default function MorningTimeScreen() {
   const gameContext = useContext(GameContext)
   const [confirmationVisible, setConfirmationVisible] = useState(false)
   const [confirmationMorningVisible, setConfirmationMorningVisible] = useState(false)
-  const [winnerDeclarationVisible, setWinnerDeclarationVisible] = useState(false)
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
@@ -76,7 +74,6 @@ export default function MorningTimeScreen() {
           morningTimeLogic()
         }}
       />
-      <WinnerDeclarationModal visible={winnerDeclarationVisible} winnerSide='Hope'/>
     </View>
   )
 
@@ -205,7 +202,10 @@ export default function MorningTimeScreen() {
             gameContext.alterEgoAlive = false
             await speakThenPause('U pu pu pu. ' + victim.name + ' was the Alter Ego.', 2, () => { morningTimeLogic() })
           } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
-            await speakThenPause('How disappointing. ' + victim.name + ' was the Blackened', 0, () => { setWinnerDeclarationVisible(true) })
+            await speakThenPause('How disappointing. ' + victim.name + ' was the Blackened', 0, () => {
+              gameContext.winnerSide = 'Hope' 
+              push('WinnerDeclarationScreen') 
+            })
           } else {
             morningTimeLogic()
           }

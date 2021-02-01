@@ -1,15 +1,15 @@
 TODO:
 
+when switching from nighttime, daytime, morningtime, background flickers. prevent it by have static background for all three screens
+if no traitors, don't show who blackened is to prevent cheaters
+add speech-to-text on all settings pages
+Info inco that respeaks speech on during each stage to remind what needs to happen
+when picking who received most votes, use PlayerBoxes
+try to remove black rectangle when you click buttons. Doesn't appear on Next or Previous buttons
 Pause between "player wake up" and "do command"
 Normal/Extreme switch not transparent?
-if no traitors, don't show who blackened is to prevent cheaters
-try to remove black rectangle when you click buttons. Doesn't appear on Next or Previous buttons
-make WinnerDeclaration a screen instead of modal
-add speech-to-text on all settings pages
-when picking who received most votes, use PlayerBoxes
-Info inco that respeaks speech on during each stage to remind what needs to happen
-when switching from nighttime, daytime, morningtime, background flickers. prevent it by have static background for all three screens
-transition music better
+transition music better?
+disable back button
 
 add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc
   body discovery sound, button sounds when you click Previous or Next

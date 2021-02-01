@@ -6,7 +6,6 @@ import { GameContext } from '../../AppContext'
 import CountdownTimer from '../components/CountdownTimer'
 import DiscussionOrVoteModal from '../components/modals/DiscussionOrVote'
 import PlayerVoteModal from '../components/modals/PlayerVote'
-import WinnerDeclarationModal from '../components/modals/WinnerDeclaration'
 import PlayersPage from '../components/PlayersPage'
 import { blackTransparent, darkGrey, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
 import { appStyle } from '../styles/styles'
@@ -17,7 +16,6 @@ import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic }
 
 let stage = 'daySpeech'
 let speech = ''
-let winnerSide = ''
 let votedPlayerIndex = -1
 let discussionTime:number
 let backgroundMusic:Audio.Sound
@@ -30,7 +28,6 @@ export default function DayTimeScreen() {
   const [timerKey, setTimerKey] = useState(0)
   const [playerVoteVisible, setPlayerVoteVisible] = useState(false)
   const [discussionOrVoteVisible, setDiscussionOrVoteVisible] = useState(false)
-  const [winnerDeclarationVisible, setWinnerDeclarationVisible] = useState(false)
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
@@ -61,7 +58,6 @@ export default function DayTimeScreen() {
         stage = 'trial'
         dayTimeLogic()
       }}/>
-      <WinnerDeclarationModal visible={winnerDeclarationVisible} winnerSide={winnerSide}/>
     </View>
   )
 
@@ -210,14 +206,14 @@ export default function DayTimeScreen() {
         break
       case 'declareWinner':
         if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
-          winnerSide = 'Hope'
-          setWinnerDeclarationVisible(true)
+          gameContext.winnerSide = 'Hope'
+          push('WinnerDeclarationScreen')
         } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
-          winnerSide = 'Ultimate Despair'
-          setWinnerDeclarationVisible(true)
+          gameContext.winnerSide = 'Ultimate Despair'
+          push('WinnerDeclarationScreen')
         } else if (gameContext.killsLeft === 0) {
-          winnerSide = 'Despair'
-          setWinnerDeclarationVisible(true)
+          gameContext.winnerSide = 'Despair'
+          push('WinnerDeclarationScreen')
         } else {
           const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
           const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
