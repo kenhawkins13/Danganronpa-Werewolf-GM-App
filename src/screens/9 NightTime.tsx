@@ -168,12 +168,15 @@ export default function NightTimeScreen({setTime}:Props) {
         break
       case 'traitor':
         if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
-          gameContext.playersInfo.forEach(playerInfo => {
-            playerInfo.playerButtonStyle.textColor = 'white'
-            if (playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
-            else if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
-            else { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
-          })
+          const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
+          if (traitorInPlay) {
+            gameContext.playersInfo.forEach(playerInfo => {
+              playerInfo.playerButtonStyle.textColor = 'white'
+              if (playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
+              else if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
+              else { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
+            })            
+          }
           setContinueButtonText('Continue')
           await speakThenPause(speechToTraitorsAwake, 0 , () => {
             timerDuration = 10
