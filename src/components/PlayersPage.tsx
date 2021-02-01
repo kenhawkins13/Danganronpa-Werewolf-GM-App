@@ -21,14 +21,10 @@ export default function PlayersPage({middleSection, onPlayerClick}:Props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} source={require('../assets/background/Setup.png')} resizeMode='cover'>
-        <View style={{ flex: 1 }}>
-          {PlayerButtons(boxIndexes(gameContext.playerCount))}
-          <View style={{ height: '60%', width: '60%', left: '20%', top: '20%', position: 'absolute' }}>
-            {middleSection}
-          </View>
-        </View>
-      </ImageBackground>
+      {PlayerButtons(boxIndexes(gameContext.playerCount))}
+      <View style={{ height: '60%', width: '60%', left: '20%', top: '20%', position: 'absolute' }}>
+        {middleSection}
+      </View>
     </View>
   )
   

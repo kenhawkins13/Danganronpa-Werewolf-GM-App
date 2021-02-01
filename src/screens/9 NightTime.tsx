@@ -1,4 +1,4 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Text, TouchableHighlight, View } from 'react-native'
 import { roleInPlay } from '../data/Table'
@@ -27,12 +27,9 @@ let backgroundMusic:Audio.Sound
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 
-export default function NightTimeScreen() {
+export default function NightTimeScreen({setTime}:Props) {
   const gameContext = useContext(GameContext)
-  const { push } = useNavigation<any>()
   const [nightTimeAbilitiesItemsModallVisible, setNightTimeAbilitiesItemsModallVisible] = useState(false)
-  const [dingDongBingBongModalVisible, setDingDongBingBongModalVisible] = useState(false)
-  const [schoolAnnouncementVisible, setSchoolAnnouncementVisible] = useState(false)
   const [revealRoleModalVisible, setRevealRoleModalVisible] = useState(false)
   const [timerVisible, setTimerVisible] = useState(false)
   const [nightTimeLabelVisible, setNightTimeLabelVisible] = useState(false)
@@ -113,10 +110,11 @@ export default function NightTimeScreen() {
     switch (stage) {
       case 'schoolAnnouncement':    
         gameContext.blackenedAttack = -1
-        setContinueButtonText('Continue')
+        setNightTimeLabelVisible(true)
         disableContinueButton()
         onPlayerClick = () => {}
         onContinue = () => {}
+        setContinueButtonText('Continue')
         if (gameContext.dayNumber === 0) {
           setNightTimeLabelVisible(false)
           await playMusic()
@@ -310,7 +308,7 @@ export default function NightTimeScreen() {
         await backgroundMusic.unloadAsync()
         stage = 'schoolAnnouncement'
         gameContext.dayNumber += 1
-        push('MorningTimeScreen')
+        setTime('MorningTimeScreen')
     }
   }
 
@@ -427,3 +425,5 @@ export default function NightTimeScreen() {
     await backgroundMusic.setIsLoopingAsync(true)
   }
 }
+
+type Props = {setTime:React.Dispatch<any>}

@@ -66,12 +66,15 @@ export default function WinnerDeclarationScreen() {
     })
     return (
       <View style={{flex: 1}}>
-        <PlayersPage middleSection={RestartButton()} onPlayerClick={(playerIndex) => {
-          setPlayerIndex(playerIndex)
-          setRevealRoleModalVisible(true)
-        }}/>
-        <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex}
-          abilityOrItem='Reveal Roles'/>
+        <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} resizeMode='cover'
+          source={require('../assets/background/Setup.png')}>
+          <PlayersPage middleSection={RestartButton()} onPlayerClick={(playerIndex) => {
+            setPlayerIndex(playerIndex)
+            setRevealRoleModalVisible(true)
+          }}/>
+          <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex}
+            abilityOrItem='Reveal Roles'/>
+        </ImageBackground>
       </View>
     ) 
   }

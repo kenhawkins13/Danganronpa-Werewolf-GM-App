@@ -17,6 +17,7 @@ import ItemsScreen from './src/screens/5 Items'
 import DirectionScreen from './src/screens/6 Direction'
 import PlayersScreen from './src/screens/7 Players'
 import SchoolAnnouncementScreen from './src/screens/8 SchoolAnnouncement'
+import GameScreen from './src/screens/9 GameScreen'
 import NightTimeScreen from './src/screens/9 NightTime'
 import MorningTimeScreen from './src/screens/9 MorningTime'
 import DayTimeScreen from './src/screens/9 DayTime'
@@ -31,6 +32,7 @@ export type RootStackParamList = {
   DirectionScreen: undefined
   PlayersScreen: undefined
   SchoolAnnouncementScreen: undefined
+  GameScreen:undefined
   NightTimeScreen: undefined
   MorningTimeScreen: undefined
   DayTimeScreen: undefined
@@ -114,6 +116,7 @@ export default function App() {
               <RootStack.Screen name="DirectionScreen" component={DirectionScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="PlayersScreen" component={PlayersScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="SchoolAnnouncementScreen" component={SchoolAnnouncementScreen} options={{ headerShown: false }}/>
+              <RootStack.Screen name="GameScreen" component={GameScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="NightTimeScreen" component={NightTimeScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="MorningTimeScreen" component={MorningTimeScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="DayTimeScreen" component={DayTimeScreen} options={{ headerShown: false }}/>

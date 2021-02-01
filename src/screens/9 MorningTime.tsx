@@ -18,7 +18,7 @@ let confirmationText = ''
 let amuletVisible = true
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
-export default function MorningTimeScreen() {
+export default function MorningTimeScreen({setTime}:Props) {
   const { push } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [confirmationVisible, setConfirmationVisible] = useState(false)
@@ -227,7 +227,7 @@ export default function MorningTimeScreen() {
           break
         }
       case 'dayTime':
-        push('DayTimeScreen')
+        setTime('DayTimeScreen')
         stage = 'morningSpeech'
         break
     }
@@ -256,3 +256,5 @@ async function speakThenPause(speech:string, seconds:number=0, onDone?:() => voi
   }
   Speech.speak(speech, {onDone: () => {callback(seconds)}})
 }
+
+type Props = {setTime:React.Dispatch<any>}

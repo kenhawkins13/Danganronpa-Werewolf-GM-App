@@ -17,7 +17,7 @@ export default function SchoolAnnouncementScreen() {
           style={{width: '100%', height: '100%'}} volume={0.5} onPlaybackStatusUpdate={(playbackStatus:any) => {
             if (playbackStatus.didJustFinish) { 
               setVideoPlaying(false) 
-              Speech.speak(speechSchoolAnnouncement1, {onDone: () => push('NightTimeScreen')})}
+              Speech.speak(speechSchoolAnnouncement1, {onDone: () => push('GameScreen')})}
             }
           }
         />

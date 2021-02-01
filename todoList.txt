@@ -1,6 +1,5 @@
 TODO:
 
-when switching from nighttime, daytime, morningtime, background flickers. prevent it by have static background for all three screens
 if no traitors, don't show who blackened is to prevent cheaters
 add speech-to-text on all settings pages
 Info inco that respeaks speech on during each stage to remind what needs to happen

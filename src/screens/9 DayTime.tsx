@@ -21,7 +21,7 @@ let discussionTime:number
 let backgroundMusic:Audio.Sound
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
-export default function DayTimeScreen() {
+export default function DayTimeScreen({setTime}:Props) {
   const { push } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [timerVisible, setTimerVisible] = useState(false)
@@ -230,7 +230,7 @@ export default function DayTimeScreen() {
         break
       case 'nightTime':
         stage = 'daySpeech'
-        push('NightTimeScreen')
+        setTime('NightTimeScreen')
         break
     }
   }
@@ -274,3 +274,5 @@ async function playMusic(gameContext:GameContextType) {
   await sound.setIsLoopingAsync(true)
   backgroundMusic = sound
 }
+
+type Props = {setTime:React.Dispatch<any>}
