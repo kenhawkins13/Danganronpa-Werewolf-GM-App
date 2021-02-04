@@ -15,14 +15,15 @@ import { Audio } from 'expo-av'
 import { disablePlayerButton, enablePlayerButton } from '../styles/playerButtonStyles'
 import { monomiMusic, nighttimeMusic } from '../assets/music/music'
 
-let stage = 'schoolAnnouncement'
 let abilityOrItem = ''
 let currentPlayerIndex = 0
 let previousPlayerIndex = -1
 let timerDuration = 0
+let onTimerDone = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 let onPlayerClick = (playerIndex:number) => {}
 let onContinue = () => {}
+let onRevealRoleModalOk = () => {}
 let backgroundMusic:Audio.Sound
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
@@ -46,7 +47,7 @@ export default function NightTimeScreen({setTime}:Props) {
   useEffect(() => { if (isFocused) { 
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setState([]) // re-render screen
-    nightTimeLogic()
+    schoolAnnouncement()
   }}, [isFocused])
 
   return (
@@ -59,7 +60,7 @@ export default function NightTimeScreen({setTime}:Props) {
       <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex} abilityOrItem={abilityOrItem}
         onOk={() => {
           gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
-          nightTimeLogic()
+          onRevealRoleModalOk()
       }}/>
     </View>
   )
@@ -68,7 +69,7 @@ export default function NightTimeScreen({setTime}:Props) {
     if (timerVisible) {
       return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <CountdownTimer timerKey={'0'} duration={timerDuration} onDone={() => { nightTimeLogic() }}/>
+          <CountdownTimer timerKey={'0'} duration={timerDuration} onDone={() => { onTimerDone() }}/>
         </View>
       )
     } else {
@@ -106,232 +107,54 @@ export default function NightTimeScreen({setTime}:Props) {
     }
   }
 
-  async function nightTimeLogic() {
-    switch (stage) {
-      case 'schoolAnnouncement':    
-        gameContext.blackenedAttack = -1
-        setNightTimeLabelVisible(true)
-        disableContinueButton()
-        onPlayerClick = () => {}
-        onContinue = () => {}
-        setContinueButtonText('Continue')
-        if (gameContext.dayNumber === 0) {
-          setNightTimeLabelVisible(false)
-          await playMusic()
-          stage = 'traitor'
-          nightTimeLogic()
-        } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
-          onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
-          onContinue = async () => {
-            setNightTimeLabelVisible(false)
-            await playMusic()
-            stage = 'abilitiesOrItemsSleep'
-            nightTimeLogic()
-          }
-          await speakThenPause(speechSchoolAnnouncement2, 0, () => {
-            gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
-            setContinueButtonColor(blackTransparent)
-            setContinueButtonTextColor('white')
-            setContinueButtonDisabled(false)
-          })
-        } else {
-          setNightTimeLabelVisible(false)
-          await speakThenPause(speechSchoolAnnouncement3, 2, async () => {
-            await playMusic()
-            stage = 'alterEgo'
-            nightTimeLogic()
-          })
-        }
-        break
-      case 'abilitiesOrItemsSleep':
-        await abilitiesAndItemsSleep()
-        break
-      case 'abilitiesOrItemsAwake':
-        setContinueButtonText('Investigate')
-        onPlayerClick = (playerIndex) => {
-          gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.playerIndex === playerIndex) {
-              playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
-            } else if (playerInfo.playerIndex !== currentPlayerIndex) {
-              playerInfo.playerButtonStyle.backgroundColor = blackTransparent 
-            }
-          })
-          setPlayerIndex(playerIndex)
-          setContinueButtonColor(pinkTransparent)
-          setContinueButtonTextColor('white')
-          setContinueButtonDisabled(false)
-        }
-        onContinue = () => {
-          setRevealRoleModalVisible(true)
-        }
-        await abilitiesAndItemsAwake()
-        break
-      case 'traitor':
-        if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
-          const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
-          if (traitorInPlay) {
-            gameContext.playersInfo.forEach(playerInfo => {
-              playerInfo.playerButtonStyle.textColor = 'white'
-              if (playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
-              else if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
-              else { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
-            })            
-          }
-          setContinueButtonText('Continue')
-          await speakThenPause(speechToTraitorsAwake, 0 , () => {
-            timerDuration = 10
-            stage = 'traitorSleep'
-            setTimerVisible(true)
-          })
-        } else {
-          stage = 'blackened'
-          nightTimeLogic()
-        }
-        break
-      case 'traitorSleep':
-        gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
-        setTimerVisible(false)
-        stage = 'blackened'
-        await speakThenPause(speechToTraitorsSleep, 2, nightTimeLogic)
-        break
-      case 'monomi':
-        if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
-          await backgroundMusic.unloadAsync()
-          await playMusic(true)
-          abilityOrItem = 'Protect'
-          setContinueButtonText('Continue')
-          onPlayerClick = (playerIndex) => {
-            const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
-            if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
-              if (playerIndex !== gameContext.monomiProtect) {
-                gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
-                gameContext.monomiProtect = playerIndex
-              } else {
-                gameContext.monomiProtect = -1
-              }              
-            }
-          }
-          await speakThenPause(speechToMonomiAwake, 0, () => {
-            gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo) })
-            timerDuration = 15
-            stage = 'monomiSleep'
-            setTimerVisible(true)
-          })
-        } else {
-          stage = 'alterEgo'
-          nightTimeLogic()
-        }
-        break
-      case 'monomiSleep':
-        gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
-        setTimerVisible(false)
-        await speakThenPause(speechToMonomiSleep, 1, async () => {
-          await backgroundMusic.unloadAsync()
-          await playMusic()
-          stage = 'alterEgo'
-          nightTimeLogic()
-        })
-        break
-      case 'alterEgo':
-        if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
-          abilityOrItem = 'Alter Ego'
-          onPlayerClick = (playerIndex) => {
-            gameContext.playersInfo.forEach(playerInfo => {
-              if (playerInfo.playerIndex === playerIndex) { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent } 
-              else if (playerInfo.role !== 'Alter Ego') { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
-            })
-            setContinueButtonColor(pinkTransparent)
-            setContinueButtonTextColor('white')
-            setContinueButtonDisabled(false) 
-          }
-          onContinue = () => { 
-            stage = 'alterEgoSleep'
-            setRevealRoleModalVisible(true) 
-          }
-          await speakThenPause(speechToAlterEgoAwake, 0, () => {
-            gameContext.playersInfo.forEach(playerInfo => {
-              if (playerInfo.role === 'Alter Ego') { disablePlayerButton(playerInfo) }
-              else { enablePlayerButton(playerInfo) }
-            })
-            setContinueButtonText('Investigate')
-            setState([]) // re-render screen if setContinueButtonText() doesn't
-          })
-        } else {
-          stage = 'blackened'
-          nightTimeLogic()
-        }
-        break
-      case 'alterEgoSleep':
-        stage = 'blackened'
-        await speakThenPause(speechToAlterEgoSleep, 2, nightTimeLogic)
-        break
-      case 'blackened':
-        if ((gameContext.dayNumber === 0 && gameContext.mode === 'extreme' || gameContext.dayNumber > 0) && !gameContext.vicePlayed) {
-          abilityOrItem = 'Attack'
-          setContinueButtonText('Attack')
-          onPlayerClick = (playerIndex) => {
-            gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
-            gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
-            gameContext.blackenedAttack = playerIndex
-            setContinueButtonColor(pinkTransparent)
-            setContinueButtonTextColor('white')
-            setContinueButtonDisabled(false)
-          }
-          onContinue = () => {
-            stage = 'blackenedSleep'
-            nightTimeLogic()
-          }
-          if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
-            await speakThenPause(speechToBlackenedAwake1, 0, () => {
-              gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
-              setState([]) // re-render screen
-            })
-          } else if (gameContext.dayNumber > 0) {
-            await speakThenPause(speechToBlackenedAwake2, 0, () => {
-              gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
-              setState([]) // re-render screen
-            })
-          }
-        } else {
-          stage = 'morningTime'
-          if (gameContext.vicePlayed === true) { 
-            await speakThenPause(speechToBlackenedVice, 1, nightTimeLogic) 
-          } else {
-            nightTimeLogic()
-          }
-        }
-        break
-      case 'blackenedSleep':
-        setContinueButtonText('Attack')
-        stage = 'morningTime'
-        await speakThenPause(speechToBlackenedSleep, 2, nightTimeLogic)
-        break
-      case 'morningTime':
-        await backgroundMusic.unloadAsync()
-        stage = 'schoolAnnouncement'
-        gameContext.dayNumber += 1
-        setTime('MorningTimeScreen')
+  async function schoolAnnouncement() {
+    gameContext.blackenedAttack = -1
+    setNightTimeLabelVisible(true)
+    disableContinueButton()
+    onPlayerClick = () => {}
+    onContinue = () => {}
+    setContinueButtonText('Continue')
+    if (gameContext.dayNumber === 0) {
+      setNightTimeLabelVisible(false)
+      await playMusic()
+      await traitors()
+    } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
+      onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
+      onContinue = async () => {
+        setNightTimeLabelVisible(false)
+        await playMusic()
+        await abilitiesOrItemsSleep()
+      }
+      await speakThenPause(speechSchoolAnnouncement2, 0, () => {
+        gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
+        setContinueButtonColor(blackTransparent)
+        setContinueButtonTextColor('white')
+        setContinueButtonDisabled(false)
+      })
+    } else {
+      setNightTimeLabelVisible(false)
+      await speakThenPause(speechSchoolAnnouncement3, 2, async () => {
+        await playMusic()
+        await alterEgo()
+      })
     }
   }
 
-  async function abilitiesAndItemsSleep() {  
+  async function abilitiesOrItemsSleep() {
     for (let i = 0; i <= gameContext.playerCount; i++) {
       // No one declared an investigative Ability or Item
       if (i === gameContext.playerCount && previousPlayerIndex === -1) {
         currentPlayerIndex  = 0 // probably can delete
         previousPlayerIndex = -1
-        stage = 'monomi'
-        await speakThenPause('Everyone should now be asleep.', 2, nightTimeLogic)
+        await speakThenPause('Everyone should now be asleep.', 2, monomi)
         return
       }
       // No more investigative Ability or Item
       else if (i === gameContext.playerCount && previousPlayerIndex !== -1) {
-        await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2, () => {
+        await speakThenPause(gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.', 2, async () => {
           currentPlayerIndex = 0
           previousPlayerIndex = -1
-          stage = 'monomi'
-          nightTimeLogic()
+          await monomi()
         })
         return
       // Someone declared an investigative Ability or Item
@@ -343,19 +166,36 @@ export default function NightTimeScreen({setTime}:Props) {
         } else if (currentPlayerIndex !== previousPlayerIndex && previousPlayerIndex !== -1) {
           speech = gameContext.playersInfo[previousPlayerIndex].name + ', go to sleep.'
         } else {
-          stage = 'abilitiesOrItemsAwake'
-          nightTimeLogic()
+          await abilitiesOrItemsAwake()
         }
-        await speakThenPause(speech, 2, () => {
-          stage = 'abilitiesOrItemsAwake'
-          nightTimeLogic()
+        await speakThenPause(speech, 2, async () => {
+          await abilitiesOrItemsAwake()
         })
         break
       }
     }
   }
 
-  async function abilitiesAndItemsAwake() {
+  async function abilitiesOrItemsAwake() {
+    setContinueButtonText('Investigate')
+    onPlayerClick = (playerIndex) => {
+      gameContext.playersInfo.forEach(playerInfo => {
+        if (playerInfo.playerIndex === playerIndex) {
+          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+        } else if (playerInfo.playerIndex !== currentPlayerIndex) {
+          playerInfo.playerButtonStyle.backgroundColor = blackTransparent 
+        }
+      })
+      setPlayerIndex(playerIndex)
+      setContinueButtonColor(pinkTransparent)
+      setContinueButtonTextColor('white')
+      setContinueButtonDisabled(false)
+    }
+    onContinue = () => {
+      onRevealRoleModalOk = async () => await abilitiesOrItemsSleep()
+      setRevealRoleModalVisible(true)
+    }
+    
     let speech = ''
     if (previousPlayerIndex !== currentPlayerIndex) {
       speech += gameContext.playersInfo[currentPlayerIndex].name + ', wake up. '
@@ -384,7 +224,6 @@ export default function NightTimeScreen({setTime}:Props) {
       speech += 'Click the player you would like to investigate whether they are a spotless or not a spotless.'
     }
     previousPlayerIndex = currentPlayerIndex
-    stage = 'abilitiesOrItemsSleep'
     await speakThenPause(speech, 0, () => {
       gameContext.playersInfo.forEach(playerInfo => {
         if (playerInfo.playerIndex === currentPlayerIndex) {
@@ -395,6 +234,141 @@ export default function NightTimeScreen({setTime}:Props) {
         setState([]) // re-render screen
       })
     })
+  }
+
+  async function traitors() {
+    if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
+      const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
+      if (traitorInPlay) {
+        gameContext.playersInfo.forEach(playerInfo => {
+          playerInfo.playerButtonStyle.textColor = 'white'
+          if (playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
+          else if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
+          else { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
+        })            
+      }
+      setContinueButtonText('Continue')
+      await speakThenPause(speechToTraitorsAwake, 0 , () => {
+        timerDuration = 10
+        onTimerDone = async () => await traitorsSleep()
+        setTimerVisible(true)
+      })
+    } else {
+      await blackened()
+    }      
+  }
+
+  async function traitorsSleep() {
+    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+    setTimerVisible(false)
+    await speakThenPause(speechToTraitorsSleep, 2, blackened)
+  }
+
+  async function monomi() {
+    if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
+      await backgroundMusic.unloadAsync()
+      await playMusic(true)
+      abilityOrItem = 'Protect'
+      setContinueButtonText('Continue')
+      onPlayerClick = (playerIndex) => {
+        const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
+        if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
+          gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+          if (playerIndex !== gameContext.monomiProtect) {
+            gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
+            gameContext.monomiProtect = playerIndex
+          } else {
+            gameContext.monomiProtect = -1
+          }              
+        }
+      }
+      await speakThenPause(speechToMonomiAwake, 0, () => {
+        gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo) })
+        timerDuration = 15
+        onTimerDone = async () => await monomiSleep()
+        setTimerVisible(true)
+      })
+    } else {
+      await alterEgo()
+    }
+  }
+
+  async function monomiSleep() {
+    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+    setTimerVisible(false)
+    await speakThenPause(speechToMonomiSleep, 1, async () => {
+      await backgroundMusic.unloadAsync()
+      await playMusic()
+      await alterEgo()
+    })
+  }
+
+  async function alterEgo() {
+    if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
+      abilityOrItem = 'Alter Ego'
+      onPlayerClick = (playerIndex) => {
+        gameContext.playersInfo.forEach(playerInfo => {
+          if (playerInfo.playerIndex === playerIndex) { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent } 
+          else if (playerInfo.role !== 'Alter Ego') { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
+        })
+        setContinueButtonColor(pinkTransparent)
+        setContinueButtonTextColor('white')
+        setContinueButtonDisabled(false) 
+      }
+      onContinue = async () => {
+        onRevealRoleModalOk = async () => await speakThenPause(speechToAlterEgoSleep, 2, blackened)
+        setRevealRoleModalVisible(true) 
+      }
+      await speakThenPause(speechToAlterEgoAwake, 0, () => {
+        gameContext.playersInfo.forEach(playerInfo => {
+          if (playerInfo.role === 'Alter Ego') { disablePlayerButton(playerInfo) }
+          else { enablePlayerButton(playerInfo) }
+        })
+        setContinueButtonText('Investigate')
+        setState([]) // re-render screen if setContinueButtonText() doesn't
+      })
+    } else {
+      await blackened()
+    }
+  }
+
+  async function blackened() {
+    if ((gameContext.dayNumber === 0 && gameContext.mode === 'extreme' || gameContext.dayNumber > 0) && !gameContext.vicePlayed) {
+      abilityOrItem = 'Attack'
+      setContinueButtonText('Attack')
+      onPlayerClick = (playerIndex) => {
+        gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+        gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
+        gameContext.blackenedAttack = playerIndex
+        setContinueButtonColor(pinkTransparent)
+        setContinueButtonTextColor('white')
+        setContinueButtonDisabled(false)
+      }
+      onContinue = async () => { await speakThenPause(speechToBlackenedSleep, 2, morningTime) }
+      if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
+        await speakThenPause(speechToBlackenedAwake1, 0, () => {
+          gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
+          setState([]) // re-render screen
+        })
+      } else if (gameContext.dayNumber > 0) {
+        await speakThenPause(speechToBlackenedAwake2, 0, () => {
+          gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
+          setState([]) // re-render screen
+        })
+      }
+    } else {
+      if (gameContext.vicePlayed === true) { 
+        await speakThenPause(speechToBlackenedVice, 1, morningTime) 
+      } else {
+        await morningTime()
+      }
+    }
+  }
+
+  async function morningTime() {
+    await backgroundMusic.unloadAsync()
+    gameContext.dayNumber += 1
+    setTime('MorningTimeScreen')
   }
 
   function disableContinueButton() {

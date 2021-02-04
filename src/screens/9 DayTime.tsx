@@ -14,10 +14,11 @@ import { GameContextType } from '../types/types'
 import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 
-let stage = 'daySpeech'
-let speech = ''
 let votedPlayerIndex = -1
 let discussionTime:number
+let onContinue = () => {}
+let onDiscussionDone = () => {}
+let onPlayerVote = () => {}
 let backgroundMusic:Audio.Sound
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
@@ -31,6 +32,7 @@ export default function DayTimeScreen({setTime}:Props) {
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
+  const [labelClassTrial, setLabelToClassTrial] = useState(false)
   const [state, setState] = useState([])
 
   // Returns true if screen is focused
@@ -39,7 +41,7 @@ export default function DayTimeScreen({setTime}:Props) {
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setState([]) // re-render screen
-    dayTimeLogic() 
+    daySpeech() 
   }}, [isFocused])
 
 
@@ -48,16 +50,12 @@ export default function DayTimeScreen({setTime}:Props) {
       <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
       <PlayerVoteModal visible={playerVoteVisible} setVisible={setPlayerVoteVisible} onOk={(playerVote) => { 
         votedPlayerIndex = playerVote
-        dayTimeLogic()
+        onPlayerVote()
       }}/>
-      <DiscussionOrVoteModal visible={discussionOrVoteVisible} setVisible={setDiscussionOrVoteVisible} onDiscussion={() => {
-        stage = 'discussion'
+      <DiscussionOrVoteModal visible={discussionOrVoteVisible} setVisible={setDiscussionOrVoteVisible} onDiscussion={async () => {
         discussionTime = 60
-        dayTimeLogic()
-      }} onVote={() => {
-        stage = 'trial'
-        dayTimeLogic()
-      }}/>
+        await discussion()
+      }} onVote={async () => { await trial() }}/>
     </View>
   )
 
@@ -74,10 +72,7 @@ export default function DayTimeScreen({setTime}:Props) {
             <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
               <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableHighlight style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }} 
-                  onPress={async () => { 
-                      await backgroundMusic.setVolumeAsync(.5)
-                      setTimerKey(timerKey + 1) 
-                    }}>
+                  onPress={async () => { setTimerKey(timerKey + 1) }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Restart{"\n"}Timer</Text>
                 </TouchableHighlight>
               </View>
@@ -96,7 +91,7 @@ export default function DayTimeScreen({setTime}:Props) {
                   onPress={async () => {
                     await backgroundMusic.unloadAsync()
                     setTimerVisible(false)
-                    dayTimeLogic() 
+                    onDiscussionDone()
                   }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>End{"\n"}Discussion</Text>
                 </TouchableHighlight>
@@ -114,7 +109,7 @@ export default function DayTimeScreen({setTime}:Props) {
             <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
               disabled={continueButtonDisabled} onPress={() => {
                 disableContinueButton()
-                dayTimeLogic() 
+                onContinue() 
               }}>
               <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
             </TouchableHighlight>
@@ -126,7 +121,7 @@ export default function DayTimeScreen({setTime}:Props) {
 
   function DayTimeLabel() {
     const trialStages = [ 'discussion', 'abilitiesOrItemsTrial', 'trial', 'vote', 'execution', 'declareWinner']
-    if (trialStages.includes(stage) && gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
+    if (labelClassTrial) {
       return (
         <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
           <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
@@ -145,94 +140,102 @@ export default function DayTimeScreen({setTime}:Props) {
     }
   }
 
-  async function dayTimeLogic() {
-    switch (stage) {
-      case 'daySpeech':
-        discussionTime = 180
-        if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
-          speech = 'It is day time. A body has been discovered! Now then, after a certain amount of time has passed, the class trial will begin!'
-        } else {
-          speech = 'Mm, ahem, it is now the day time.'
-        }
-        stage = 'abilitiesOrItems'
-        await speakThenPause(speech, 1, dayTimeLogic)
-        break
-      case 'abilitiesOrItems':
-        if (gameContext.mode === 'extreme') {
-          await speakThenPause('Would anybody like to use an ability or item?', 0, () => {
-            enableContinueButton()
-            stage = 'discussion'
-          })
-          break
-        }
-      case 'discussion':
-        await playMusic(gameContext)
-        if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
-          stage = 'abilitiesOrItemsTrial'
-        } else {
-          stage = 'nightTime'
-        }
-        await speakThenPause('Discussion starts now.', 0, () => { setTimerVisible(true) })
-        break
-      case 'abilitiesOrItemsTrial':
-        if (gameContext.mode === 'extreme' && gameContext.tieVote === false) {
-          stage = 'trial'
-          await speakThenPause('Would anybody like to use an ability or item before voting?', 0, enableContinueButton)
-          break
-        }
-      case 'trial':
-        stage = 'vote'
-        await speakThenPause('Up next is the voting segment where each player points to who they think is the Blackened.\
-        Click Continue when everyone is ready to vote.', 0, enableContinueButton)
-        break
-      case 'vote':
-        stage = 'execution'
-        await speakThenPause('Three. Two. One. Vote!', 0, () => { setPlayerVoteVisible(true) })
-        break
-      case 'execution':
-        if (votedPlayerIndex === -1) { // Tie vote
-          gameContext.tieVote = true
-          setDiscussionOrVoteVisible(true)
-        } else {
-          gameContext.tieVote = false
-          gameContext.playersInfo[votedPlayerIndex].alive = false
-          const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
-          if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
-            gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
-          }
-          stage = 'declareWinner'
-          await speakThenPause(votedPlayer + ' has received the most votes and has been executed.', 1, dayTimeLogic)
-        }
-        break
-      case 'declareWinner':
-        if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
-          gameContext.winnerSide = 'Hope'
-          push('WinnerDeclarationScreen')
-        } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
-          gameContext.winnerSide = 'Ultimate Despair'
-          push('WinnerDeclarationScreen')
-        } else if (gameContext.killsLeft === 0) {
-          gameContext.winnerSide = 'Despair'
-          push('WinnerDeclarationScreen')
-        } else {
-          const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
-          const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
-          stage = 'nightTime'
-          if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
-            gameContext.alterEgoAlive = false
-            await speakThenPause('U pu pu pu. ' + votedPlayer + ' was the Alter Ego. The game continues and the Blackened needs ' + 
-            gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1, dayTimeLogic)
-          } else {
-            await speakThenPause(votedPlayer + ' was not the Blackened player. The game continues and the Blackened needs ' + 
-            gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1, dayTimeLogic)
-          }
-        }
-        break
-      case 'nightTime':
-        stage = 'daySpeech'
-        setTime('NightTimeScreen')
-        break
+  async function daySpeech() {
+    let speech = ''
+    let onSpeechDone = () => {}
+    discussionTime = 180
+    if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
+      speech = 'It is day time. A body has been discovered! Now then, after a certain amount of time has passed, the class trial will begin!'
+    } else {
+      speech = 'Mm, ahem, it is now the day time.'
     }
+    if (gameContext.mode === 'extreme') {
+      onSpeechDone = async () => await abilitiesOrItems()
+    } else {
+      onSpeechDone = async () => await discussion()
+    }
+    await speakThenPause(speech, 1, onSpeechDone)
+  }
+
+  async function abilitiesOrItems() {
+    await speakThenPause('Would anybody like to use an ability or item?', 0, () => {
+      onContinue = async () => await discussion()
+      enableContinueButton()
+    })
+  }
+
+  async function discussion() {
+    await playMusic(gameContext)
+    if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
+      setLabelToClassTrial(true)
+      onDiscussionDone = async () => await abilitiesOrItemsTrial()
+    } else {
+      onDiscussionDone = async () => await nightTime()
+    }
+    await speakThenPause('Discussion starts now.', 0, () => { setTimerVisible(true) })
+  }
+
+  async function abilitiesOrItemsTrial() {
+    if (gameContext.mode === 'extreme' && gameContext.tieVote === false) {
+      onContinue = async () => await trial()
+      await speakThenPause('Would anybody like to use an ability or item before voting?', 0, enableContinueButton)
+    } else {
+      await trial()
+    }
+  }
+
+  async function trial() {
+    onContinue = async () => await vote()
+    await speakThenPause('Up next is the voting segment where each player points to who they think is the Blackened.\
+    Click Continue when everyone is ready to vote.', 0, enableContinueButton)
+  }
+
+  async function vote() {
+    onPlayerVote = async () => await execution()
+    await speakThenPause('Three. Two. One. Vote!', 0, () => { setPlayerVoteVisible(true) })
+  }
+
+  async function execution() {
+    if (votedPlayerIndex === -1) { // Tie vote
+      gameContext.tieVote = true
+      setDiscussionOrVoteVisible(true)
+    } else {
+      gameContext.tieVote = false
+      gameContext.playersInfo[votedPlayerIndex].alive = false
+      const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
+      if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
+        gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
+      }
+      await speakThenPause(votedPlayer + ' has received the most votes and has been executed.', 1, declareWinner)
+    }
+  }
+
+  async function declareWinner() {
+    if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
+      gameContext.winnerSide = 'Hope'
+      push('WinnerDeclarationScreen')
+    } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
+      gameContext.winnerSide = 'Ultimate Despair'
+      push('WinnerDeclarationScreen')
+    } else if (gameContext.killsLeft === 0) {
+      gameContext.winnerSide = 'Despair'
+      push('WinnerDeclarationScreen')
+    } else {
+      const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
+      const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
+      if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
+        gameContext.alterEgoAlive = false
+        await speakThenPause('U pu pu pu. ' + votedPlayer + ' was the Alter Ego. The game continues and the Blackened needs ' + 
+        gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1, nightTime)
+      } else {
+        await speakThenPause(votedPlayer + ' was not the Blackened player. The game continues and the Blackened needs ' + 
+        gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1, nightTime)
+      }
+    }
+  }
+
+  async function nightTime() {
+    setTime('NightTimeScreen')
   }
 
   function enableContinueButton() {
