@@ -5,7 +5,7 @@ import { GameContext } from '../../AppContext'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { PlayerInfo } from '../types/types'
-import { greyTransparent } from '../styles/colors'
+import { darkGrey, greyTransparent } from '../styles/colors'
 
 export default function PlayersPage({middleSection, onPlayerClick}:Props) {
   // modal.props.setVisisble(true) Is this possible so I don't need to pass in setModalVisible

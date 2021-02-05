@@ -1,7 +1,7 @@
 import { Video } from "expo-av"
 import React, { useState } from "react"
 import { View, Image } from "react-native"
-import { speechSchoolAnnouncement1 } from "../data/NightTimeDialogue"
+import { nightTimeSpeech } from "../data/Speeches"
 import * as Speech from 'expo-speech'
 import { useNavigation } from "@react-navigation/native"
 import { video } from "../assets/video/video"
@@ -14,12 +14,16 @@ export default function SchoolAnnouncementScreen() {
     return (
       <View style={{flex: 1}}>
         <Video source={video[0]} shouldPlay={true} resizeMode="cover"
-          style={{width: '100%', height: '100%'}} volume={0.5} onPlaybackStatusUpdate={(playbackStatus:any) => {
-            if (playbackStatus.didJustFinish) { 
+          style={{width: '100%', height: '100%'}} volume={0.5} onPlaybackStatusUpdate={async (playbackStatus:any) => {
+            if (playbackStatus.didJustFinish) {
               setVideoPlaying(false) 
-              Speech.speak(speechSchoolAnnouncement1, {onDone: () => push('GameScreen')})}
+              await speakThenPause(nightTimeSpeech.schoolAnnouncement1, 2, async () => {
+                await speakThenPause(nightTimeSpeech.everyoneSleep2, 2, () => {
+                  push('GameScreen')
+                })
+              })
             }
-          }
+          }}
         />
       </View>
     )    
@@ -30,4 +34,14 @@ export default function SchoolAnnouncementScreen() {
       </View>
     )
   }
+}
+
+const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
+
+async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
+  const callback = async(seconds:number) => {
+    await sleep(seconds * 1000)
+    if (onDone) { onDone() }
+  }
+  Speech.speak(speech, {onDone: () => {callback(seconds)}})
 }

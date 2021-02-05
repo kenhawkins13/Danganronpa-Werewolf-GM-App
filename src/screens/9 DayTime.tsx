@@ -13,6 +13,7 @@ import { Audio } from 'expo-av'
 import { GameContextType } from '../types/types'
 import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
+import { dayTimeSpeech } from '../data/Speeches'
 
 let votedPlayerIndex = -1
 let discussionTime:number
@@ -120,7 +121,6 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   function DayTimeLabel() {
-    const trialStages = [ 'discussion', 'abilitiesOrItemsTrial', 'trial', 'vote', 'execution', 'declareWinner']
     if (labelClassTrial) {
       return (
         <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
@@ -145,9 +145,9 @@ export default function DayTimeScreen({setTime}:Props) {
     let onSpeechDone = () => {}
     discussionTime = 180
     if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
-      speech = 'It is day time. A body has been discovered! Now then, after a certain amount of time has passed, the class trial will begin!'
+      speech = dayTimeSpeech().daySpeech1
     } else {
-      speech = 'Mm, ahem, it is now the day time.'
+      speech = dayTimeSpeech().daySpeech2
     }
     if (gameContext.mode === 'extreme') {
       onSpeechDone = async () => await abilitiesOrItems()
@@ -158,7 +158,7 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItems() {
-    await speakThenPause('Would anybody like to use an ability or item?', 0, () => {
+    await speakThenPause(dayTimeSpeech().abilityOrItem, 0, () => {
       onContinue = async () => await discussion()
       enableContinueButton()
     })
@@ -172,13 +172,13 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       onDiscussionDone = async () => await nightTime()
     }
-    await speakThenPause('Discussion starts now.', 0, () => { setTimerVisible(true) })
+    await speakThenPause(dayTimeSpeech().discussion, 0, () => { setTimerVisible(true) })
   }
 
   async function abilitiesOrItemsTrial() {
     if (gameContext.mode === 'extreme' && gameContext.tieVote === false) {
       onContinue = async () => await trial()
-      await speakThenPause('Would anybody like to use an ability or item before voting?', 0, enableContinueButton)
+      await speakThenPause(dayTimeSpeech().abilityOrItemTrial, 0, enableContinueButton)
     } else {
       await trial()
     }
@@ -186,13 +186,12 @@ export default function DayTimeScreen({setTime}:Props) {
 
   async function trial() {
     onContinue = async () => await vote()
-    await speakThenPause('Up next is the voting segment where each player points to who they think is the Blackened.\
-    Click Continue when everyone is ready to vote.', 0, enableContinueButton)
+    await speakThenPause(dayTimeSpeech().trial, 0, enableContinueButton)
   }
 
   async function vote() {
     onPlayerVote = async () => await execution()
-    await speakThenPause('Three. Two. One. Vote!', 0, () => { setPlayerVoteVisible(true) })
+    await speakThenPause(dayTimeSpeech().vote, 0, () => { setPlayerVoteVisible(true) })
   }
 
   async function execution() {
@@ -206,7 +205,7 @@ export default function DayTimeScreen({setTime}:Props) {
       if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
         gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
       }
-      await speakThenPause(votedPlayer + ' has received the most votes and has been executed.', 1, declareWinner)
+      await speakThenPause(dayTimeSpeech(votedPlayer).execution, 1, declareWinner)
     }
   }
 
@@ -225,11 +224,9 @@ export default function DayTimeScreen({setTime}:Props) {
       const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
-        await speakThenPause('U pu pu pu. ' + votedPlayer + ' was the Alter Ego. The game continues and the Blackened needs ' + 
-        gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1, nightTime)
+        await speakThenPause(dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft1, 1, nightTime)
       } else {
-        await speakThenPause(votedPlayer + ' was not the Blackened player. The game continues and the Blackened needs ' + 
-        gameContext.killsLeft  + ' more ' + killOrKills + 'to win.', 1, nightTime)
+        await speakThenPause(dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft2, 1, nightTime)
       }
     }
   }

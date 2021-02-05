@@ -1,8 +1,8 @@
 TODO:
 
-Pause between "player wake up" and "do command". Delay after schoolAnnouncement1
 add speech-to-text on all settings pages
 Info inco that respeaks speech on during each stage to remind what needs to happen
+don't reset app after game ends
 try to remove black rectangle when you click buttons. Doesn't appear on Next or Previous buttons
 Normal/Extreme switch not transparent?
 transition music better?
