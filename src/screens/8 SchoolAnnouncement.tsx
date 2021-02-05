@@ -13,8 +13,8 @@ export default function SchoolAnnouncementScreen() {
   if (videoPlaying) {
     return (
       <View style={{flex: 1}}>
-        <Video source={video[0]} shouldPlay={true} resizeMode="cover"
-          style={{width: '100%', height: '100%'}} volume={0.5} onPlaybackStatusUpdate={async (playbackStatus:any) => {
+        <Video source={video[0]} shouldPlay={true} resizeMode="cover" 
+          style={{width: '100%', height: '100%'}} volume={0.1} onPlaybackStatusUpdate={async (playbackStatus:any) => {
             if (playbackStatus.didJustFinish) {
               setVideoPlaying(false) 
               await speakThenPause(nightTimeSpeech.schoolAnnouncement1, 2, async () => {
