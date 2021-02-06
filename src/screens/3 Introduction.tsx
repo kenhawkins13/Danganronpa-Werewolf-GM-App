@@ -26,22 +26,26 @@ export default function IntroductionScreen() {
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
-            <Text style={{...appStyle.text, alignSelf: 'center', textAlign: 'center'}}>
-              -Introduction-
-            </Text>
-            <TouchableHighlight style={{height: 15, width: 15, alignSelf: 'flex-end'}} 
-              onPress={async() => {
-                await Speech.stop()
-                Speech.speak(text1 + ' ' + text2)
-              }}>
-              <Image style={{height: 15, width: 15,}} source={require('../assets/images/Speaker.png')}/>
-            </TouchableHighlight>
-            <Text style={{...appStyle.text}}>
-              {"\n"}
-              {text1}
-              {"\n\n"}
-              {text2}
-            </Text>
+            <View style={{height: 28, justifyContent: 'center'}}>
+              <Text style={{...appStyle.text, textAlign: 'center'}}>
+                -Introduction-
+              </Text>
+              <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
+                onPress={async() => {
+                  await Speech.stop()
+                  Speech.speak(speech1 + ' ' + speech2)
+                }}>
+                <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+              </TouchableHighlight>
+            </View>
+            <View>
+              <Text style={{...appStyle.text}}>
+                {"\n"}
+                {body1}
+                {"\n\n"}
+                {body2}
+              </Text>
+            </View>
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -67,8 +71,13 @@ async function playMusic() {
   backgroundMusic = sound
 }
 
-const text1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adoorable headmaster, Monokuma!"
-const text2 = "Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
+const body1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Monokuma!"
+const body2 = "Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
 I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
 academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
 Werewolf for the ultimate students.\n\nHow exciting!"
+const speech1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Moenoekuma!"
+const speech2 = "Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
+I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
+academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
+Werewolf for the ultimate students. How exciting!"

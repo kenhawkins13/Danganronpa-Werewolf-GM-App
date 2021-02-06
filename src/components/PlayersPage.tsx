@@ -1,11 +1,11 @@
 import { useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableHighlight, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { PlayerInfo } from '../types/types'
-import { darkGrey, greyTransparent } from '../styles/colors'
+import { greyTransparent } from '../styles/colors'
 
 export default function PlayersPage({middleSection, onPlayerClick}:Props) {
   // modal.props.setVisisble(true) Is this possible so I don't need to pass in setModalVisible
