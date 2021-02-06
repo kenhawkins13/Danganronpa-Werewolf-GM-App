@@ -1,7 +1,7 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import * as Speech from 'expo-speech'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, TouchableHighlight } from 'react-native'
+import { Image, View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import Confirmation from '../components/modals/Confirmation'
 import ConfirmationMorning from '../components/modals/ConfirmationMorning'
@@ -13,6 +13,7 @@ import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { appStyle } from '../styles/styles'
 import { PlayerInfo } from '../types/types'
 
+let speech = ''
 let victim:PlayerInfo
 let onSpeechDone = () => {}
 let onContinue = () => {}
@@ -79,7 +80,17 @@ export default function MorningTimeScreen({setTime}:Props) {
   function PlayersPageMiddleSection() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-        {MorningTimeLabel()}
+        <View>
+          {MorningTimeLabel()}
+          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
+            onPress={async() => {
+              if (await Speech.isSpeakingAsync() === false) {
+                Speech.speak(speech)                
+              }
+            }}>
+            <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+          </TouchableHighlight>
+        </View>
         <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
             disabled={continueButtonDisabled} onPress={() => { onContinue() }}>
@@ -107,7 +118,8 @@ export default function MorningTimeScreen({setTime}:Props) {
     } else {
       onSpeechDone = async () => await dayTime()
     }
-    await speakThenPause(goodMorningSpeech(gameContext.dayNumber), 1, onSpeechDone)
+    speech = goodMorningSpeech(gameContext.dayNumber)
+    await speakThenPause(speech, 1, onSpeechDone)
   }
 
   async function announceAttack() {
@@ -128,25 +140,26 @@ export default function MorningTimeScreen({setTime}:Props) {
     } else {
       onSpeechDone = async () => await bodyDiscovery()
     }
-    await speakThenPause(morningTimeSpeech(victim.name).announceAttack, 1, onSpeechDone)
+    speech = morningTimeSpeech(victim.name).announceAttack
+    await speakThenPause(speech, 1, onSpeechDone)
   }
 
   async function monomi() {
     if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 1 && gameContext.monomiExploded === false  && gameContext.blackenedAttack !== -1) {
-      let speech = ''
-      if (gameContext.blackenedAttack === gameContext.monomiProtect) {
-        const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
-        gameContext.monomiExploded = true
-        gameContext.blackenedAttack = monomi
-        gameContext.playersInfo[monomi].alive = false
-        gameContext.killsLeft -= 1
-        speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi2
-        onSpeechDone = async () => await dayTime()
-      } else {          
-        speech = morningTimeSpeech().monomi3
-        onSpeechDone = async () => await victimActions()
-      }
-      await speakThenPause(morningTimeSpeech(victim.name).monomi1, 1, async () => {
+      speech = morningTimeSpeech(victim.name).monomi1
+      await speakThenPause(speech, 1, async () => {
+        if (gameContext.blackenedAttack === gameContext.monomiProtect) {
+          const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
+          gameContext.monomiExploded = true
+          gameContext.blackenedAttack = monomi
+          gameContext.playersInfo[monomi].alive = false
+          gameContext.killsLeft -= 1
+          speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi2
+          onSpeechDone = async () => await dayTime()
+        } else {          
+          speech = morningTimeSpeech().monomi3
+          onSpeechDone = async () => await victimActions()
+        }
         await speakThenPause(speech, 1, onSpeechDone)
       })
     } else {
@@ -158,12 +171,14 @@ export default function MorningTimeScreen({setTime}:Props) {
     if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber === 1 && gameContext.mode === 'extreme') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       onContinue = async () => await dayTime()
-      await speakThenPause(morningTimeSpeech(victim.name).victim1, 0, enableContinueButton)
+      speech = morningTimeSpeech(victim.name).victim1
+      await speakThenPause(speech, 0, enableContinueButton)
     } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'extreme') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       confirmationText = 'Does ' + victim.name + ' protect themselves?'
       amuletVisible = true
-      await speakThenPause(morningTimeSpeech(victim.name).victim2, 0, () => {
+      speech = morningTimeSpeech(victim.name).victim2
+      await speakThenPause(speech, 0, () => {
         onNo = async () => await playersAbilities()
         setConfirmationMorningVisible(true)
       })          
@@ -177,7 +192,8 @@ export default function MorningTimeScreen({setTime}:Props) {
   async function playersAbilities() {
     confirmationText = 'Did somebody protect ' + victim.name + '\nwith a character ability?'
     amuletVisible = false
-    await speakThenPause(morningTimeSpeech(victim.name).playersAbilities, 0, () => {
+    speech = morningTimeSpeech(victim.name).playersAbilities
+    await speakThenPause(speech, 0, () => {
       onNo = async () => await giveItems()
       setConfirmationMorningVisible(true)
     })
@@ -196,7 +212,7 @@ export default function MorningTimeScreen({setTime}:Props) {
     } while (!gameContext.playersInfo[indexLeft].alive)
     const leftPlayer = gameContext.playersInfo[indexLeft].name
     const rightPlayer = gameContext.playersInfo[indexRight].name
-    const speech = morningTimeSpeech(victim.name, leftPlayer, rightPlayer).giveItems
+    speech = morningTimeSpeech(victim.name, leftPlayer, rightPlayer).giveItems
     confirmationText = 'Did ' + victim.name + ' protect himself?'
     amuletVisible = true
     onNo = async () => await bodyDiscovery()
@@ -206,12 +222,15 @@ export default function MorningTimeScreen({setTime}:Props) {
   async function bodyDiscovery() {
     gameContext.playersInfo[gameContext.blackenedAttack].alive = false
     gameContext.killsLeft -= 1
-    await speakThenPause(morningTimeSpeech(victim.name).bodyDiscovery1, 1, async () => {
+    speech = morningTimeSpeech(victim.name).bodyDiscovery1
+    await speakThenPause(speech, 1, async () => {
       if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
-        await speakThenPause(morningTimeSpeech(victim.name).bodyDiscovery2, 2, async () => { await abilitiesOrItems() })
+        speech = morningTimeSpeech(victim.name).bodyDiscovery2
+        await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
       } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
-        await speakThenPause(morningTimeSpeech(victim.name).bodyDiscovery3, 0, () => {
+        speech = morningTimeSpeech(victim.name).bodyDiscovery3
+        await speakThenPause(speech, 0, () => {
           gameContext.winnerSide = 'Hope'
           push('WinnerDeclarationScreen')
         })
@@ -224,7 +243,8 @@ export default function MorningTimeScreen({setTime}:Props) {
   async function abilitiesOrItems() {
     if (gameContext.mode === 'extreme') {
       onContinue = async () => await viceConfirmation()
-      await speakThenPause(morningTimeSpeech().abilityOrItem, 0, enableContinueButton)
+      speech = morningTimeSpeech().abilityOrItem
+      await speakThenPause(speech, 0, enableContinueButton)
     } else {
       await dayTime()
     }

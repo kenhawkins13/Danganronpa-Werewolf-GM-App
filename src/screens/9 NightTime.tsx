@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, TouchableHighlight, View } from 'react-native'
+import { Image, Text, TouchableHighlight, View } from 'react-native'
 import { roleInPlay } from '../data/Table'
 import { nightTimeSpeech } from "../data/Speeches"
 import * as Speech from 'expo-speech'
@@ -95,10 +95,20 @@ export default function NightTimeScreen({setTime}:Props) {
   function NightTimeLabel() {
     if (nightTimeLabelVisible) {
       return (
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: blueTransparent}}>
-          <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
-            Nighttime{"\n"}of Day {gameContext.dayNumber}
-          </Text>
+        <View>
+          <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: blueTransparent}}>
+            <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
+              Nighttime{"\n"}of Day {gameContext.dayNumber}
+            </Text>
+          </View>
+          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
+            onPress={async() => {
+              if (await Speech.isSpeakingAsync() === false) {
+                Speech.speak(nightTimeSpeech.schoolAnnouncement2)                
+              }
+            }}>
+            <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+          </TouchableHighlight>
         </View>
       )      
     } else {

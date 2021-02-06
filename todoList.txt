@@ -1,6 +1,6 @@
 TODO:
 
-Info inco that respeaks speech on during each stage to remind what needs to happen
+daytime/class trial label slightly smaller than the two discussion buttons
 don't reset app after game ends
 try to remove black rectangle when you click buttons. Doesn't appear on Next or Previous buttons
 Normal/Extreme switch not transparent?

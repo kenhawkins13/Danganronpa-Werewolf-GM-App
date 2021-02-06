@@ -1,7 +1,7 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import * as Speech from 'expo-speech'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, TouchableHighlight } from 'react-native'
+import { Image, View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import CountdownTimer from '../components/CountdownTimer'
 import DiscussionOrVoteModal from '../components/modals/DiscussionOrVote'
@@ -15,6 +15,7 @@ import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 import { dayTimeSpeech } from '../data/Speeches'
 
+let speech = ''
 let votedPlayerIndex = -1
 let discussionTime:number
 let onContinue = () => {}
@@ -66,7 +67,17 @@ export default function DayTimeScreen({setTime}:Props) {
         <View style={{flex: 1}}>
           <View style={{flex: 2}}/>
           <View style={{flex: 4, alignItems: 'center', justifyContent: 'center'}}>
-            {DayTimeLabel()}
+            <View>
+              {DayTimeLabel()}
+              <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
+                onPress={async() => {
+                  if (await Speech.isSpeakingAsync() === false) {
+                    Speech.speak(speech)                
+                  }
+                }}>
+                <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+              </TouchableHighlight>
+            </View>
           </View>
           <View style={{flex: 1}}/>
           <View style={{flex: 10, flexDirection: 'row'}}>
@@ -82,7 +93,8 @@ export default function DayTimeScreen({setTime}:Props) {
               <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
                 if (timerVisible) { 
                   await backgroundMusic.setVolumeAsync(.1)
-                  Speech.speak("Time is up")
+                  speech = "Time is up"
+                  Speech.speak(speech)
                 }
               }}/>
             </View>
@@ -105,7 +117,17 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-          {DayTimeLabel()}
+          <View>
+            {DayTimeLabel()}
+            <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
+              onPress={async() => {
+                if (await Speech.isSpeakingAsync() === false) {
+                  Speech.speak(speech)                
+                }
+              }}>
+              <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+            </TouchableHighlight>
+          </View>
           <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
             <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
               disabled={continueButtonDisabled} onPress={() => {
@@ -141,7 +163,6 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function daySpeech() {
-    let speech = ''
     let onSpeechDone = () => {}
     discussionTime = 180
     if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
@@ -158,7 +179,8 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItems() {
-    await speakThenPause(dayTimeSpeech().abilityOrItem, 0, () => {
+    speech = dayTimeSpeech().abilityOrItem
+    await speakThenPause(speech, 0, () => {
       onContinue = async () => await discussion()
       enableContinueButton()
     })
@@ -172,13 +194,15 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       onDiscussionDone = async () => await nightTime()
     }
-    await speakThenPause(dayTimeSpeech().discussion, 0, () => { setTimerVisible(true) })
+    speech = dayTimeSpeech().discussion
+    await speakThenPause(speech, 0, () => { setTimerVisible(true) })
   }
 
   async function abilitiesOrItemsTrial() {
     if (gameContext.mode === 'extreme' && gameContext.tieVote === false) {
       onContinue = async () => await trial()
-      await speakThenPause(dayTimeSpeech().abilityOrItemTrial, 0, enableContinueButton)
+      speech = dayTimeSpeech().abilityOrItemTrial
+      await speakThenPause(speech, 0, enableContinueButton)
     } else {
       await trial()
     }
@@ -186,12 +210,14 @@ export default function DayTimeScreen({setTime}:Props) {
 
   async function trial() {
     onContinue = async () => await vote()
-    await speakThenPause(dayTimeSpeech().trial, 0, enableContinueButton)
+    speech = dayTimeSpeech().trial
+    await speakThenPause(speech, 0, enableContinueButton)
   }
 
   async function vote() {
     onPlayerVote = async () => await execution()
-    await speakThenPause(dayTimeSpeech().vote, 0, () => { setPlayerVoteVisible(true) })
+    speech = dayTimeSpeech().vote
+    await speakThenPause(speech, 0, () => { setPlayerVoteVisible(true) })
   }
 
   async function execution() {
@@ -205,7 +231,8 @@ export default function DayTimeScreen({setTime}:Props) {
       if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
         gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
       }
-      await speakThenPause(dayTimeSpeech(votedPlayer).execution, 1, declareWinner)
+      speech = dayTimeSpeech(votedPlayer).execution
+      await speakThenPause(speech, 1, declareWinner)
     }
   }
 
@@ -224,10 +251,11 @@ export default function DayTimeScreen({setTime}:Props) {
       const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
-        await speakThenPause(dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft1, 1, nightTime)
+        speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft1
       } else {
-        await speakThenPause(dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft2, 1, nightTime)
+        speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft2
       }
+      await speakThenPause(speech, 1, nightTime)
     }
   }
 
