@@ -111,8 +111,17 @@ const styles = StyleSheet.create({
 })
 
 function fillContextInfo(gameContext:GameContextType) {
-  gameContext.roleCounts = calculateRoles(gameContext.mode, gameContext.playerCount)
   gameContext.killsLeft = requiredKills(gameContext.playerCount)
+  gameContext.roleCounts = calculateRoles(gameContext.mode, gameContext.playerCount)
+  gameContext.dayNumber = 0
+  gameContext.blackenedAttack = -1,
+  gameContext.alterEgoAlive = true,
+  gameContext.monomiExploded = false,
+  gameContext.monomiProtect = -1,
+  gameContext.vicePlayed = false,
+  gameContext.tieVote = false,
+  gameContext.winnerSide = ''
+
   // Delete existing data
   while (gameContext.playersInfo.length > 0) {
     gameContext.playersInfo.pop()

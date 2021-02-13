@@ -7,9 +7,13 @@ import PlayersPage from "../components/PlayersPage"
 import RevealRoleModal from "../components/modals/RevealRole"
 import { Audio } from 'expo-av'
 import { endMusic } from "../assets/music/music"
+import { useNavigation } from "@react-navigation/native"
+
+let backgroundMusic:Audio.Sound
 
 export default function WinnerDeclarationScreen() {
   const gameContext = useContext(GameContext)
+  const navigation = useNavigation()
   const [winnerBannerVisible, setWinnerBannerVisible] = useState(false)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [revealRoleModalVisible, setRevealRoleModalVisible] = useState(false)
@@ -115,7 +119,10 @@ export default function WinnerDeclarationScreen() {
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <View style={{...appStyle.frame, height: '25%', minWidth: '25%'}}>
           <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
-          disabled={false} onPress={() => { DevSettings.reload() }}>
+          disabled={false} onPress={async () => {
+            await backgroundMusic.unloadAsync()           
+            navigation.navigate('StartScreen')
+           }}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>Restart</Text>
           </TouchableHighlight>
         </View>
@@ -130,4 +137,5 @@ async function playMusic() {
   await sound.playAsync()
   await sound.setVolumeAsync(.1)
   await sound.setIsLoopingAsync(true)
+  backgroundMusic = sound
 }
