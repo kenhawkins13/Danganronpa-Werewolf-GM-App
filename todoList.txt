@@ -1,6 +1,5 @@
 TODO:
 
-separate "it is now night time" with "anyone like to use abilities or items"
 try to remove black rectangle when you click buttons. Doesn't appear on Next or Previous buttons
 Normal/Extreme switch not transparent?
 transition music better?

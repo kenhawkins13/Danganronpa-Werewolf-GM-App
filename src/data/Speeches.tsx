@@ -1,18 +1,17 @@
 export const nightTimeSpeech = {
   schoolAnnouncement1: "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
   Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone go to sleep.",
-  schoolAnnouncement2: "It is now nighttime. Would anyone like to use an ability or item? \
-  Click on the player and enter any investigative abilities or items.",
-  schoolAnnouncement3: "It is now nighttime. Everybody go to sleep.",
-  everyoneSleep: "Everyone go to sleep.",
+  schoolAnnouncement2: "It is now nighttime.",
+  schoolAnnouncement3: "Would anyone like to use an ability or item? Click on the player and enter any investigative abilities or items.",
+  everyoneSleep1: "Everyone go to sleep.",
   everyoneSleep2: "Everyone should now be asleep.",
   traitors1: "Traitors, wake up.",
   traitors2: "On the screen, I will reveal all the traitors in grey and the blackened in pink.",
   traitors3: "Traitors, go back to sleep.",
-  monomi1: "Monomi, wake up.",
+  monomi1: "Moenoemi, wake up.",
   monomi2: "Click the player you would like to protect. You do not have to protect somebody. \
   I will automatically move on in 15 seconds.",
-  monomi3: "Monomi, go back to sleep.",
+  monomi3: "Moenoemi, go back to sleep.",
   alterEgo1: "Alter ego, wake up.",
   alterEgo2: "Click the player you would like to investigate.",
   alterEgo3: "Alter ego, go back to sleep.",
@@ -20,7 +19,13 @@ export const nightTimeSpeech = {
   blackened2: "Click the player you would like to attack. The victim will only lose an item card.",
   blackened3: "Click the player you would like to attack.",
   blackened4: "Since vice was played this morning, the Blackened will not attack anyone tonight.",
-  blackened5: "U pu pu pu. Blackened, go back to sleep."
+  blackened5: "U pu pu pu. Blackened, go back to sleep.",
+  kyokoKirigiri: "Click the player you would like to investigate whether they are on the side of hope or despair.",
+  yasuhiroHagakure1: 'Click the player you would like to investigate whether they are the despair disease patient or not the despair disease patient',
+  yasuhiroHagakure2: 'Click the player you would like to investigate whether they are Moenoemi or not Moenoemi',
+  glasses: "Click the player you would like to investigate whether they are on the side of hope or despair.",
+  someonesGraduationAlbum: "Click the player you would like to investigate whether they are a traitor or not a traitor.",
+  silentReceiver: "Click the player you would like to investigate whether they are a spotless or not a spotless.",
 }
 
 export const goodMorningSpeech = (dayNumber:number) => {
@@ -35,7 +40,7 @@ export const goodMorningSpeech = (dayNumber:number) => {
 export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) => {
   return {
     announceAttack: name1 + ", was attacked by the Blackened last night.",
-    monomi1: "Did Monomi protect" + name1 + " last night? ",
+    monomi1: "Did Moenoemi protect" + name1 + " last night? ",
     monomi2: "Yes, she did. " + name2 + " explodes and dies to protect " + name1,
     monomi3: "No, she did not.",
     victim1: name1 + ", discard one Item card.",
