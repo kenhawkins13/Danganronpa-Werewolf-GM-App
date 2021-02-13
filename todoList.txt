@@ -1,6 +1,5 @@
 TODO:
 
-Normal/Extreme switch not transparent?
 transition music better?
 when picking who received most votes, use PlayerBoxes -> how to display instruction to click on highest voted player / tie
 

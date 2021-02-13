@@ -53,7 +53,7 @@ export default function StartScreen () {
                 selectedColor='#cc0066'
                 buttonColor='white'
                 borderRadius={15}
-                backgroundColor={blackTransparent}
+                backgroundColor='rgba(0, 0, 0, 0)'
                 hasPadding={false}
                 height={44} // 50 (height) - 3 (top borderwidth) - 3 (bottom borderwidth)
                 style={{width: '100%', height: '100%'}}
