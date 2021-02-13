@@ -8,9 +8,7 @@ import { OrientationLock } from 'expo-screen-orientation'
 import * as Speech from 'expo-speech'
 
 export default function DirectionScreen() {
-    // Check if screen is focused
     const isFocused = useIsFocused()
-    // Listen for isFocused. If useFocused changes, force re-render by setting state
     useEffect(() => { if (isFocused) {
       ScreenOrientation.lockAsync(OrientationLock.PORTRAIT)
     }})

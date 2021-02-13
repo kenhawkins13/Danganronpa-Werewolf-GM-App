@@ -4,7 +4,6 @@ separate "it is now night time" with "anyone like to use abilities or items"
 try to remove black rectangle when you click buttons. Doesn't appear on Next or Previous buttons
 Normal/Extreme switch not transparent?
 transition music better?
-disable back button
 when picking who received most votes, use PlayerBoxes -> how to display instruction to click on highest voted player / tie
 
 add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc

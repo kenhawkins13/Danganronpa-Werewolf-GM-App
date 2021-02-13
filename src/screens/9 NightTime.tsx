@@ -40,9 +40,7 @@ export default function NightTimeScreen({setTime}:Props) {
   const [playerIndex, setPlayerIndex] = useState(0)
   const [state, setState] = useState([])
 
-  // Check if screen is focused
   const isFocused = useIsFocused()
-  // Listen for isFocused. If useFocused changes, force re-render by setting state
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setState([]) // re-render screen

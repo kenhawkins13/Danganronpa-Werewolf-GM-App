@@ -32,9 +32,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
   const [array, setArray] = useState([])
 
-  // Returns true if screen is focused
   const isFocused = useIsFocused()
-  // Listen for isFocused. If useFocused changes, force re-render by setting state
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     morningSpeech()

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, ImageBackground, TouchableHighlight } from 'react-native'
+import { Text, View, StyleSheet, ImageBackground, TouchableHighlight, BackHandler } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import SwitchSelector from 'react-native-switch-selector'
 import Slider from '@react-native-community/slider'
@@ -21,13 +21,16 @@ export default function StartScreen () {
   const [playerCount, setPlayerCount] = useState(4)
   const navigation = useNavigation()
   
-  // Check if screen is focused
+  // Returns true if screen is focused
   const isFocused = useIsFocused()
   // Listen for isFocused. If useFocused changes, force re-render by setting state
-  useEffect(() => { if (isFocused) {
-    ScreenOrientation.lockAsync(OrientationLock.PORTRAIT)
-    playMusic()
-  }}, [isFocused])
+  useEffect(() => { 
+    if (isFocused) {
+      ScreenOrientation.lockAsync(OrientationLock.PORTRAIT)
+      playMusic()
+    }
+    BackHandler.addEventListener('hardwareBackPress', () => true)
+  }, [isFocused])
 
   return (
     <View style={{ flex: 1 }}>

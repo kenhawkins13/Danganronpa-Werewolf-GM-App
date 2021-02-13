@@ -21,9 +21,7 @@ export default function PlayersScreen() {
   const [alertModalVisible, setAlertModalVisible] = useState(false)
   const [playerIndex, setPlayerIndex] = useState(0)
 
-    // Check if screen is focused
     const isFocused = useIsFocused()
-    // Listen for isFocused. If useFocused changes, force re-render by setting state
     useEffect(() => { if (isFocused) {
       ScreenOrientation.lockAsync(OrientationLock.LANDSCAPE)
       if (gameContext.playersInfo.every((value) => { return value.role !== ''})) {

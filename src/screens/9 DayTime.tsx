@@ -37,9 +37,7 @@ export default function DayTimeScreen({setTime}:Props) {
   const [labelClassTrial, setLabelToClassTrial] = useState(false)
   const [state, setState] = useState([])
 
-  // Returns true if screen is focused
   const isFocused = useIsFocused()
-  // Listen for isFocused. If useFocused changes, force re-render by setting state
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setState([]) // re-render screen
