@@ -35,16 +35,18 @@ export const modalStyles = StyleSheet.create({
   button: {
     backgroundColor: 'rgba(0,0,0,0.9)',
     borderRadius: 20,
+    minHeight: 28,
     width: 100,
     margin: 10,
     padding: 10,
-    elevation: 2
+    elevation: 2,
+    justifyContent: 'center'
   },
   textStyle: {
     color: "white",
     fontFamily: 'goodbyeDespair',
     fontSize: 18,
-    textAlign: "center"
+    textAlign: 'center'
   },
   modalText: {
     color: 'black',

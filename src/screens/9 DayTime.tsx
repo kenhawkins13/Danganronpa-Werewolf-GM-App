@@ -66,7 +66,7 @@ export default function DayTimeScreen({setTime}:Props) {
       return (
         <View style={{flex: 1}}>
           <View style={{flex: 2}}/>
-          <View style={{flex: 4, alignItems: 'center', justifyContent: 'center'}}>
+          <View style={{flex: 5, alignItems: 'center', justifyContent: 'center'}}>
             <View>
               {DayTimeLabel()}
               <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
