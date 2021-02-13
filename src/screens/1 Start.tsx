@@ -109,7 +109,7 @@ export default function StartScreen () {
 
 const styles = StyleSheet.create({
   startGameButton: {
-    width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'
+    flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
   }
 })
 
