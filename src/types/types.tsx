@@ -1,5 +1,5 @@
 export type RoleCount = {roles:string[], count:number}
-export type PlayerButtonStyle = {disabled: boolean, textColor:string, backgroundColor:string, borderColor:string}
+export type PlayerButtonStyle = {disabled: boolean, textColor:string, backgroundColor:string, borderColor:string, underlayColor:string}
 export type PlayerInfo = {
   playerIndex:number,
   name:string,

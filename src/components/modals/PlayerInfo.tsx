@@ -33,6 +33,7 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
                   gameContext.playersInfo[playerIndex].role = ''
                   gameContext.playersInfo[playerIndex].side = ''
                   gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = blackTransparent
                   setVisible(false)
                   setPlayerRole('')
                 }}>
@@ -46,10 +47,12 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
                   gameContext.playersInfo[playerIndex].side = 
                     ['Spotless', 'Alter Ego', 'Ultimate Despair'].indexOf(playerRole) !== -1 ? 'Hope' : 'Despair'
                   gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = greyTransparent
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = greyTransparent
                 } else {
                   gameContext.playersInfo[playerIndex].role = ''
                   gameContext.playersInfo[playerIndex].side = ''
                   gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = blackTransparent
                 }
                 setPlayerRole('')
                 setVisible(false)

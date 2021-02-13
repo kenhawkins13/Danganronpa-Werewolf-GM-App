@@ -5,6 +5,7 @@ export function enablePlayerButton(playerInfo:PlayerInfo) {
   playerInfo.playerButtonStyle.disabled = false
   playerInfo.playerButtonStyle.textColor = 'white'
   playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+  playerInfo.playerButtonStyle.underlayColor = blackTransparent
   playerInfo.playerButtonStyle.borderColor = 'white'
 }
 

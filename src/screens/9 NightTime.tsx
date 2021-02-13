@@ -74,8 +74,8 @@ export default function NightTimeScreen({setTime}:Props) {
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
           {NightTimeLabel()}
           <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
-            <TouchableHighlight style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} 
-              disabled={continueButtonDisabled} onPress={() => {
+            <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+              disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => {
                 onContinue()
                 gameContext.playersInfo.forEach(playerInfo => { disablePlayerButton(playerInfo) })
                 onContinue = () => {}
@@ -250,7 +250,7 @@ export default function NightTimeScreen({setTime}:Props) {
             if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
             if (traitorInPlay && playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
           })
-          timerDuration = 10
+          timerDuration = 15
           onTimerDone = async () => await traitorsSleep()
           setTimerVisible(true)
         })
@@ -275,9 +275,13 @@ export default function NightTimeScreen({setTime}:Props) {
       onPlayerClick = (playerIndex) => {
         const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
         if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
-          gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+          gameContext.playersInfo.forEach(playerInfo => { 
+            playerInfo.playerButtonStyle.backgroundColor = blackTransparent 
+            playerInfo.playerButtonStyle.underlayColor = blackTransparent 
+          })
           if (playerIndex !== gameContext.monomiProtect) {
             gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
+            gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = blackTransparent
             gameContext.monomiProtect = playerIndex
           } else {
             gameContext.monomiProtect = -1
@@ -312,8 +316,14 @@ export default function NightTimeScreen({setTime}:Props) {
       abilityOrItem = 'Alter Ego'
       onPlayerClick = (playerIndex) => {
         gameContext.playersInfo.forEach(playerInfo => {
-          if (playerInfo.playerIndex === playerIndex) { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent } 
-          else if (playerInfo.role !== 'Alter Ego') { playerInfo.playerButtonStyle.backgroundColor = blackTransparent }
+          if (playerInfo.playerIndex === playerIndex) { 
+            playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+            playerInfo.playerButtonStyle.underlayColor = pinkTransparent
+          } 
+          else if (playerInfo.role !== 'Alter Ego') { 
+            playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+            playerInfo.playerButtonStyle.underlayColor = blackTransparent
+          }
         })
         setContinueButtonColor(pinkTransparent)
         setContinueButtonTextColor('white')
@@ -343,8 +353,12 @@ export default function NightTimeScreen({setTime}:Props) {
       abilityOrItem = 'Attack'
       setContinueButtonText('Attack')
       onPlayerClick = (playerIndex) => {
-        gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+        gameContext.playersInfo.forEach(playerInfo => { 
+          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+          playerInfo.playerButtonStyle.underlayColor = blackTransparent
+        })
         gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
+        gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = pinkTransparent
         gameContext.blackenedAttack = playerIndex
         setContinueButtonColor(pinkTransparent)
         setContinueButtonTextColor('white')

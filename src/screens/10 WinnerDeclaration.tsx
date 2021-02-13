@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { View, Text, TouchableHighlight, DevSettings, ImageBackground } from "react-native"
 import { GameContext } from "../../AppContext"
-import { blackTransparent, blueTransparent, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../styles/colors"
+import { blackTransparent, blueTransparent, darkGrey, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../styles/colors"
 import { appStyle } from "../styles/styles"
 import PlayersPage from "../components/PlayersPage"
 import RevealRoleModal from "../components/modals/RevealRole"
@@ -35,36 +35,43 @@ export default function WinnerDeclarationScreen() {
           playerInfo.playerButtonStyle.textColor = 'white'
           playerInfo.playerButtonStyle.backgroundColor = whiteTransparent
           playerInfo.playerButtonStyle.borderColor = 'white'
+          playerInfo.playerButtonStyle.underlayColor = greyTransparent
           break
         case 'Alter Ego':
           playerInfo.playerButtonStyle.textColor = greenTransparent
           playerInfo.playerButtonStyle.backgroundColor = whiteTransparent
           playerInfo.playerButtonStyle.borderColor = 'white'
+          playerInfo.playerButtonStyle.underlayColor = greyTransparent
           break
         case 'Blackened':
           playerInfo.playerButtonStyle.textColor = pinkTransparent
           playerInfo.playerButtonStyle.backgroundColor = blackTransparent
           playerInfo.playerButtonStyle.borderColor = 'black'
+          playerInfo.playerButtonStyle.underlayColor = 'black'
           break
         case 'Traitor':
           playerInfo.playerButtonStyle.textColor = greyTransparent
           playerInfo.playerButtonStyle.backgroundColor = blackTransparent
           playerInfo.playerButtonStyle.borderColor = 'black'
+          playerInfo.playerButtonStyle.underlayColor = 'black'
           break
         case 'Despair Disease Patient':
           playerInfo.playerButtonStyle.textColor = blueTransparent
           playerInfo.playerButtonStyle.backgroundColor = whiteTransparent 
           playerInfo.playerButtonStyle.borderColor = 'white'
+          playerInfo.playerButtonStyle.underlayColor = greyTransparent
           break
         case 'Monomi':
           playerInfo.playerButtonStyle.textColor = pinkTransparent
           playerInfo.playerButtonStyle.backgroundColor = whiteTransparent 
           playerInfo.playerButtonStyle.borderColor = 'white'
+          playerInfo.playerButtonStyle.underlayColor = greyTransparent
           break
         case 'Ultimate Despair':
           playerInfo.playerButtonStyle.textColor = 'black'
           playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
           playerInfo.playerButtonStyle.borderColor = pink
+          playerInfo.playerButtonStyle.underlayColor = pink
           break
       }      
     })
@@ -118,7 +125,7 @@ export default function WinnerDeclarationScreen() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <View style={{...appStyle.frame, height: '25%', minWidth: '25%'}}>
-          <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
+          <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
           disabled={false} onPress={async () => {
             await backgroundMusic.unloadAsync()           
             navigation.navigate('StartScreen')

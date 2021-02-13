@@ -73,7 +73,7 @@ export default function DayTimeScreen({setTime}:Props) {
                     Speech.speak(speech)                
                   }
                 }}>
-                <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+                <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
               </TouchableHighlight>
             </View>
           </View>
@@ -81,7 +81,7 @@ export default function DayTimeScreen({setTime}:Props) {
           <View style={{flex: 10, flexDirection: 'row'}}>
             <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
               <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableHighlight style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }} 
+                <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
                   onPress={async () => { setTimerKey(timerKey + 1) }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Restart{"\n"}Timer</Text>
                 </TouchableHighlight>
@@ -98,7 +98,7 @@ export default function DayTimeScreen({setTime}:Props) {
             </View>
             <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
               <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
+                <TouchableHighlight style={{flex:1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
                   onPress={async () => {
                     await backgroundMusic.unloadAsync()
                     setTimerVisible(false)
@@ -127,8 +127,8 @@ export default function DayTimeScreen({setTime}:Props) {
             </TouchableHighlight>
           </View>
           <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
-            <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
-              disabled={continueButtonDisabled} onPress={() => {
+            <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+              disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => {
                 disableContinueButton()
                 onContinue() 
               }}>

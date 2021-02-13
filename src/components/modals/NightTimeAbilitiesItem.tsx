@@ -52,8 +52,10 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                   gameContext.playersInfo[playerIndex].useItem = itemCard
                   if (playerAbility !== '' || itemCard !== '') {
                     gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = greyTransparent
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = greyTransparent
                   } else {
                     gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = blackTransparent
                   }
                   setPlayerAbility('')
                   setItemCard('')

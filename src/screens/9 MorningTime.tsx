@@ -90,8 +90,8 @@ export default function MorningTimeScreen({setTime}:Props) {
           </TouchableHighlight>
         </View>
         <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
-          <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
-            disabled={continueButtonDisabled} onPress={() => { onContinue() }}>
+          <TouchableHighlight style={{flex: 1,  borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+            disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => { onContinue() }}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
           </TouchableHighlight>
         </View>

@@ -8,30 +8,27 @@ import { PlayerInfo } from '../types/types'
 import { greyTransparent } from '../styles/colors'
 
 export default function PlayersPage({middleSection, onPlayerClick}:Props) {
-  // modal.props.setVisisble(true) Is this possible so I don't need to pass in setModalVisible
   const gameContext = useContext(GameContext)
   const [bool, setBool] = useState(false)
 
-  // Check if screen is focused+
   const isFocused = useIsFocused()
-  // Listen for isFocused. If useFocused changes, force re-render by setting state
   useEffect(() => { if (isFocused) {
     ScreenOrientation.lockAsync(OrientationLock.LANDSCAPE)
   }})
 
   return (
     <View style={{ flex: 1 }}>
-      {PlayerButtons(boxIndexes(gameContext.playerCount))}
+      {PlayerButtons(buttonIndexes(gameContext.playerCount))}
       <View style={{ height: '60%', width: '60%', left: '20%', top: '20%', position: 'absolute' }}>
         {middleSection}
       </View>
     </View>
   )
   
-  function PlayerButtons(boxIndexes:number[]) {
+  function PlayerButtons(buttonIndexes:number[]) {
     return (
-      boxIndexes.map((value, index) => (
-        <View key={'box' + value} style={boxPosition(value).playerBox}>
+      buttonIndexes.map((value, index) => (
+        <View key={'box' + value} style={buttonPosition(value).playerBox}>
           {PlayerButton(index)}
         </View>
       ))
@@ -42,14 +39,15 @@ export default function PlayersPage({middleSection, onPlayerClick}:Props) {
     return (
       <View key={'player' + playerIndex} style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
         <TouchableHighlight key={'player' + playerIndex + 1} 
-          style={{...playerBoxStyle(gameContext.playersInfo[playerIndex]).boxStyle}}
+          underlayColor={playerButtonStyle(gameContext.playersInfo[playerIndex]).underlayStyle.color}
+          style={{...playerButtonStyle(gameContext.playersInfo[playerIndex]).buttonStyle}}
           disabled={gameContext.playersInfo[playerIndex].playerButtonStyle.disabled === true || 
             gameContext.playersInfo[playerIndex].alive === false}
           onPress={() => { 
             onPlayerClick(playerIndex)
             setBool(!bool)
           }}>
-          <Text adjustsFontSizeToFit style={playerBoxStyle(gameContext.playersInfo[playerIndex]).textStyle}>
+          <Text adjustsFontSizeToFit style={playerButtonStyle(gameContext.playersInfo[playerIndex]).textStyle}>
             {gameContext.playersInfo[playerIndex].name}
           </Text>
         </TouchableHighlight>
@@ -60,17 +58,18 @@ export default function PlayersPage({middleSection, onPlayerClick}:Props) {
 
 type Props = {middleSection:JSX.Element, onPlayerClick:(playerIndex:number) => void}
 
-function playerBoxStyle(playerInfo:PlayerInfo) {
+function playerButtonStyle(playerInfo:PlayerInfo) {
   let textColor = playerInfo.playerButtonStyle.textColor
   let backgroundColor = playerInfo.playerButtonStyle.backgroundColor
   let borderColor = playerInfo.playerButtonStyle.borderColor
+  let underlayColor = playerInfo.playerButtonStyle.underlayColor
   if (!playerInfo.alive) {
     textColor = greyTransparent
     backgroundColor = greyTransparent
     borderColor = greyTransparent
   }
   return StyleSheet.create({
-    boxStyle: {
+    buttonStyle: {
       height: '100%',
       width: '100%',
       alignItems: 'center',
@@ -86,11 +85,14 @@ function playerBoxStyle(playerInfo:PlayerInfo) {
       fontSize: 50,
       marginVertical: '5%',
       textAlign: 'center',
+    },
+    underlayStyle: {
+      color: underlayColor,
     }
   })
 }
 
-const boxPosition = (index:number) => {
+const buttonPosition = (index:number) => {
   let position = {top:'', left:''}
   switch (index) {
     case 0:
@@ -169,7 +171,7 @@ const boxPosition = (index:number) => {
   })
 }
 
-const boxIndexes = (playerCount:number) => {
+const buttonIndexes = (playerCount:number) => {
   switch (playerCount) {
     case 4:
       return [0, 4, 8, 12]

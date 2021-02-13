@@ -54,24 +54,29 @@ export default function PlayersScreen() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row'}}>
         <View style={{...appStyle.frame, height: '25%', width: '25%', margin: '2.5%'}}>
-          <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} onPress={() => { 
-            gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-            gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
-            gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
-            push('DirectionScreen')
+          <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}
+            onPress={() => { 
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
+              push('DirectionScreen')
             }}> 
             <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
           </TouchableHighlight>
         </View>
         <View style={{...appStyle.frame, height: '25%', width: '25%', margin: '2.5%', backgroundColor: startButtonColor}}>
-          <TouchableHighlight style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}} 
-            disabled={startButtonDisabled} onPress={() => {
+          <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+            disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={() => {
+            gameContext.playersInfo.forEach(playerInfo => { 
+              playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+              playerInfo.playerButtonStyle.underlayColor = blackTransparent
+              playerInfo.playerButtonStyle.borderColor = 'white'
+            })
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
               push('SchoolAnnouncementScreen')
             } else {
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
               setAlertModalVisible(true)
             }
           }}>

@@ -138,7 +138,7 @@ function fillContextInfo(gameContext:GameContextType) {
       alive: true,
       useAbility: '',
       useItem: '',
-      playerButtonStyle: {disabled: false, textColor: 'white', backgroundColor: blackTransparent, borderColor: 'white'}
+      playerButtonStyle: {disabled: false, textColor: 'white', backgroundColor: blackTransparent, borderColor: 'white', underlayColor: blackTransparent}
     })
   }
   return true
