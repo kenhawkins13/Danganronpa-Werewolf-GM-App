@@ -153,12 +153,15 @@ export default function MorningTimeScreen({setTime}:Props) {
           gameContext.playersInfo[monomi].alive = false
           gameContext.killsLeft -= 1
           speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi2
-          onSpeechDone = async () => await dayTime()
+          await speakThenPause(speech, 1, async () => {
+            speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi3
+            await speakThenPause(speech, 1, async () => { await dayTime() })
+          })
         } else {          
-          speech = morningTimeSpeech().monomi3
+          speech = morningTimeSpeech().monomi4
           onSpeechDone = async () => await victimActions()
+          await speakThenPause(speech, 1, onSpeechDone)
         }
-        await speakThenPause(speech, 1, onSpeechDone)
       })
     } else {
       await victimActions()
@@ -220,22 +223,20 @@ export default function MorningTimeScreen({setTime}:Props) {
   async function bodyDiscovery() {
     gameContext.playersInfo[gameContext.blackenedAttack].alive = false
     gameContext.killsLeft -= 1
-    speech = morningTimeSpeech(victim.name).bodyDiscovery1
-    await speakThenPause(speech, 1, async () => {
-      if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
-        gameContext.alterEgoAlive = false
-        speech = morningTimeSpeech(victim.name).bodyDiscovery2
-        await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
-      } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
-        speech = morningTimeSpeech(victim.name).bodyDiscovery3
-        await speakThenPause(speech, 0, () => {
-          gameContext.winnerSide = 'Hope'
-          push('WinnerDeclarationScreen')
-        })
-      } else {
-        await abilitiesOrItems()
-      }
-    })
+    if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
+      gameContext.alterEgoAlive = false
+      speech = morningTimeSpeech(victim.name).bodyDiscovery2
+      await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
+    } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
+      speech = morningTimeSpeech(victim.name).bodyDiscovery3
+      await speakThenPause(speech, 0, () => {
+        gameContext.winnerSide = 'Hope'
+        push('WinnerDeclarationScreen')
+      })
+    } else {
+      speech = morningTimeSpeech(victim.name).bodyDiscovery1
+      await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
+    }
   }
 
   async function abilitiesOrItems() {

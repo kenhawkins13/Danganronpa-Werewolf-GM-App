@@ -1,10 +1,21 @@
 TODO:
 
-transition music better?
-when picking who received most votes, use PlayerBoxes -> how to display instruction to click on highest voted player / tie
+start page music louder
+start night music after everyone go to sleep
+hitting sound button twice stops speech
+hitting next/previous stops speech
+continue playing music in settings, through players page
+when picking who received most votes, use PlayerBoxes. Use speech to say, who recieved the most votes. Add tie button and confirm button
+monrning dialogs, make into speech with buttons on screen
+15 character limit on player name
+after amulet of takejin, see if monomi protects the victim
+remove nighttimeabilitiesitmes, place drop downs on gamescreen. make amulet of takejin a 2nd yes or no question
+  does victim 
 
+add mic check before game starts
+remove Mr.-Monokuma's-Tutoring from night time music
 add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc
   body discovery sound, button sounds when you click Previous or Next
-3 hung trials leads to despair victory
+3 hung trials leads to despair victory. lead straight discussion on tie vote.
 if player does nothing for 15 seconds, repeat command
-make quotes more characteristic of Monokuma and Monomi
+include rulebook, link in disclaimer page.

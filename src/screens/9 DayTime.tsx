@@ -14,9 +14,11 @@ import { GameContextType } from '../types/types'
 import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 import { dayTimeSpeech } from '../data/Speeches'
+import PunishmentTimeModal from '../components/modals/PunishmentTime'
 
 let speech = ''
 let votedPlayerIndex = -1
+let votedPlayer = ''
 let discussionTime:number
 let onContinue = () => {}
 let onDiscussionDone = () => {}
@@ -27,6 +29,7 @@ const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, millis
 export default function DayTimeScreen({setTime}:Props) {
   const { push } = useNavigation<any>()
   const gameContext = useContext(GameContext)
+  const [videoVisible, setVideoVisible] = useState(false)
   const [timerVisible, setTimerVisible] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
   const [playerVoteVisible, setPlayerVoteVisible] = useState(false)
@@ -113,6 +116,12 @@ export default function DayTimeScreen({setTime}:Props) {
         </View>
       )      
     } else {
+      const onVideoDone = async () => {
+        await speakThenPause(dayTimeSpeech(votedPlayer).execution2, 1, () => {
+          setVideoVisible(false)
+          declareWinner()
+        })
+      }
       return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
           <View>
@@ -135,6 +144,7 @@ export default function DayTimeScreen({setTime}:Props) {
               <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
             </TouchableHighlight>
           </View>
+          <PunishmentTimeModal visible={videoVisible} setVisible={setVideoVisible} onDone={onVideoDone}/>
         </View>
       )
     }
@@ -225,28 +235,32 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       gameContext.tieVote = false
       gameContext.playersInfo[votedPlayerIndex].alive = false
-      const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
+      votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
       if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
         gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
       }
-      speech = dayTimeSpeech(votedPlayer).execution
-      await speakThenPause(speech, 1, declareWinner)
+      speech = dayTimeSpeech(votedPlayer).execution1
+      await speakThenPause(speech, 1, () => setVideoVisible(true))
     }
   }
 
   async function declareWinner() {
     if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
-      gameContext.winnerSide = 'Hope'
-      push('WinnerDeclarationScreen')
+      await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration1, 0, () => {
+        gameContext.winnerSide = 'Hope'
+        push('WinnerDeclarationScreen')
+      })
     } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
-      gameContext.winnerSide = 'Ultimate Despair'
-      push('WinnerDeclarationScreen')
+      await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration2, 0, () => {
+        gameContext.winnerSide = 'Ultimate Despair'
+        push('WinnerDeclarationScreen')
+      })
     } else if (gameContext.killsLeft === 0) {
-      gameContext.winnerSide = 'Despair'
-      push('WinnerDeclarationScreen')
+      await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration3, 0, () => {
+        gameContext.winnerSide = 'Despair'
+        push('WinnerDeclarationScreen')
+      })
     } else {
-      const votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
-      const killOrKills = gameContext.killsLeft === 1 ? 'kill' : 'kills'
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
         speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft1
