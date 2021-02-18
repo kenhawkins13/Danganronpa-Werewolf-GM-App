@@ -23,7 +23,6 @@ let discussionTime:number
 let onContinue = () => {}
 let onDiscussionDone = () => {}
 let onPlayerVote = () => {}
-let backgroundMusic:Audio.Sound
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen({setTime}:Props) {
@@ -93,7 +92,7 @@ export default function DayTimeScreen({setTime}:Props) {
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
               <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
                 if (timerVisible) { 
-                  await backgroundMusic.setVolumeAsync(.1)
+                  await gameContext.backgroundMusic.setVolumeAsync(.1)
                   speech = "Time is up"
                   Speech.speak(speech)
                 }
@@ -103,7 +102,7 @@ export default function DayTimeScreen({setTime}:Props) {
               <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableHighlight style={{flex:1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
                   onPress={async () => {
-                    await backgroundMusic.unloadAsync()
+                    await gameContext.backgroundMusic.unloadAsync()
                     setTimerVisible(false)
                     onDiscussionDone()
                   }}>
@@ -312,7 +311,7 @@ async function playMusic(gameContext:GameContextType) {
   await sound.playAsync()
   await sound.setVolumeAsync(.1)
   await sound.setIsLoopingAsync(true)
-  backgroundMusic = sound
+  gameContext.backgroundMusic = sound
 }
 
 type Props = {setTime:React.Dispatch<any>}

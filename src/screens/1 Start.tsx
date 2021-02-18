@@ -13,8 +13,6 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { startMusic } from '../assets/music/music';
 
-let backgroundMusic:Audio.Sound
-
 export default function StartScreen () {
   const gameContext = useContext(GameContext)
   const [gameMode, setGameMode] = useState(0)
@@ -92,7 +90,7 @@ export default function StartScreen () {
                 )
                 await sound.playAsync()
                 await sound.setVolumeAsync(.1)
-                await stopMusic(backgroundMusic)
+                await stopMusic(gameContext.backgroundMusic)
                 fillContextInfo(gameContext)
                 navigation.navigate('DisclaimerScreen')
                 }}>
@@ -105,6 +103,17 @@ export default function StartScreen () {
       </ImageBackground>
     </View>
   )
+
+  async function playMusic() {
+    const { sound } = await Audio.Sound.createAsync(startMusic[0])
+    await sound.playAsync()
+    await sound.setVolumeAsync(.25)
+    gameContext.backgroundMusic = sound
+  }
+  
+  async function stopMusic(sound:Audio.Sound) {
+    await sound.unloadAsync()
+  }
 }
 
 const styles = StyleSheet.create({
@@ -142,15 +151,4 @@ function fillContextInfo(gameContext:GameContextType) {
     })
   }
   return true
-}
-
-async function playMusic() {
-  const { sound } = await Audio.Sound.createAsync(startMusic[0])
-  await sound.playAsync()
-  await sound.setVolumeAsync(.1)
-  backgroundMusic = sound
-}
-
-async function stopMusic(sound:Audio.Sound) {
-  await sound.unloadAsync()
 }

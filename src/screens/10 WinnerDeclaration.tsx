@@ -9,8 +9,6 @@ import { Audio } from 'expo-av'
 import { endMusic } from "../assets/music/music"
 import { useNavigation } from "@react-navigation/native"
 
-let backgroundMusic:Audio.Sound
-
 export default function WinnerDeclarationScreen() {
   const gameContext = useContext(GameContext)
   const navigation = useNavigation()
@@ -46,13 +44,13 @@ export default function WinnerDeclarationScreen() {
         case 'Blackened':
           playerInfo.playerButtonStyle.textColor = pinkTransparent
           playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-          playerInfo.playerButtonStyle.borderColor = 'black'
+          playerInfo.playerButtonStyle.borderColor = 'white'
           playerInfo.playerButtonStyle.underlayColor = 'black'
           break
         case 'Traitor':
           playerInfo.playerButtonStyle.textColor = greyTransparent
           playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-          playerInfo.playerButtonStyle.borderColor = 'black'
+          playerInfo.playerButtonStyle.borderColor = 'white'
           playerInfo.playerButtonStyle.underlayColor = 'black'
           break
         case 'Despair Disease Patient':
@@ -70,7 +68,7 @@ export default function WinnerDeclarationScreen() {
         case 'Ultimate Despair':
           playerInfo.playerButtonStyle.textColor = 'black'
           playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
-          playerInfo.playerButtonStyle.borderColor = pink
+          playerInfo.playerButtonStyle.borderColor = 'white'
           playerInfo.playerButtonStyle.underlayColor = pink
           break
       }      
@@ -127,7 +125,7 @@ export default function WinnerDeclarationScreen() {
         <View style={{...appStyle.frame, height: '25%', minWidth: '25%'}}>
           <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
           disabled={false} onPress={async () => {
-            await backgroundMusic.unloadAsync()           
+            await gameContext.backgroundMusic.unloadAsync()           
             navigation.navigate('StartScreen')
            }}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>Restart</Text>
@@ -136,13 +134,13 @@ export default function WinnerDeclarationScreen() {
       </View>
     )
   }
-}
 
-async function playMusic() {
-  const randomNum = Math.floor(Math.random() * endMusic.length)
-  const { sound } = await Audio.Sound.createAsync(endMusic[randomNum])
-  await sound.playAsync()
-  await sound.setVolumeAsync(.1)
-  await sound.setIsLoopingAsync(true)
-  backgroundMusic = sound
+  async function playMusic() {
+    const randomNum = Math.floor(Math.random() * endMusic.length)
+    const { sound } = await Audio.Sound.createAsync(endMusic[randomNum])
+    await sound.playAsync()
+    await sound.setVolumeAsync(.1)
+    await sound.setIsLoopingAsync(true)
+    gameContext.backgroundMusic = sound
+  }
 }

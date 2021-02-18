@@ -17,7 +17,13 @@ export default function ItemsScreen() {
           {getBody(gameContext.mode)}
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='RolesScreen' nextPage='DirectionScreen'></NavigationBar>
+          <NavigationBar previousPage='RolesScreen' nextPage='DirectionScreen' onNext={() => {
+            Speech.stop()
+            return true
+          }} onPrevious={() => {
+            Speech.stop()
+            return true
+          }}/>
         </View>
       </ImageBackground>
     </View>
@@ -34,9 +40,12 @@ function getBody(mode:string) {
               -Items-
             </Text>
             <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-              onPress={async() => {
-                await Speech.stop()
-                Speech.speak(body2)
+              onPress={async () => {
+                if (await Speech.isSpeakingAsync() === true) {
+                  await Speech.stop()
+                } else {
+                  Speech.speak(body2)
+                }
               }}>
               <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
             </TouchableHighlight>
@@ -98,8 +107,11 @@ function getBody(mode:string) {
             </Text>
             <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
               onPress={async() => {
-                await Speech.stop()
-                Speech.speak(body1)
+                if (await Speech.isSpeakingAsync() === true) {
+                  await Speech.stop()
+                } else{
+                  Speech.speak(body1)
+                }
               }}>
               <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
             </TouchableHighlight>

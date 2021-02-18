@@ -11,8 +11,6 @@ import * as Speech from 'expo-speech'
 import { Audio } from 'expo-av'
 import { daytimeCalmMusic } from '../assets/music/music'
 
-let backgroundMusic:Audio.Sound
-
 export default function RolesScreen() {
   
   const isFocused = useIsFocused()
@@ -37,8 +35,11 @@ export default function RolesScreen() {
                 </Text>
                 <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
                   onPress={async() => {
-                    await Speech.stop()
-                    Speech.speak(speech1(gameContext.mode))
+                    if (await Speech.isSpeakingAsync() === true) {
+                      await Speech.stop()
+                    } else {
+                      Speech.speak(speech1(gameContext.mode))
+                    }
                   }}>
                   <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
                 </TouchableHighlight>
@@ -61,16 +62,29 @@ export default function RolesScreen() {
         </View>
         <View style={{ flex: 1 }}>
           <NavigationBar previousPage='IntroductionScreen' nextPage='ItemsScreen'onPrevious={() => {
-            backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic.unloadAsync()
+            Speech.stop()
             return true
           }} onNext={() => {
-            backgroundMusic.unloadAsync()
+            Speech.stop()
             return true
           }}/>
         </View>
       </ImageBackground>
     </View>
   )
+  
+  async function playMusic() {
+    const randomNum = Math.floor(Math.random() * 5)
+    const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum])
+    gameContext.backgroundMusic = sound
+    await gameContext.backgroundMusic.playAsync()
+    await gameContext.backgroundMusic.setVolumeAsync(.1)
+    await gameContext.backgroundMusic.setIsLoopingAsync(false)
+    gameContext.backgroundMusic.setOnPlaybackStatusUpdate(async (playbackStatus:any) => {
+      if (playbackStatus.didJustFinish) { await playMusic() }
+    })
+  }
 }
 
 function DisplayNormalRoles(gameContext:GameContextType) {
@@ -215,7 +229,7 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
     return (<></>)
   }
 }
-
+  
 const body1 = (gameMode:string) => `Prepare one character card for each player then have everyone introduce their character's name, \
 gender, ultimate title, ${(extraText(gameMode))} and quotes.
 
@@ -229,12 +243,4 @@ const extraText = (Mode:string) => {
   } else if (Mode === 'extreme') {
     return ' character ability,'
   }
-}
-
-async function playMusic() {
-  const randomNum = Math.floor(Math.random() * 5)
-  const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum])
-  await sound.playAsync()
-  await sound.setVolumeAsync(.1)
-  backgroundMusic = sound
 }

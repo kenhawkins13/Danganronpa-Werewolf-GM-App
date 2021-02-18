@@ -1,10 +1,5 @@
 TODO:
 
-start page music louder
-start night music after everyone go to sleep
-hitting sound button twice stops speech
-hitting next/previous stops speech
-continue playing music in settings, through players page
 when picking who received most votes, use PlayerBoxes. Use speech to say, who recieved the most votes. Add tie button and confirm button
 monrning dialogs, make into speech with buttons on screen
 15 character limit on player name
@@ -12,7 +7,7 @@ after amulet of takejin, see if monomi protects the victim
 remove nighttimeabilitiesitmes, place drop downs on gamescreen. make amulet of takejin a 2nd yes or no question
   does victim 
 
-add mic check before game starts
+add mic check on 7 Players page with a speaker icon
 remove Mr.-Monokuma's-Tutoring from night time music
 add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc
   body discovery sound, button sounds when you click Previous or Next

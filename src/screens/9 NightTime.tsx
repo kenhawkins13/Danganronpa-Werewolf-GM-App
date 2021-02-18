@@ -23,7 +23,6 @@ const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, millis
 let onPlayerClick = (playerIndex:number) => {}
 let onContinue = () => {}
 let onRevealRoleModalOk = () => {}
-let backgroundMusic:Audio.Sound
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 
@@ -144,10 +143,10 @@ export default function NightTimeScreen({setTime}:Props) {
       })
     } else {
       setNightTimeLabelVisible(false)
+      await playMusic()
       await speakThenPause(nightTimeSpeech.schoolAnnouncement2, 0, async () => {
         await speakThenPause(nightTimeSpeech.everyoneSleep1, 3, async () => {
           await speakThenPause(nightTimeSpeech.everyoneSleep2, 3, async () => {
-            await playMusic()
             await alterEgo()
           })
         })
@@ -268,7 +267,7 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function monomi() {
     if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
-      await backgroundMusic.unloadAsync()
+      await gameContext.backgroundMusic.unloadAsync()
       await playMusic(true)
       abilityOrItem = 'Protect'
       setContinueButtonText('Continue')
@@ -305,7 +304,7 @@ export default function NightTimeScreen({setTime}:Props) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setTimerVisible(false)
     await speakThenPause(nightTimeSpeech.monomi3, 1, async () => {
-      await backgroundMusic.unloadAsync()
+      await gameContext.backgroundMusic.unloadAsync()
       await playMusic()
       await alterEgo()
     })
@@ -390,7 +389,7 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function morningTime() {
-    await backgroundMusic.unloadAsync()
+    await gameContext.backgroundMusic.unloadAsync()
     gameContext.dayNumber += 1
     setTime('MorningTimeScreen')
   }
@@ -402,9 +401,9 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
-    if (backgroundMusic && isMusicPlaying) { await backgroundMusic.setVolumeAsync(.1) }
+    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.1) }
     const callback = async(seconds:number) => {
-      if (backgroundMusic && isMusicPlaying) {  await backgroundMusic.setVolumeAsync(.5) }
+      if (gameContext.backgroundMusic && isMusicPlaying) {  await gameContext.backgroundMusic.setVolumeAsync(.5) }
       await sleep(seconds * 1000)
       if (onDone) { onDone() }
     }
@@ -420,10 +419,10 @@ export default function NightTimeScreen({setTime}:Props) {
       music = nighttimeMusic[randomNum]
     }
     const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
-    backgroundMusic = sound
-    await backgroundMusic.playAsync()
-    await backgroundMusic.setVolumeAsync(.5)
-    await backgroundMusic.setIsLoopingAsync(true)
+    gameContext.backgroundMusic = sound
+    await gameContext.backgroundMusic.playAsync()
+    await gameContext.backgroundMusic.setVolumeAsync(.5)
+    await gameContext.backgroundMusic.setIsLoopingAsync(true)
   }
 }
 

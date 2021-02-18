@@ -104,7 +104,8 @@ export default function App() {
           monomiProtect: -1,
           vicePlayed: false,
           tieVote: false,
-          winnerSide: ''
+          winnerSide: '',
+          backgroundMusic: ''
           }}>
           <NavigationContainer>
             <RootStack.Navigator>

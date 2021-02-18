@@ -74,6 +74,7 @@ export default function PlayersScreen() {
               playerInfo.playerButtonStyle.borderColor = 'white'
             })
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
+              gameContext.backgroundMusic.unloadAsync()
               push('SchoolAnnouncementScreen')
             } else {
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, ImageBackground, Image, TouchableHighlight } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
@@ -7,10 +7,10 @@ import { useIsFocused } from '@react-navigation/native'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { Audio } from 'expo-av'
 import { monokumaMusic } from '../assets/music/music'
-
-let backgroundMusic:Audio.Sound
+import { GameContext } from '../../AppContext'
 
 export default function IntroductionScreen() {
+  const gameContext = useContext(GameContext)
   
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
@@ -32,8 +32,11 @@ export default function IntroductionScreen() {
               </Text>
               <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
                 onPress={async() => {
-                  await Speech.stop()
-                  Speech.speak(speech1 + ' ' + speech2)
+                  if (await Speech.isSpeakingAsync() === true) {
+                    await Speech.stop()
+                  } else {
+                    Speech.speak(speech1 + ' ' + speech2)
+                  }
                 }}>
                 <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
               </TouchableHighlight>
@@ -50,11 +53,11 @@ export default function IntroductionScreen() {
         </View>
         <View style={{ flex: 1 }}>
           <NavigationBar previousPage='DisclaimerScreen' nextPage='RolesScreen' onPrevious={() => {
-            backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
             return true
           }} onNext={() => {
-            backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
             return true
           }}/>
@@ -62,13 +65,13 @@ export default function IntroductionScreen() {
       </ImageBackground>
     </View>
   )
-}
 
-async function playMusic() {
-  const { sound } = await Audio.Sound.createAsync(monokumaMusic[0])
-  await sound.playAsync()
-  await sound.setVolumeAsync(.1)
-  backgroundMusic = sound
+  async function playMusic() {
+    const { sound } = await Audio.Sound.createAsync(monokumaMusic[0])
+    await sound.playAsync()
+    await sound.setVolumeAsync(.1)
+    gameContext.backgroundMusic = sound
+  }
 }
 
 const body1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Monokuma!"

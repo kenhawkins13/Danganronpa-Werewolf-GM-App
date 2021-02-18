@@ -19,8 +19,11 @@ export default function DisclaimerScreen() {
               </Text>
               <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
                 onPress={async() => {
-                  await Speech.stop()
-                  Speech.speak(speech1 + ' ' + speech2)
+                  if (await Speech.isSpeakingAsync() === true) {
+                    await Speech.stop()
+                  } else {
+                    Speech.speak(speech1 + ' ' + speech2)
+                  }
                 }}>
                 <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
               </TouchableHighlight>
@@ -42,7 +45,13 @@ export default function DisclaimerScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='StartScreen' nextPage='IntroductionScreen'></NavigationBar>
+          <NavigationBar previousPage='StartScreen' nextPage='IntroductionScreen' onNext={() => {
+            Speech.stop()
+            return true
+          }} onPrevious={() => {
+            Speech.stop()
+            return true
+          }}/>
         </View>
       </ImageBackground>
     </View>
