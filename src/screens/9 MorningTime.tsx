@@ -3,8 +3,6 @@ import * as Speech from 'expo-speech'
 import React, { useContext, useEffect, useState } from 'react'
 import { Image, View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
-import Confirmation from '../components/modals/Confirmation'
-import ConfirmationMorning from '../components/modals/ConfirmationMorning'
 import PlayersPage from '../components/PlayersPage'
 import { goodMorningSpeech, morningTimeSpeech } from '../data/Speeches'
 import { roleInPlay } from '../data/Table'
@@ -17,16 +15,14 @@ let speech = ''
 let victim:PlayerInfo
 let onSpeechDone = () => {}
 let onContinue = () => {}
-let confirmationText = ''
+let onYes = () => {}
 let onNo = () => {}
-let amuletVisible = true
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function MorningTimeScreen({setTime}:Props) {
   const { push } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [confirmationVisible, setConfirmationVisible] = useState(false)
-  const [confirmationMorningVisible, setConfirmationMorningVisible] = useState(false)
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
@@ -41,70 +37,85 @@ export default function MorningTimeScreen({setTime}:Props) {
   return (
     <View style={{ flex: 1 }}>
       <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
-      <Confirmation visible={confirmationVisible} setVisible={setConfirmationVisible} text='Was the Item Card "Vice" Played?'
-      onYes={() => { 
-        gameContext.vicePlayed = true 
-        dayTime()
-      }} onNo={() => { dayTime() }}/>
-      <ConfirmationMorning visible={confirmationMorningVisible} setVisible={setConfirmationMorningVisible} 
-        text={confirmationText} amuletVisible={amuletVisible}
-        onYes={async () => {
-          gameContext.blackenedAttack = -2
-          await dayTime()
-        }}
-        onNo={() => { onNo() }}
-        onAmulet={() => {
-          do {
-            gameContext.blackenedAttack -= 1
-            if (gameContext.blackenedAttack === -1) {
-              gameContext.blackenedAttack = gameContext.playerCount - 1
-            }       
-          } while (!gameContext.playersInfo[gameContext.blackenedAttack].alive)
-          gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.playerIndex === gameContext.blackenedAttack) {
-              playerInfo.playerButtonStyle.textColor = 'white'
-              playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
-            } else {
-              playerInfo.playerButtonStyle.textColor = darkGrey
-              playerInfo.playerButtonStyle.backgroundColor = greyTransparent
-            }
-          })
-          victimActions()
-        }}
-      />
     </View>
   )
 
   function PlayersPageMiddleSection() {
-    return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-        <View>
-          {MorningTimeLabel()}
-          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
-            onPress={async() => {
-              if (await Speech.isSpeakingAsync() === false) {
-                Speech.speak(speech)                
-              }
-            }}>
-            <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-          </TouchableHighlight>
+    if (confirmationVisible) {
+      return (
+        <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <View style={{flex: 2}}/>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              {MorningTimeLabel()}
+            </View>
+          </View>
+          <View style={{flex: 1}}>
+            <View style={{flex: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
+              <View style={{...appStyle.frame, height: '62.5%', minWidth: '25%'}}>
+                <TouchableHighlight style={{flex: 1,  borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  onPress={() => {
+                    setConfirmationVisible(false)
+                    onNo()
+                  }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>No</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={{...appStyle.frame, height: '62.5%', minWidth: '25%'}}>
+                <TouchableHighlight style={{flex: 1,  borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  onPress={async () => {
+                    setConfirmationVisible(false)
+                    onYes()
+                  }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Yes</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{flex: 2}}/>
+          </View>
         </View>
-        <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
-          <TouchableHighlight style={{flex: 1,  borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-            disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => { onContinue() }}>
-            <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
-          </TouchableHighlight>
+      )
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <View style={{flex: 2}}/>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              {MorningTimeLabel()}
+            </View>
+          </View>
+          <View style={{flex: 1}}>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              <View style={{...appStyle.frame, height: '62.5%', minWidth: '25%', backgroundColor: continueButtonColor}}>
+                <TouchableHighlight style={{flex: 1,  borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => { onContinue() }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{flex: 2}}/>
+          </View>
         </View>
-      </View>
-    )
+      )
+    }
   }
 
   function MorningTimeLabel() {
     return (
-      <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: greyTransparent}}>
-        <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
-          Morning{"\n"}of Day {gameContext.dayNumber}
-        </Text>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: greyTransparent}}>
+          <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
+            Morning{"\n"}of Day {gameContext.dayNumber}
+          </Text>
+        </View>
+        <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+          onPress={async() => {
+            if (await Speech.isSpeakingAsync() === false) {
+              Speech.speak(speech)                
+            }
+          }}>
+          <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+        </TouchableHighlight>
       </View>
     )
   }
@@ -144,7 +155,7 @@ export default function MorningTimeScreen({setTime}:Props) {
 
   async function monomi() {
     if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 1 && gameContext.monomiExploded === false  && gameContext.blackenedAttack !== -1) {
-      speech = morningTimeSpeech(victim.name).monomi1
+      speech = morningTimeSpeech().monomi1
       await speakThenPause(speech, 1, async () => {
         if (gameContext.blackenedAttack === gameContext.monomiProtect) {
           const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
@@ -154,21 +165,21 @@ export default function MorningTimeScreen({setTime}:Props) {
           gameContext.killsLeft -= 1
           speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi2
           await speakThenPause(speech, 1, async () => {
-            speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi3
+            speech = morningTimeSpeech().monomi3
             await speakThenPause(speech, 1, async () => { await dayTime() })
           })
         } else {          
           speech = morningTimeSpeech().monomi4
-          onSpeechDone = async () => await victimActions()
+          onSpeechDone = async () => await victimActions1()
           await speakThenPause(speech, 1, onSpeechDone)
         }
       })
     } else {
-      await victimActions()
+      await victimActions1()
     }
   }
 
-  async function victimActions() {
+  async function victimActions1() {
     if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber === 1 && gameContext.mode === 'extreme') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       onContinue = async () => await dayTime()
@@ -176,12 +187,17 @@ export default function MorningTimeScreen({setTime}:Props) {
       await speakThenPause(speech, 0, enableContinueButton)
     } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'extreme') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
-      confirmationText = 'Does ' + victim.name + ' protect themselves?'
-      amuletVisible = true
       speech = morningTimeSpeech(victim.name).victim2
       await speakThenPause(speech, 0, () => {
+        onYes = async () => {
+          onNo = async () => {      
+            gameContext.blackenedAttack = -2
+            await dayTime()
+          }
+          await amuletOfTakejin()
+        }
         onNo = async () => await playersAbilities()
-        setConfirmationMorningVisible(true)
+        setConfirmationVisible(true)
       })          
     } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'normal') {
       await bodyDiscovery()
@@ -190,17 +206,42 @@ export default function MorningTimeScreen({setTime}:Props) {
     }
   }
 
+  async function amuletOfTakejin() {
+    onYes = async () => {
+      do {
+        gameContext.blackenedAttack -= 1
+        if (gameContext.blackenedAttack === -1) {
+          gameContext.blackenedAttack = gameContext.playerCount - 1
+        }       
+      } while (!gameContext.playersInfo[gameContext.blackenedAttack].alive)
+      gameContext.playersInfo.forEach(playerInfo => {
+        if (playerInfo.playerIndex === gameContext.blackenedAttack) {
+          playerInfo.playerButtonStyle.textColor = 'white'
+          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+        } else {
+          playerInfo.playerButtonStyle.textColor = darkGrey
+          playerInfo.playerButtonStyle.backgroundColor = greyTransparent
+        }
+      })
+      await announceAttack()
+    }
+    speech = morningTimeSpeech(victim.name).amuletOfTakejin
+    await speakThenPause(speech, 0, () => setConfirmationVisible(true))
+  }
+
   async function playersAbilities() {
-    confirmationText = 'Did somebody protect ' + victim.name + '\nwith a character ability?'
-    amuletVisible = false
+    onYes = async () => {
+      gameContext.blackenedAttack = -2
+      await dayTime()
+    }
+    onNo = async () => await giveItems()
     speech = morningTimeSpeech(victim.name).playersAbilities
-    await speakThenPause(speech, 0, () => {
-      onNo = async () => await giveItems()
-      setConfirmationMorningVisible(true)
-    })
+    await speakThenPause(speech, 0, () => setConfirmationVisible(true))
   }
 
   async function giveItems() {
+    onYes = async () => await victimActions2()
+    onNo = async () => await bodyDiscovery()
     let indexRight = victim.playerIndex
     do {
       indexRight--
@@ -214,10 +255,20 @@ export default function MorningTimeScreen({setTime}:Props) {
     const leftPlayer = gameContext.playersInfo[indexLeft].name
     const rightPlayer = gameContext.playersInfo[indexRight].name
     speech = morningTimeSpeech(victim.name, leftPlayer, rightPlayer).giveItems
-    confirmationText = 'Did ' + victim.name + ' protect himself?'
-    amuletVisible = true
-    onNo = async () => await bodyDiscovery()
-    await speakThenPause(speech, 0, () => { setConfirmationMorningVisible(true) })
+    await speakThenPause(speech, 0, () => setConfirmationVisible(true))
+  }
+
+  async function victimActions2() {
+    onYes = async () => {
+      onNo = async () => {
+        gameContext.blackenedAttack = -2
+        await dayTime()
+      }
+      await amuletOfTakejin()
+    }
+    onNo = async () => {await bodyDiscovery() }
+    speech = morningTimeSpeech(victim.name).victim3
+    await speakThenPause(speech, 0, () => setConfirmationVisible(true))
   }
 
   async function bodyDiscovery() {
@@ -251,7 +302,13 @@ export default function MorningTimeScreen({setTime}:Props) {
 
   async function viceConfirmation() {
     if (gameContext.killsLeft !== 0) {
-      setConfirmationVisible(true)
+      onYes = async () => {
+        gameContext.vicePlayed = true
+        await dayTime()
+      }
+      onNo = async () => await dayTime()
+      speech = morningTimeSpeech(victim.name).vice
+      await speakThenPause(speech, 0, () => setConfirmationVisible(true))
     } else {
       await dayTime()
     }

@@ -47,10 +47,13 @@ export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) =
     victim2: name1 + ", would you like to use an ability or item to prevent your death?",
     playersAbilities: "Would anybody like to use an ability to protect " + name1 + "?",
     giveItems: name2 + " and " + name3 + ", would either of you like to give an item to " + name1 + "?",
+    victim3: name1 + ", would you like to use a gifted item to save yourself?",
     bodyDiscovery1: "U pu pu pu. " + name1 + " has been killed.",
     bodyDiscovery2: "Buah hahaha! " + name1 + " is dead. They were the Alter Ego.",
     bodyDiscovery3: "Unbelievable, " + name1 + ". You managed to get yourself killed. You are the worst Blackened ever.",
-    abilityOrItem: "Would anybody like to use an ability or item before moving on to day time?"
+    abilityOrItem: "Would anybody like to use an ability or item before moving on to day time?",
+    amuletOfTakejin: name1 + ", did you play the item card, Amulet of Takayjin?",
+    vice: "Was the item card, Vice, played?"
   }
 }
 
@@ -64,7 +67,8 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
     abilityOrItemTrial: "Would anybody like to use an ability or item before voting?",
     trial: "Up next is the voting segment where each player points to who they think is the Blackened. \
       Click Continue when everyone is ready to vote.",
-    vote: "Three. Two. One. Vote!",
+    vote1: "Three. Two. One. Vote!",
+    vote2: "Who received the most votes?",
     execution1: "Let's give it everything we've got! IIIIIT'S PUNISHMENT TIME!",
     execution2: name + " has been executed.",
     winnerDeclaration1: name + " was the Blackened.",

@@ -1,6 +1,5 @@
 TODO:
 
-when picking who received most votes, use PlayerBoxes. Use speech to say, who recieved the most votes. Add tie button and confirm button
 monrning dialogs, make into speech with buttons on screen
 15 character limit on player name
 after amulet of takejin, see if monomi protects the victim

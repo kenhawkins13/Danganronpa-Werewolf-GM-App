@@ -68,10 +68,37 @@ export default function NightTimeScreen({setTime}:Props) {
           <CountdownTimer timerKey={'0'} duration={timerDuration} onDone={() => { onTimerDone() }}/>
         </View>
       )
+    } else if (nightTimeLabelVisible) {
+      return (
+        <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <View style={{flex: 2}}/>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              {NightTimeLabel()}
+            </View>
+          </View>
+          <View style={{flex: 1}}>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              <View style={{...appStyle.frame, height: '62.5%', minWidth: '25%', backgroundColor: continueButtonColor}}>
+                <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => {
+                    onContinue()
+                    gameContext.playersInfo.forEach(playerInfo => { disablePlayerButton(playerInfo) })
+                    onContinue = () => {}
+                    onPlayerClick = () => {}
+                    disableContinueButton()
+                  }}>
+                  <Text style={{...appStyle.text, color: continueButtonTextColor, textAlign: 'center', margin: 10}}>{continueButtonText}</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{flex: 2}}/>
+          </View>
+        </View>
+      )
     } else {
       return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-          {NightTimeLabel()}
           <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
             <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
               disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => {
@@ -90,27 +117,23 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   function NightTimeLabel() {
-    if (nightTimeLabelVisible) {
-      return (
-        <View>
-          <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: blueTransparent}}>
-            <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
-              Nighttime{"\n"}of Day {gameContext.dayNumber}
-            </Text>
-          </View>
-          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
-            onPress={async() => {
-              if (await Speech.isSpeakingAsync() === false) {
-                Speech.speak(nightTimeSpeech.schoolAnnouncement3)                
-              }
-            }}>
-            <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-          </TouchableHighlight>
+    return (
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: blueTransparent}}>
+          <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
+            Nighttime{"\n"}of Day {gameContext.dayNumber}
+          </Text>
         </View>
-      )      
-    } else {
-      return (<></>)
-    }
+        <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+          onPress={async() => {
+            if (await Speech.isSpeakingAsync() === false) {
+              Speech.speak(nightTimeSpeech.schoolAnnouncement3)                
+            }
+          }}>
+          <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+        </TouchableHighlight>
+      </View>
+    )
   }
 
   async function schoolAnnouncement() {
@@ -249,7 +272,7 @@ export default function NightTimeScreen({setTime}:Props) {
             if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
             if (traitorInPlay && playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
           })
-          timerDuration = 15
+          timerDuration = 10
           onTimerDone = async () => await traitorsSleep()
           setTimerVisible(true)
         })

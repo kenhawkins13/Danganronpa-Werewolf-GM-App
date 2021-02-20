@@ -4,14 +4,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Image, View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import CountdownTimer from '../components/CountdownTimer'
-import DiscussionOrVoteModal from '../components/modals/DiscussionOrVote'
-import PlayerVoteModal from '../components/modals/PlayerVote'
 import PlayersPage from '../components/PlayersPage'
 import { blackTransparent, darkGrey, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
 import { appStyle } from '../styles/styles'
 import { Audio } from 'expo-av'
 import { GameContextType } from '../types/types'
-import { disablePlayerButton } from '../styles/playerButtonStyles'
+import { disablePlayerButton, enablePlayerButton } from '../styles/playerButtonStyles'
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 import { dayTimeSpeech } from '../data/Speeches'
 import PunishmentTimeModal from '../components/modals/PunishmentTime'
@@ -21,8 +19,8 @@ let votedPlayerIndex = -1
 let votedPlayer = ''
 let discussionTime:number
 let onContinue = () => {}
+let onPlayerClick = (playerIndex:number) => {}
 let onDiscussionDone = () => {}
-let onPlayerVote = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen({setTime}:Props) {
@@ -30,9 +28,8 @@ export default function DayTimeScreen({setTime}:Props) {
   const gameContext = useContext(GameContext)
   const [videoVisible, setVideoVisible] = useState(false)
   const [timerVisible, setTimerVisible] = useState(false)
+  const [votingTime, setVotingTime] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
-  const [playerVoteVisible, setPlayerVoteVisible] = useState(false)
-  const [discussionOrVoteVisible, setDiscussionOrVoteVisible] = useState(false)
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
@@ -49,15 +46,7 @@ export default function DayTimeScreen({setTime}:Props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
-      <PlayerVoteModal visible={playerVoteVisible} setVisible={setPlayerVoteVisible} onOk={(playerVote) => { 
-        votedPlayerIndex = playerVote
-        onPlayerVote()
-      }}/>
-      <DiscussionOrVoteModal visible={discussionOrVoteVisible} setVisible={setDiscussionOrVoteVisible} onDiscussion={async () => {
-        discussionTime = 60
-        await discussion()
-      }} onVote={async () => { await trial() }}/>
+      <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={onPlayerClick}/>
     </View>
   )
 
@@ -65,55 +54,89 @@ export default function DayTimeScreen({setTime}:Props) {
     if (timerVisible) {
       return (
         <View style={{flex: 1}}>
-          <View style={{flex: 2}}/>
-          <View style={{flex: 5, alignItems: 'center', justifyContent: 'center'}}>
-            <View>
+          <View style={{flex: 1}}>
+            <View style={{flex: 2}}/>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
               {DayTimeLabel()}
-              <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
-                onPress={async() => {
-                  if (await Speech.isSpeakingAsync() === false) {
-                    Speech.speak(speech)                
-                  }
-                }}>
-                <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
-              </TouchableHighlight>
             </View>
           </View>
-          <View style={{flex: 1}}/>
-          <View style={{flex: 10, flexDirection: 'row'}}>
-            <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
-              <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-                  onPress={async () => { setTimerKey(timerKey + 1) }}>
-                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Restart{"\n"}Timer</Text>
-                </TouchableHighlight>
+          <View style={{flex: 1}}>
+            <View style={{flex: 8}}>
+              <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
+                <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
+                  <View style={{...appStyle.frame, height: '62.5%', minWidth: '75%'}}>
+                    <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                      onPress={async () => { setTimerKey(timerKey + 1) }}>
+                      <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Restart{"\n"}Timer</Text>
+                    </TouchableHighlight>
+                  </View>
+                </View>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                  <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
+                    if (timerVisible) { 
+                      await gameContext.backgroundMusic.setVolumeAsync(.1)
+                      speech = "Time is up"
+                      Speech.speak(speech)
+                    }
+                  }}/>
+                </View>
+                <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
+                  <View style={{...appStyle.frame, height: '62.5%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
+                    <TouchableHighlight style={{flex:1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                      onPress={async () => {
+                        await gameContext.backgroundMusic.unloadAsync()
+                        setTimerVisible(false)
+                        onDiscussionDone()
+                      }}>
+                      <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>End{"\n"}Discussion</Text>
+                    </TouchableHighlight>
+                  </View>
+                </View>
               </View>
             </View>
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
-                if (timerVisible) { 
-                  await gameContext.backgroundMusic.setVolumeAsync(.1)
-                  speech = "Time is up"
-                  Speech.speak(speech)
-                }
-              }}/>
-            </View>
-            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
-              <View style={{...appStyle.frame, height: '50%', minWidth: '75%', alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableHighlight style={{flex:1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-                  onPress={async () => {
-                    await gameContext.backgroundMusic.unloadAsync()
-                    setTimerVisible(false)
-                    onDiscussionDone()
-                  }}>
-                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>End{"\n"}Discussion</Text>
-                </TouchableHighlight>
-              </View>
-            </View>
+            <View style={{flex: 2}}/>
           </View>
-          <View style={{flex: 1}}/>
         </View>
       )      
+    } else if (votingTime) {      
+      return (
+        <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <View style={{flex: 2}}/>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              {DayTimeLabel()}
+            </View>
+          </View>
+          <View style={{flex: 1}}>
+            <View style={{flex: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
+              <View style={{...appStyle.frame, height: '62.5%', width: '25%'}}>
+                <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  onPress={async () => {
+                    votedPlayerIndex = -1
+                    gameContext.tieVote = true
+                    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+                    setVotingTime(false)
+                    discussionTime = 60
+                    await discussion()
+                    }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Tie</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={{...appStyle.frame, height: '62.5%', width: '25%', backgroundColor: continueButtonColor}}>
+                <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={async () => {
+                    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+                    setVotingTime(false)
+                    await execution()
+                  }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Select</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{flex: 2}}/>
+          </View>
+        </View>
+      )
     } else {
       const onVideoDone = async () => {
         await speakThenPause(dayTimeSpeech(votedPlayer).execution2, 1, () => {
@@ -122,26 +145,26 @@ export default function DayTimeScreen({setTime}:Props) {
         })
       }
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-          <View>
-            {DayTimeLabel()}
-            <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: -50, top: 15}} 
-              onPress={async() => {
-                if (await Speech.isSpeakingAsync() === false) {
-                  Speech.speak(speech)                
-                }
-              }}>
-              <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-            </TouchableHighlight>
+        <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <View style={{flex: 2}}/>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              {DayTimeLabel()}
+            </View>
           </View>
-          <View style={{...appStyle.frame, height: '25%', minWidth: '25%', backgroundColor: continueButtonColor}}>
-            <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-              disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => {
-                disableContinueButton()
-                onContinue() 
-              }}>
-              <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
-            </TouchableHighlight>
+          <View style={{flex: 1}}>
+            <View style={{flex: 8, alignItems: 'center', justifyContent: 'center'}}>
+              <View style={{...appStyle.frame, height: '62.5%', minWidth: '25%', backgroundColor: continueButtonColor}}>
+                <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+                  disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={() => {
+                    disableContinueButton()
+                    onContinue() 
+                  }}>
+                  <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Continue</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{flex: 2}}/>
           </View>
           <PunishmentTimeModal visible={videoVisible} setVisible={setVideoVisible} onDone={onVideoDone}/>
         </View>
@@ -152,18 +175,38 @@ export default function DayTimeScreen({setTime}:Props) {
   function DayTimeLabel() {
     if (labelClassTrial) {
       return (
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
-          <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>
-            Class trial{"\n"}of Day {gameContext.dayNumber}
-          </Text>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
+            <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
+              Class trial{"\n"}of Day {gameContext.dayNumber}
+            </Text>
+          </View>
+          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+            onPress={async() => {
+              if (await Speech.isSpeakingAsync() === false) {
+                Speech.speak(speech)                
+              }
+            }}>
+            <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
+          </TouchableHighlight>
         </View>
       )      
     } else {
       return (
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: yellowTransparent}}>
-          <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
-            Daytime{"\n"}of Day {gameContext.dayNumber}
-          </Text>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: yellowTransparent}}>
+            <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
+              Daytime{"\n"}of Day {gameContext.dayNumber}
+            </Text>
+          </View>
+          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+            onPress={async() => {
+              if (await Speech.isSpeakingAsync() === false) {
+                Speech.speak(speech)                
+              }
+            }}>
+            <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
+          </TouchableHighlight>
         </View>
       )
     }
@@ -222,25 +265,44 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function vote() {
-    onPlayerVote = async () => await execution()
-    speech = dayTimeSpeech().vote
-    await speakThenPause(speech, 0, () => { setPlayerVoteVisible(true) })
+    onContinue = async () => {
+      gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+      disableContinueButton()
+      await execution()
+    }
+    onPlayerClick = (playerIndex) => {
+      gameContext.playersInfo.forEach(playerInfo => {
+        if (playerInfo.playerIndex === playerIndex) {
+          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+          playerInfo.playerButtonStyle.underlayColor = pinkTransparent 
+        } else {
+          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+          playerInfo.playerButtonStyle.underlayColor = blackTransparent
+        }
+      })
+      votedPlayerIndex = playerIndex
+      enableContinueButton()
+    }
+    speech = dayTimeSpeech().vote1
+    await speakThenPause(speech, 2, async () => {
+      speech = dayTimeSpeech().vote2
+      await speakThenPause(speech, 0, () => {
+        gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
+        disableContinueButton()
+        setVotingTime(true)
+      })
+    })
   }
 
   async function execution() {
-    if (votedPlayerIndex === -1) { // Tie vote
-      gameContext.tieVote = true
-      setDiscussionOrVoteVisible(true)
-    } else {
-      gameContext.tieVote = false
-      gameContext.playersInfo[votedPlayerIndex].alive = false
-      votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
-      if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
-        gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
-      }
-      speech = dayTimeSpeech(votedPlayer).execution1
-      await speakThenPause(speech, 1, () => setVideoVisible(true))
+    gameContext.tieVote = false
+    gameContext.playersInfo[votedPlayerIndex].alive = false
+    votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
+    if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
+      gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
     }
+    speech = dayTimeSpeech(votedPlayer).execution1
+    await speakThenPause(speech, 1, () => setVideoVisible(true))
   }
 
   async function declareWinner() {
