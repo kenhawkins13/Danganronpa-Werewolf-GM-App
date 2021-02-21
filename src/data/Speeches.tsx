@@ -1,3 +1,6 @@
+// "Mike" is a misspelling of "mic" as it is misspelled in the game.
+export const micCheckSpeech = "Ahem, Ahem! Testing, testing! Mike check, one two! This is a test of the school broadcast system!"
+
 export const nightTimeSpeech = {
   schoolAnnouncement1: "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
   Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone go to sleep.",

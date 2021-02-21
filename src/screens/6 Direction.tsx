@@ -65,7 +65,9 @@ export default function DirectionScreen() {
 
 const body1 = "Place your phone in the center of the play area like so:"
 const body2 = "On the next page, have each player click the slot corresponding to their seating position and have them enter \
-their name and role. Do not swap seating as some of the later gameplay will be affected."
+their name and role. Do not swap seating after entering your information.\n\nUse the speaker icon on the next page to adjust the \
+volume so that everyone can hear the instructions clearly."
 const speech1 = "Place your phone in the center of the play area like so."
 const speech2 = "On the next page, have each player click the slot corresponding to their seating position and have them enter \
-their name and role. Do not swap seating as some of the later game play will be affected."
+their name and role. Do not swap seating as some of the later game play will be affected. Use the speaker icon to adjust the \
+volume so that everyone can hear the instructions clearly."

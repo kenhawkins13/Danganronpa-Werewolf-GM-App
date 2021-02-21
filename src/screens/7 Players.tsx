@@ -1,15 +1,17 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, ImageBackground, TouchableHighlight } from 'react-native'
+import { View, Text, Image, ImageBackground, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import { GameContextType, RoleCount } from '../types/types'
 import AlertModal from '../components/modals/Alert'
 import PlayerInfoModal from '../components/modals/PlayerInfo'
 import PlayersPage from '../components/PlayersPage'
-import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { blackTransparent, darkGrey, greenTransparent, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { appStyle } from '../styles/styles'
+import * as Speech from 'expo-speech'
+import { micCheckSpeech } from '../data/Speeches'
 
 export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
@@ -52,36 +54,52 @@ export default function PlayersScreen() {
 
   function PlayersPageMiddleSection() {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row'}}>
-        <View style={{...appStyle.frame, height: '25%', width: '25%', margin: '2.5%'}}>
-          <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}
-            onPress={() => { 
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
-              push('DirectionScreen')
-            }}> 
-            <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
-          </TouchableHighlight>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
+          <View style={{...appStyle.frame, height: '25%', width: '75%'}}>
+            <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}
+              onPress={() => { 
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
+                push('DirectionScreen')
+              }}> 
+              <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
+            </TouchableHighlight>
+          </View>
         </View>
-        <View style={{...appStyle.frame, height: '25%', width: '25%', margin: '2.5%', backgroundColor: startButtonColor}}>
-          <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-            disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={() => {
-            gameContext.playersInfo.forEach(playerInfo => { 
-              playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-              playerInfo.playerButtonStyle.underlayColor = blackTransparent
-              playerInfo.playerButtonStyle.borderColor = 'white'
-            })
-            if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
-              gameContext.backgroundMusic.unloadAsync()
-              push('SchoolAnnouncementScreen')
-            } else {
-              gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-              setAlertModalVisible(true)
-            }
-          }}>
-            <Text adjustsFontSizeToFit={true} style={{...appStyle.text, color: startButtonTextColor, margin: '2.5%'}}>START</Text>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <View style={{...appStyle.frame, height: '25%', width: '75%', backgroundColor: startButtonColor}}>
+            <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+              disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={() => {
+              gameContext.playersInfo.forEach(playerInfo => { 
+                playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+                playerInfo.playerButtonStyle.underlayColor = blackTransparent
+                playerInfo.playerButtonStyle.borderColor = 'white'
+              })
+              if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
+                gameContext.backgroundMusic.unloadAsync()
+                push('SchoolAnnouncementScreen')
+              } else {
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
+                setAlertModalVisible(true)
+              }
+            }}>
+              <Text adjustsFontSizeToFit={true} style={{...appStyle.text, color: startButtonTextColor, margin: '2.5%'}}>START</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+        <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
+          <TouchableHighlight style={{height: 28, width: 28, marginLeft: '10%'}}
+            onPress={async() => {
+              if (await Speech.isSpeakingAsync() === true) {
+                await Speech.stop()  
+              } else {
+                Speech.speak(micCheckSpeech)              
+              }
+            }}>
+            <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
           </TouchableHighlight>
         </View>
       </View>
