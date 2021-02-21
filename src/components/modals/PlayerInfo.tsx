@@ -16,8 +16,11 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
         <View style={modalStyles.modalView}>
           <View style={{flexDirection: 'row', alignItems: 'center', margin: 10}}>
             <Text style={{...modalStyles.modalText, width: 75, margin: 0}}>Name:</Text>
-            <TextInput style={modalStyles.modalTextInput} placeholder={gameContext.playersInfo[playerIndex].name}
-              placeholderTextColor='black' onChangeText={(text) => gameContext.playersInfo[playerIndex].name=text}/>
+            <TextInput style={modalStyles.modalTextInput} placeholder={gameContext.playersInfo[playerIndex].name} maxLength={15}
+              placeholderTextColor='black' onChangeText={(text) => {
+                text = text.trim()
+                gameContext.playersInfo[playerIndex].name=text
+              }}/>
           </View>
           <View style={{borderWidth: 1, borderColor: 'black', margin: 10}}>
             <Picker style={{width: 200}} itemStyle={{fontFamily: 'goodbyeDespair'}} dropdownIconColor='#ffffff' 
