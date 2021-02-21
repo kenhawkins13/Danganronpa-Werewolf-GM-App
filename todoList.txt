@@ -1,7 +1,5 @@
 TODO:
 
-characters page, only play music when music already not playing
-
 15 character limit on player name
 add mic check on 7 Players page with a speaker icon
 remove Mr.-Monokuma's-Tutoring from night time music

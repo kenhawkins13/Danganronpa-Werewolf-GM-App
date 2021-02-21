@@ -11,12 +11,15 @@ import * as Speech from 'expo-speech'
 import { Audio } from 'expo-av'
 import { daytimeCalmMusic } from '../assets/music/music'
 
+let isMusicPlaying = false
+const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
+
 export default function RolesScreen() {
   
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-    playMusic()
+    if (!isMusicPlaying) { playMusic() }    
   }}, [isFocused])
 
   const gameContext = useContext(GameContext)
@@ -62,6 +65,7 @@ export default function RolesScreen() {
         </View>
         <View style={{ flex: 1 }}>
           <NavigationBar previousPage='IntroductionScreen' nextPage='ItemsScreen'onPrevious={() => {
+            isMusicPlaying = false
             gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
             return true
@@ -76,7 +80,7 @@ export default function RolesScreen() {
   
   async function playMusic() {
     const randomNum = Math.floor(Math.random() * 5)
-    const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum])
+    const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum], {}, updateMusicStatus)
     gameContext.backgroundMusic = sound
     await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setVolumeAsync(.1)
