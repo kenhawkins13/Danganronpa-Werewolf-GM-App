@@ -25,6 +25,7 @@ let onContinue = () => {}
 let onRevealRoleModalOk = () => {}
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
+let intervalId:number
 
 export default function NightTimeScreen({setTime}:Props) {
   const gameContext = useContext(GameContext)
@@ -178,9 +179,7 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItems() {
-    onContinue = async () => {
-      setRevealRoleModalVisible(true)
-    }
+    onContinue = async () => { setRevealRoleModalVisible(true) }
     onPlayerClick = (playerIndex) => {
       gameContext.playersInfo.forEach(playerInfo => {
         if (playerInfo.playerIndex === playerIndex) {
@@ -207,6 +206,7 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function abilitiesOrItemsSpeech(playerIndex:number) {   
     onRevealRoleModalOk = async () => {
+      clearInterval(intervalId)
       if (gameContext.playersInfo[playerIndex].useAbility === '' && gameContext.playersInfo[playerIndex].useItem === '') {
         await speakThenPause(gameContext.playersInfo[playerIndex].name + ', go to sleep.', 2, abilitiesOrItems)
       } else {
@@ -253,6 +253,7 @@ export default function NightTimeScreen({setTime}:Props) {
           }
           setState([]) // re-render screen
         })
+        intervalId = setInterval(async () => await speakThenPause(gameContext.playersInfo[playerIndex].name + ", " + speech2), 15000)
       })
     })
     previousPlayerIndex = playerIndex
@@ -352,7 +353,10 @@ export default function NightTimeScreen({setTime}:Props) {
         setContinueButtonDisabled(false) 
       }
       onContinue = async () => {
-        onRevealRoleModalOk = async () => await speakThenPause(nightTimeSpeech.alterEgo3, 2, blackened)
+        onRevealRoleModalOk = async () => {
+          clearInterval(intervalId)
+          await speakThenPause(nightTimeSpeech.alterEgo3, 2, blackened)
+        }
         setRevealRoleModalVisible(true) 
       }
       await speakThenPause(nightTimeSpeech.alterEgo1, 1, async () => {
@@ -362,6 +366,7 @@ export default function NightTimeScreen({setTime}:Props) {
             else { enablePlayerButton(playerInfo) }
           })
           setContinueButtonText('Investigate')
+          intervalId = setInterval(async () => await speakThenPause("Alter ego, " + nightTimeSpeech.alterEgo2), 15000)
           setState([]) // re-render screen if setContinueButtonText() doesn't
         })
       })
@@ -386,11 +391,15 @@ export default function NightTimeScreen({setTime}:Props) {
         setContinueButtonTextColor('white')
         setContinueButtonDisabled(false)
       }
-      onContinue = async () => { await speakThenPause(nightTimeSpeech.blackened5, 2, morningTime) }
+      onContinue = async () => {
+        clearInterval(intervalId)
+        await speakThenPause(nightTimeSpeech.blackened5, 2, morningTime)
+      }
       if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
         await speakThenPause(nightTimeSpeech.blackened1, 1, async () => {
           await speakThenPause(nightTimeSpeech.blackened2, 0, () => {
             gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
+            intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech.blackened2), 15000)
             setState([]) // re-render screen
           })
         })
@@ -398,6 +407,7 @@ export default function NightTimeScreen({setTime}:Props) {
         await speakThenPause(nightTimeSpeech.blackened1, 1, async () => {
           await speakThenPause(nightTimeSpeech.blackened3, 0, () => {
             gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
+            intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech.blackened3), 15000)
             setState([]) // re-render screen
           })
         })
