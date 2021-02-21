@@ -45,7 +45,6 @@ export const nighttimeMusic = [
   require("./NightTime/Desire-for-Execution.mp3"),
   require("./NightTime/Despair-Syndrome-1.mp3"),
   require("./NightTime/Despair-Syndrome-2.mp3"),
-  require("./NightTime/Mr.-Monokuma's-Tutoring.mp3"),
   require("./NightTime/Weekly-Despair-Magazine.mp3"),
   require("./NightTime/Welcome-to-Despair-Academy.mp3")
 ]

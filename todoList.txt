@@ -1,7 +1,6 @@
 TODO:
 
 add mic check on 7 Players page with a speaker icon
-remove Mr.-Monokuma's-Tutoring from night time music
 add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc
   body discovery sound, button sounds when you click Previous or Next
 3 hung trials leads to despair victory. lead straight discussion on tie vote
