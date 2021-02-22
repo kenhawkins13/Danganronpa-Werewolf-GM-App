@@ -7,7 +7,7 @@ import AppLoading from 'expo-app-loading'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
 import { music } from './src/assets/music/music'
-import { video } from './src/assets/video/video'
+import { videos } from './src/assets/videos/videos'
 
 import StartScreen from './src/screens/1 Start'
 import DisclaimerScreen from './src/screens/2 Disclaimer'
@@ -22,6 +22,7 @@ import NightTimeScreen from './src/screens/9 NightTime'
 import MorningTimeScreen from './src/screens/9 MorningTime'
 import DayTimeScreen from './src/screens/9 DayTime'
 import WinnerDeclarationScreen from './src/screens/10 WinnerDeclaration'
+import { sounds } from './src/assets/sounds/sounds'
 
 export type RootStackParamList = {
   StartScreen: undefined
@@ -47,7 +48,8 @@ export default function App() {
   async function loadAssetsAsync() {
     const assets = [
       ...music,
-      ...video,
+      ...videos,
+      ...Object.values(sounds),
       require('./src/assets/background/Despair-Victory.png'),
       require('./src/assets/background/Ding-Dong-Bing-Bong.jpg'),
       require('./src/assets/background/Hope-Victory.png'),
@@ -71,7 +73,6 @@ export default function App() {
       require('./src/assets/RoleCards/Spotless.png'),
       require('./src/assets/RoleCards/Traitor.png'),
       require('./src/assets/RoleCards/Ultimate-Despair.png'),
-      require('./src/assets/sounds/Revolver.mp3'),
     ]
     const cachedImages = assets.map(asset => { Asset.fromModule(asset).downloadAsync() })
     const cachedFonts = [Font.loadAsync({goodbyeDespair: require('./src/assets/fonts/goodbyeDespair.ttf')})]

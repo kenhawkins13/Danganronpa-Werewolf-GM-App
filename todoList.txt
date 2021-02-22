@@ -1,7 +1,9 @@
 TODO:
 
-add mic check on 7 Players page with a speaker icon
-add more sounds https://www.youtube.com/playlist?list=PLXdf1FMDhjyr-rzUkoN8fR2Z1QV2Z_joc
-  body discovery sound, button sounds when you click Previous or Next
+TODO on nighttime
+disable victim playerbutton immediately after announcement, not after asking for if people want to use abilities/items
+music loud then quiet during first school announcement
 3 hung trials leads to despair victory. lead straight discussion on tie vote
-include rulebook, link in disclaimer page.
+include rulebook, link in disclaimer page
+make OK button on RevealRole modal actually the whole screen?
+is winnerdeclaration too slow to reveal after a trial? (b/c of all-rise sound and punishment-time video) 

@@ -12,6 +12,7 @@ import { blackTransparent } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { startMusic } from '../assets/music/music';
+import { sounds } from '../assets/sounds/sounds'
 
 export default function StartScreen () {
   const gameContext = useContext(GameContext)
@@ -85,9 +86,9 @@ export default function StartScreen () {
             <Text> </Text>
             <View style={{...appStyle.frame, width: 300, height: 50}}>
               <TouchableHighlight style={styles.startGameButton} onPress={async() => {
-                const { sound } = await Audio.Sound.createAsync(
-                  require('../assets/sounds/Revolver.mp3')
-                )
+                const { sound } = await Audio.Sound.createAsync(sounds.revolver, {}, async (playbackStatus:any) => {
+                  if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
+                })
                 await sound.playAsync()
                 await sound.setVolumeAsync(.1)
                 await stopMusic(gameContext.backgroundMusic)

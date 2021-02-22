@@ -10,6 +10,8 @@ import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '..
 import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { appStyle } from '../styles/styles'
 import { PlayerInfo } from '../types/types'
+import { Audio } from 'expo-av'
+import { sounds } from '../assets/sounds/sounds'
 
 let speech = ''
 let victim:PlayerInfo
@@ -272,21 +274,30 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function bodyDiscovery() {
+    let onSoundDone = async () => {}
+    const { sound } = await Audio.Sound.createAsync(sounds.despairPollution, {}, async (playbackStatus:any) => {
+      if (playbackStatus.didJustFinish) { 
+        await sound.unloadAsync()
+        await onSoundDone()
+      }
+    })
+    await sound.playAsync()
+    await sound.setVolumeAsync(.5)
     gameContext.playersInfo[gameContext.blackenedAttack].alive = false
     gameContext.killsLeft -= 1
     if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
       gameContext.alterEgoAlive = false
       speech = morningTimeSpeech(victim.name).bodyDiscovery2
-      await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
+      onSoundDone = async () => await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
     } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
       speech = morningTimeSpeech(victim.name).bodyDiscovery3
-      await speakThenPause(speech, 0, () => {
+      onSoundDone = async () => await speakThenPause(speech, 0, () => {
         gameContext.winnerSide = 'Hope'
         push('WinnerDeclarationScreen')
       })
     } else {
       speech = morningTimeSpeech(victim.name).bodyDiscovery1
-      await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
+      onSoundDone = async () => await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
     }
   }
 

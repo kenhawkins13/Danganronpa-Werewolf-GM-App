@@ -6,12 +6,14 @@ import { GameContextType, RoleCount } from '../types/types'
 import AlertModal from '../components/modals/Alert'
 import PlayerInfoModal from '../components/modals/PlayerInfo'
 import PlayersPage from '../components/PlayersPage'
-import { blackTransparent, darkGrey, greenTransparent, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
+import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
 import { micCheckSpeech } from '../data/Speeches'
+import { Audio } from 'expo-av'
+import { sounds } from "../assets/sounds/sounds"
 
 export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
@@ -58,7 +60,12 @@ export default function PlayersScreen() {
         <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
           <View style={{...appStyle.frame, height: '25%', width: '75%'}}>
             <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}
-              onPress={() => { 
+              onPress={async () => {
+                const { sound } = await Audio.Sound.createAsync(sounds.previousOption, {}, async (playbackStatus:any) => {
+                  if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
+                })
+                await sound.playAsync()
+                await sound.setVolumeAsync(.1)
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })
@@ -72,8 +79,9 @@ export default function PlayersScreen() {
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <View style={{...appStyle.frame, height: '25%', width: '75%', backgroundColor: startButtonColor}}>
             <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-              disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={() => {
-              gameContext.playersInfo.forEach(playerInfo => { 
+              disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={async () => {
+              await Speech.stop()
+              gameContext.playersInfo.forEach(playerInfo => {
                 playerInfo.playerButtonStyle.backgroundColor = blackTransparent
                 playerInfo.playerButtonStyle.underlayColor = blackTransparent
                 playerInfo.playerButtonStyle.borderColor = 'white'

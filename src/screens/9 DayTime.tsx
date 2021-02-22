@@ -13,6 +13,7 @@ import { disablePlayerButton, enablePlayerButton } from '../styles/playerButtonS
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 import { dayTimeSpeech } from '../data/Speeches'
 import PunishmentTimeModal from '../components/modals/PunishmentTime'
+import { sounds } from '../assets/sounds/sounds'
 
 let speech = ''
 let votedPlayerIndex = -1
@@ -166,7 +167,7 @@ export default function DayTimeScreen({setTime}:Props) {
             </View>
             <View style={{flex: 2}}/>
           </View>
-          <PunishmentTimeModal visible={videoVisible} setVisible={setVideoVisible} onDone={onVideoDone}/>
+          <PunishmentTimeModal visible={videoVisible} onDone={onVideoDone}/>
         </View>
       )
     }
@@ -215,17 +216,25 @@ export default function DayTimeScreen({setTime}:Props) {
   async function daySpeech() {
     let onSpeechDone = () => {}
     discussionTime = 180
-    if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
-      speech = dayTimeSpeech().daySpeech1
-    } else {
-      speech = dayTimeSpeech().daySpeech2
-    }
     if (gameContext.mode === 'extreme') {
       onSpeechDone = async () => await abilitiesOrItems()
     } else {
       onSpeechDone = async () => await discussion()
     }
-    await speakThenPause(speech, 1, onSpeechDone)
+    if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
+      speech = dayTimeSpeech().daySpeech1
+      const { sound } = await Audio.Sound.createAsync(sounds.dingDongBingBong2, {}, async (playbackStatus:any) => {
+        if (playbackStatus.didJustFinish) {
+          await sound.unloadAsync()
+          await speakThenPause(speech, 1, onSpeechDone)
+        }
+      })
+      await sound.playAsync()
+      await sound.setVolumeAsync(.1)
+    } else {
+      speech = dayTimeSpeech().daySpeech2
+      await speakThenPause(speech, 1, onSpeechDone)
+    }
   }
 
   async function abilitiesOrItems() {
@@ -301,8 +310,15 @@ export default function DayTimeScreen({setTime}:Props) {
     if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
       gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
     }
-    speech = dayTimeSpeech(votedPlayer).execution1
-    await speakThenPause(speech, 1, () => setVideoVisible(true))
+    const { sound } = await Audio.Sound.createAsync(sounds.allRise, {}, async (playbackStatus:any) => {
+      if (playbackStatus.didJustFinish) {
+        await sound.unloadAsync()
+        speech = dayTimeSpeech(votedPlayer).execution1
+        await speakThenPause(speech, 1, () => setVideoVisible(true))
+      }
+    })
+    await sound.playAsync()
+    await sound.setVolumeAsync(.1)
   }
 
   async function declareWinner() {
