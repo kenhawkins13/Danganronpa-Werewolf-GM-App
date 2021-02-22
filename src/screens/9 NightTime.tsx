@@ -192,8 +192,6 @@ export default function NightTimeScreen({setTime}:Props) {
       setContinueButtonTextColor('white')
       setContinueButtonDisabled(false)
     }
-    setContinueButtonText('Investigate') // TODO: does this automatically, even when no abilities/items played
-
     for (let i = 0; i < gameContext.playerCount; i++) {
       if (gameContext.playersInfo[i].useAbility || gameContext.playersInfo[i].useItem) {
        await abilitiesOrItemsSpeech(i)
@@ -204,7 +202,8 @@ export default function NightTimeScreen({setTime}:Props) {
     }
   }
 
-  async function abilitiesOrItemsSpeech(playerIndex:number) {   
+  async function abilitiesOrItemsSpeech(playerIndex:number) { 
+    setContinueButtonText('Investigate')  
     onRevealRoleModalOk = async () => {
       clearInterval(intervalId)
       if (gameContext.playersInfo[playerIndex].useAbility === '' && gameContext.playersInfo[playerIndex].useItem === '') {
@@ -213,14 +212,12 @@ export default function NightTimeScreen({setTime}:Props) {
         await abilitiesOrItems()
       }
     }
-
     let speech1 = ''
     if (playerIndex === previousPlayerIndex) {
       speech1 =  gameContext.playersInfo[playerIndex].name
     } else {
       speech1 = gameContext.playersInfo[playerIndex].name + ', wake up.'
     }
-
     let speech2 = ''
     if (gameContext.playersInfo[playerIndex].useAbility === "Kyoko Kirigiri") {
       abilityOrItem = "Kyoko Kirigiri"
