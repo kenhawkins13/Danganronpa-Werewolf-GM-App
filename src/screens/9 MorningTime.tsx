@@ -28,7 +28,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
-  const [array, setArray] = useState([])
+  const [array, setState] = useState([])
 
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
@@ -145,7 +145,7 @@ export default function MorningTimeScreen({setTime}:Props) {
         disablePlayerButton(playerInfo)
       }
     })
-    setArray([])
+    setState([]) // re-render screen
     if (gameContext.mode === 'extreme') {
       onSpeechDone = async () => await monomi()
     } else {
@@ -274,17 +274,18 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function bodyDiscovery() {
+    gameContext.playersInfo[gameContext.blackenedAttack].alive = false
+    gameContext.killsLeft -= 1
     let onSoundDone = async () => {}
     const { sound } = await Audio.Sound.createAsync(sounds.despairPollution, {}, async (playbackStatus:any) => {
-      if (playbackStatus.didJustFinish) { 
+      if (playbackStatus.didJustFinish) {
+        setState([]) // re-render screen
         await sound.unloadAsync()
         await onSoundDone()
       }
     })
     await sound.playAsync()
     await sound.setVolumeAsync(.5)
-    gameContext.playersInfo[gameContext.blackenedAttack].alive = false
-    gameContext.killsLeft -= 1
     if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
       gameContext.alterEgoAlive = false
       speech = morningTimeSpeech(victim.name).bodyDiscovery2

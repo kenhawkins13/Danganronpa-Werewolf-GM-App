@@ -1,7 +1,6 @@
 TODO:
 
 TODO on nighttime
-disable victim playerbutton immediately after announcement, not after asking for if people want to use abilities/items
 music loud then quiet during first school announcement
 3 hung trials leads to despair victory. lead straight discussion on tie vote
 include rulebook, link in disclaimer page
