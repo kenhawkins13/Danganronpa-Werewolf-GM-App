@@ -153,8 +153,8 @@ export default function NightTimeScreen({setTime}:Props) {
       onContinue = async () => {
         setNightTimeLabelVisible(false)
         await playMusic()
-        await speakThenPause(nightTimeSpeech.everyoneSleep1, 3, async () => {
-          await speakThenPause(nightTimeSpeech.everyoneSleep2, 3, async () => { await abilitiesOrItems() })
+        await speakThenPause(nightTimeSpeech.schoolAnnouncement4, 3, async () => {
+          await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, async () => { await abilitiesOrItems() })
         })
       }
       await speakThenPause(nightTimeSpeech.schoolAnnouncement2, 1, async () => {
@@ -168,11 +168,9 @@ export default function NightTimeScreen({setTime}:Props) {
     } else {
       setNightTimeLabelVisible(false)
       await playMusic()
-      await speakThenPause(nightTimeSpeech.schoolAnnouncement2, 0, async () => {
-        await speakThenPause(nightTimeSpeech.everyoneSleep1, 3, async () => {
-          await speakThenPause(nightTimeSpeech.everyoneSleep2, 3, async () => {
-            await alterEgo()
-          })
+      await speakThenPause(nightTimeSpeech.schoolAnnouncement5, 3, async () => {
+        await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, async () => {
+          await alterEgo()
         })
       })
     }

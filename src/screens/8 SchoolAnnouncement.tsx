@@ -18,7 +18,7 @@ export default function SchoolAnnouncementScreen() {
             if (playbackStatus.didJustFinish) {
               setVideoPlaying(false) 
               await speakThenPause(nightTimeSpeech.schoolAnnouncement1, 3, async () => {
-                await speakThenPause(nightTimeSpeech.everyoneSleep2, 3, () => {
+                await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, () => {
                   push('GameScreen')
                 })
               })
