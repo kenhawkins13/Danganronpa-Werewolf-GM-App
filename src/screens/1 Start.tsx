@@ -132,7 +132,7 @@ function fillContextInfo(gameContext:GameContextType) {
   gameContext.monomiExploded = false,
   gameContext.monomiProtect = -1,
   gameContext.vicePlayed = false,
-  gameContext.tieVote = false,
+  gameContext.tieVoteCount = 0,
   gameContext.winnerSide = ''
 
   // Delete existing data

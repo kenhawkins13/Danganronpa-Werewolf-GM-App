@@ -87,6 +87,7 @@ export default function DayTimeScreen({setTime}:Props) {
                       onPress={async () => {
                         await gameContext.backgroundMusic.unloadAsync()
                         setTimerVisible(false)
+                        disableContinueButton()
                         onDiscussionDone()
                       }}>
                       <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>End{"\n"}Discussion</Text>
@@ -114,11 +115,28 @@ export default function DayTimeScreen({setTime}:Props) {
                 <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
                   onPress={async () => {
                     votedPlayerIndex = -1
-                    gameContext.tieVote = true
+                    gameContext.tieVoteCount += 1
                     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
                     setVotingTime(false)
-                    discussionTime = 60
-                    await discussion()
+                    disableContinueButton()
+                    let onSpeechDone = async () => {
+                      discussionTime = 60
+                      await discussion()
+                    }
+                    if (gameContext.tieVoteCount === 1) {
+                      speech = dayTimeSpeech().tie1
+                      await speakThenPause(speech, 1, onSpeechDone)
+                    } else if (gameContext.tieVoteCount === 2) {
+                      speech = dayTimeSpeech().tie2
+                      await speakThenPause(speech, 1, onSpeechDone)
+                    } else if (gameContext.tieVoteCount === 3) {
+                      speech = dayTimeSpeech().tie3
+                      onSpeechDone = async () => {
+                        gameContext.winnerSide = 'Despair'
+                        push('WinnerDeclarationScreen')
+                      }
+                      await speakThenPause(speech, 0, onSpeechDone)
+                    }
                     }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Tie</Text>
                 </TouchableHighlight>
@@ -128,6 +146,7 @@ export default function DayTimeScreen({setTime}:Props) {
                   disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={async () => {
                     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
                     setVotingTime(false)
+                    disableContinueButton()
                     await execution()
                   }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Select</Text>
@@ -258,7 +277,7 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItemsTrial() {
-    if (gameContext.mode === 'extreme' && gameContext.tieVote === false) {
+    if (gameContext.mode === 'extreme' && gameContext.tieVoteCount === 0) {
       onContinue = async () => await trial()
       speech = dayTimeSpeech().abilityOrItemTrial
       await speakThenPause(speech, 0, enableContinueButton)
@@ -304,7 +323,7 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function execution() {
-    gameContext.tieVote = false
+    gameContext.tieVoteCount = 0
     gameContext.playersInfo[votedPlayerIndex].alive = false
     votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
     if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
@@ -379,7 +398,7 @@ async function playMusic(gameContext:GameContextType) {
     music = daytimeCalmMusic
   } else if (gameContext.blackenedAttack === -2) {
     music = daytimeAggressiveMusic
-  } else if (gameContext.tieVote === true) {
+  } else if (gameContext.tieVoteCount > 0) {
     music = scrumMusic
   } else {
     music = classTrialMusic

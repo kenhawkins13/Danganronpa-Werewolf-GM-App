@@ -104,7 +104,7 @@ export default function App() {
           monomiExploded: false,
           monomiProtect: -1,
           vicePlayed: false,
-          tieVote: false,
+          tieVoteCount: 0,
           winnerSide: '',
           backgroundMusic: ''
           }}>

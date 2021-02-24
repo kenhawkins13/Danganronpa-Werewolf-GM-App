@@ -1,7 +1,7 @@
 TODO:
 
-music loud then quiet during first school announcement
-3 hung trials leads to despair victory. lead straight discussion on tie vote
+keep player names between games
+await sound.setVolumeAsync(.1) before playing music
 include rulebook, link in disclaimer page
 make OK button on RevealRole modal actually the whole screen?
 is winnerdeclaration too slow to reveal after a trial? (b/c of all-rise sound and punishment-time video) 

@@ -73,6 +73,10 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
       Click Continue when everyone is ready to vote.",
     vote1: "Three. Two. One. Vote!",
     vote2: "Who received the most votes?",
+    tie1: "Looks like we're gonna need another class trial between just the tied players",
+    tie2: "Another tie? Alright, I'm gonna give you guys one more class trial but if it's a tie again, I'm gonna to give the victory \
+    to the despair side.",
+    tie3: "A promise is a promise. Despair wins.",
     execution1: "Let's give it everything we've got! IIIIIT'S PUNISHMENT TIME!",
     execution2: name + " has been executed.",
     winnerDeclaration1: name + " was the Blackened.",
