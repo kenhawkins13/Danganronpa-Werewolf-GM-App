@@ -448,8 +448,8 @@ export default function NightTimeScreen({setTime}:Props) {
     }
     const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
     gameContext.backgroundMusic = sound
-    await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setVolumeAsync(.5)
+    await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setIsLoopingAsync(true)
   }
 }

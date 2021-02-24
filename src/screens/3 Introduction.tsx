@@ -68,8 +68,8 @@ export default function IntroductionScreen() {
 
   async function playMusic() {
     const { sound } = await Audio.Sound.createAsync(monokumaMusic[0])
-    await sound.playAsync()
     await sound.setVolumeAsync(.1)
+    await sound.playAsync()
     gameContext.backgroundMusic = sound
   }
 }

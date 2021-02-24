@@ -64,8 +64,8 @@ export default function PlayersScreen() {
                 const { sound } = await Audio.Sound.createAsync(sounds.previousOption, {}, async (playbackStatus:any) => {
                   if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
                 })
-                await sound.playAsync()
                 await sound.setVolumeAsync(.1)
+                await sound.playAsync()
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })

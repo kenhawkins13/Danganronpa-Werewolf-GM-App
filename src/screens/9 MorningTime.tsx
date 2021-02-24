@@ -284,8 +284,8 @@ export default function MorningTimeScreen({setTime}:Props) {
         await onSoundDone()
       }
     })
+    await sound.setVolumeAsync(.1)
     await sound.playAsync()
-    await sound.setVolumeAsync(.5)
     if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
       gameContext.alterEgoAlive = false
       speech = morningTimeSpeech(victim.name).bodyDiscovery2

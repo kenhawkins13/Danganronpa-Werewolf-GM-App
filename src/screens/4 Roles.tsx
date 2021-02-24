@@ -82,8 +82,8 @@ export default function RolesScreen() {
     const randomNum = Math.floor(Math.random() * 5)
     const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum], {}, updateMusicStatus)
     gameContext.backgroundMusic = sound
-    await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setVolumeAsync(.1)
+    await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setIsLoopingAsync(false)
     gameContext.backgroundMusic.setOnPlaybackStatusUpdate(async (playbackStatus:any) => {
       if (playbackStatus.didJustFinish) { await playMusic() }

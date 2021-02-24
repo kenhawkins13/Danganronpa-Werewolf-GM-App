@@ -89,8 +89,8 @@ export default function StartScreen () {
                 const { sound } = await Audio.Sound.createAsync(sounds.revolver, {}, async (playbackStatus:any) => {
                   if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
                 })
-                await sound.playAsync()
                 await sound.setVolumeAsync(.1)
+                await sound.playAsync()
                 await stopMusic(gameContext.backgroundMusic)
                 fillContextInfo(gameContext)
                 navigation.navigate('DisclaimerScreen')
@@ -107,8 +107,8 @@ export default function StartScreen () {
 
   async function playMusic() {
     const { sound } = await Audio.Sound.createAsync(startMusic[0])
-    await sound.playAsync()
     await sound.setVolumeAsync(.25)
+    await sound.playAsync()
     gameContext.backgroundMusic = sound
   }
   

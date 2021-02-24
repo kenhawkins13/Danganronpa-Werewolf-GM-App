@@ -27,8 +27,8 @@ function previousButton(navigation:any, previousPage:string, onPrevious?:() => b
         const { sound } = await Audio.Sound.createAsync(sounds.previousOption, {}, async (playbackStatus:any) => {
           if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
         })
-        await sound.playAsync()
         await sound.setVolumeAsync(.1)
+        await sound.playAsync()
         onButton(navigation, previousPage, onPrevious)
       }}>
       <Text style={appStyle.text}>PREVIOUS</Text>
@@ -37,35 +37,19 @@ function previousButton(navigation:any, previousPage:string, onPrevious?:() => b
 }
 
 function nextButton(navigation:any, nextPage:string, onNext?:() => boolean) {
-  if (nextPage === 'NightTimeScreen') {
-    return (
-      <TouchableHighlight style={{...appStyle.frame, width: 150, height: 50, alignItems: 'center', justifyContent: 'center', backgroundColor: pinkTransparent}} 
-        onPress={async () => {
-          const { sound } = await Audio.Sound.createAsync(sounds.optionSelected, {}, async (playbackStatus:any) => {
-            if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
-          })
-          await sound.playAsync()
-          await sound.setVolumeAsync(.1)
-          onButton(navigation, nextPage, onNext)
-        }}>
-        <Text style={appStyle.text}>START</Text>
-      </TouchableHighlight>
-    )    
-  } else {
-    return (
-      <TouchableHighlight style={{...appStyle.frame, width: 150, height: 50, alignItems: 'center', justifyContent: 'center'}} 
-        onPress={async () => {
-          const { sound } = await Audio.Sound.createAsync(sounds.optionSelected, {}, async (playbackStatus:any) => {
-            if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
-          })
-          await sound.playAsync()
-          await sound.setVolumeAsync(.1)
-          onButton(navigation, nextPage, onNext)
-        }}>
-        <Text style={appStyle.text}>NEXT</Text>
-      </TouchableHighlight>
-    )
-  }
+  return (
+    <TouchableHighlight style={{...appStyle.frame, width: 150, height: 50, alignItems: 'center', justifyContent: 'center'}} 
+      onPress={async () => {
+        const { sound } = await Audio.Sound.createAsync(sounds.optionSelected, {}, async (playbackStatus:any) => {
+          if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
+        })
+        await sound.setVolumeAsync(.1)
+        await sound.playAsync()
+        onButton(navigation, nextPage, onNext)
+      }}>
+      <Text style={appStyle.text}>NEXT</Text>
+    </TouchableHighlight>
+  )
 }
 
 function onButton(navigation: any, page: string, onButton?: () => boolean) {

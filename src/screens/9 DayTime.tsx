@@ -74,8 +74,7 @@ export default function DayTimeScreen({setTime}:Props) {
                 </View>
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                   <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
-                    if (timerVisible) { 
-                      await gameContext.backgroundMusic.setVolumeAsync(.1)
+                    if (timerVisible) {
                       speech = "Time is up"
                       Speech.speak(speech)
                     }
@@ -248,8 +247,8 @@ export default function DayTimeScreen({setTime}:Props) {
           await speakThenPause(speech, 1, onSpeechDone)
         }
       })
-      await sound.playAsync()
       await sound.setVolumeAsync(.1)
+      await sound.playAsync()
     } else {
       speech = dayTimeSpeech().daySpeech2
       await speakThenPause(speech, 1, onSpeechDone)
@@ -336,8 +335,8 @@ export default function DayTimeScreen({setTime}:Props) {
         await speakThenPause(speech, 1, () => setVideoVisible(true))
       }
     })
-    await sound.playAsync()
     await sound.setVolumeAsync(.1)
+    await sound.playAsync()
   }
 
   async function declareWinner() {
@@ -405,8 +404,8 @@ async function playMusic(gameContext:GameContextType) {
   }
   const randomNum = Math.floor(Math.random() * music.length)
   const { sound } = await Audio.Sound.createAsync(music[randomNum])
-  await sound.playAsync()
   await sound.setVolumeAsync(.1)
+  await sound.playAsync()
   await sound.setIsLoopingAsync(true)
   gameContext.backgroundMusic = sound
 }
