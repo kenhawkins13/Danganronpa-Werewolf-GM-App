@@ -49,9 +49,9 @@ export default function NightTimeScreen({setTime}:Props) {
 
   return (
     <View style={{flex: 1}}>
-      <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()}  onPlayerClick={(playerIndex) => {
-        setPlayerIndex(playerIndex)
-        onPlayerClick(playerIndex)
+      <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
+          setPlayerIndex(playerIndex)
+          onPlayerClick(playerIndex)
         }}/>
       <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={playerIndex}/>
       <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex} abilityOrItem={abilityOrItem}

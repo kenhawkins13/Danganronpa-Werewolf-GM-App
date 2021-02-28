@@ -1,6 +1,5 @@
 TODO:
 
-make OK button on RevealRole modal actually the whole screen
 include rulebook, link in disclaimer page
 is winnerdeclaration too slow to reveal after a trial? (b/c of all-rise sound and punishment-time video)
 refactor colors to be one object

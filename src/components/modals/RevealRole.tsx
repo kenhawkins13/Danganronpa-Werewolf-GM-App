@@ -9,18 +9,22 @@ export default function RevealRoleModal({visible, setVisible, playerIndex, abili
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <View style={modalStyles.centeredView}>
-        <View style={modalStyles.modalView}>
-          <Text adjustsFontSizeToFit style={{...modalStyles.modalText, fontSize: 60}}>
-            {revealText(gameContext, playerIndex, abilityOrItem)}
-          </Text>
-          <TouchableHighlight style={{...modalStyles.button}} 
-            onPress={() => { 
-              setVisible(false)
-              if (onOk) { onOk() }
-            }}>
-            <Text style={modalStyles.textStyle}>OK</Text>
-          </TouchableHighlight>
-        </View>
+        <TouchableHighlight onPress={() => { 
+            setVisible(false)
+            if (onOk) { onOk() }
+          }}>
+          <View style={modalStyles.modalView}>
+            <Text adjustsFontSizeToFit style={{...modalStyles.modalText, fontSize: 60}}>
+              {revealText(gameContext, playerIndex, abilityOrItem)}
+            </Text>
+            <TouchableHighlight style={{...modalStyles.button}} onPress={() => { 
+                setVisible(false)
+                if (onOk) { onOk() }
+              }}>
+              <Text style={modalStyles.textStyle}>OK</Text>
+            </TouchableHighlight>
+          </View>
+        </TouchableHighlight>
       </View>
     </Modal>
   )
