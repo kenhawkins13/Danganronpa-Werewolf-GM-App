@@ -10,6 +10,7 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import * as Speech from 'expo-speech'
 import { Audio } from 'expo-av'
 import { daytimeCalmMusic } from '../assets/music/music'
+import { colors } from '../styles/colors'
 
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
@@ -54,7 +55,7 @@ export default function RolesScreen() {
                 </Text>
               </View>
             </View>
-            <View style={{borderBottomColor: 'white', borderBottomWidth: 2, marginVertical: 10}}/>
+            <View style={{borderBottomColor: colors.white, borderBottomWidth: 2, marginVertical: 10}}/>
             <View style={{flex: 4}}>
               {DisplayNormalRoles(gameContext)}
             </View>

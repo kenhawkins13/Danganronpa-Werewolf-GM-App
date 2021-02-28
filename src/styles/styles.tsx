@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native"
-import { blackTransparent } from "./colors";
+import { colors } from "./colors";
 
 export const appStyle = StyleSheet.create({  
   frame: {
-    borderWidth: 3, borderColor: 'white', borderRadius: 20, backgroundColor: blackTransparent
+    borderWidth: 3, borderColor: colors.white, borderRadius: 20, backgroundColor: colors.blackTransparent
   },
   text: {
-    color: 'white', fontFamily: 'goodbyeDespair', fontSize: 16
+    color: colors.white, fontFamily: 'goodbyeDespair', fontSize: 16
   }
 })
 
@@ -17,8 +17,8 @@ export const modalStyles = StyleSheet.create({
     alignItems: "center"
   },
   modalView: {
-    backgroundColor: "white",
-    borderColor: 'black',
+    backgroundColor: colors.white,
+    borderColor: colors.black,
     borderWidth: 3,
     borderRadius: 20,
     padding: 20,
@@ -33,7 +33,7 @@ export const modalStyles = StyleSheet.create({
     elevation: 5
   },
   button: {
-    backgroundColor: 'rgba(0,0,0,0.9)',
+    backgroundColor: colors.blackLessTransparent,
     borderRadius: 20,
     minHeight: 28,
     width: 100,
@@ -43,13 +43,13 @@ export const modalStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   textStyle: {
-    color: "white",
+    color: colors.white,
     fontFamily: 'goodbyeDespair',
     fontSize: 18,
     textAlign: 'center'
   },
   modalText: {
-    color: 'black',
+    color: colors.black,
     fontFamily: 'goodbyeDespair',
     fontSize: 18,
     margin: 10,
@@ -57,9 +57,9 @@ export const modalStyles = StyleSheet.create({
   },
   modalTextInput: {
     textAlign: 'center',
-    color: 'black',
+    color: colors.black,
     fontSize: 16,
-    borderColor: 'black',
+    borderColor: colors.black,
     borderBottomWidth: 1,
     width: 125
   }

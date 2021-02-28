@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import { PlayerInfo } from '../types/types'
-import { greyTransparent } from '../styles/colors'
+import { colors } from '../styles/colors'
 
 export default function PlayersPage({visible, middleSection, onPlayerClick}:Props) {
   const gameContext = useContext(GameContext)
@@ -56,9 +56,9 @@ function playerButtonStyle(playerInfo:PlayerInfo) {
   let borderColor = playerInfo.playerButtonStyle.borderColor
   let underlayColor = playerInfo.playerButtonStyle.underlayColor
   if (!playerInfo.alive) {
-    textColor = greyTransparent
-    backgroundColor = greyTransparent
-    borderColor = greyTransparent
+    textColor = colors.greyTransparent
+    backgroundColor = colors.greyTransparent
+    borderColor = colors.greyTransparent
   }
   return StyleSheet.create({
     buttonStyle: {

@@ -8,7 +8,7 @@ import NightTimeAbilitiesItemsModal from '../components/modals/NightTimeAbilitie
 import RevealRoleModal from '../components/modals/RevealRole'
 import { GameContext } from '../../AppContext'
 import PlayersPage from '../components/PlayersPage'
-import { blackTransparent, blueTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { colors } from '../styles/colors'
 import { appStyle } from '../styles/styles'
 import CountdownTimer from '../components/CountdownTimer'
 import { Audio } from 'expo-av'
@@ -34,8 +34,8 @@ export default function NightTimeScreen({setTime}:Props) {
   const [timerVisible, setTimerVisible] = useState(false)
   const [nightTimeLabelVisible, setNightTimeLabelVisible] = useState(false)
   const [continueButtonText, setContinueButtonText] = useState('')
-  const [continueButtonColor, setContinueButtonColor] = useState(blackTransparent)
-  const [continueButtonTextColor, setContinueButtonTextColor] = useState(blackTransparent)
+  const [continueButtonColor, setContinueButtonColor] = useState(colors.blackTransparent)
+  const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.blackTransparent)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [state, setState] = useState([])
@@ -120,7 +120,7 @@ export default function NightTimeScreen({setTime}:Props) {
   function NightTimeLabel() {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: blueTransparent}}>
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: colors.blueTransparent}}>
           <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
             Nighttime{"\n"}of Day {gameContext.dayNumber}
           </Text>
@@ -160,8 +160,8 @@ export default function NightTimeScreen({setTime}:Props) {
       await speakThenPause(nightTimeSpeech.schoolAnnouncement2, 1, async () => {
         await speakThenPause(nightTimeSpeech.schoolAnnouncement3, 0, () => {
           gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
-          setContinueButtonColor(blackTransparent)
-          setContinueButtonTextColor('white')
+          setContinueButtonColor(colors.blackTransparent)
+          setContinueButtonTextColor(colors.white)
           setContinueButtonDisabled(false)
         })
       })
@@ -181,13 +181,13 @@ export default function NightTimeScreen({setTime}:Props) {
     onPlayerClick = (playerIndex) => {
       gameContext.playersInfo.forEach(playerInfo => {
         if (playerInfo.playerIndex === playerIndex) {
-          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
         } else if (playerInfo.playerButtonStyle.disabled === false)
-          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
       })
       setPlayerIndex(playerIndex)
-      setContinueButtonColor(pinkTransparent)
-      setContinueButtonTextColor('white')
+      setContinueButtonColor(colors.pinkTransparent)
+      setContinueButtonTextColor(colors.white)
       setContinueButtonDisabled(false)
     }
     for (let i = 0; i < gameContext.playerCount; i++) {
@@ -258,15 +258,15 @@ export default function NightTimeScreen({setTime}:Props) {
     if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
       const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
       gameContext.playersInfo.forEach(playerInfo => {
-        playerInfo.playerButtonStyle.textColor = 'white'
-        playerInfo.playerButtonStyle.backgroundColor = blackTransparent
+        playerInfo.playerButtonStyle.textColor = colors.white
+        playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
       })
       setContinueButtonText('Continue')
       await speakThenPause(nightTimeSpeech.traitors1, 1, async () => {
         await speakThenPause(nightTimeSpeech.traitors2, 0, async () => {
           gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = greyTransparent }
-            if (traitorInPlay && playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = pinkTransparent }
+            if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent }
+            if (traitorInPlay && playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent }
           })
           timerDuration = 10
           onTimerDone = async () => await traitorsSleep()
@@ -294,12 +294,12 @@ export default function NightTimeScreen({setTime}:Props) {
         const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
         if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
           gameContext.playersInfo.forEach(playerInfo => { 
-            playerInfo.playerButtonStyle.backgroundColor = blackTransparent 
-            playerInfo.playerButtonStyle.underlayColor = blackTransparent 
+            playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent 
+            playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent 
           })
           if (playerIndex !== gameContext.monomiProtect) {
-            gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
-            gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = blackTransparent
+            gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.pinkTransparent
+            gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.blackTransparent
             gameContext.monomiProtect = playerIndex
           } else {
             gameContext.monomiProtect = -1
@@ -335,16 +335,16 @@ export default function NightTimeScreen({setTime}:Props) {
       onPlayerClick = (playerIndex) => {
         gameContext.playersInfo.forEach(playerInfo => {
           if (playerInfo.playerIndex === playerIndex) { 
-            playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
-            playerInfo.playerButtonStyle.underlayColor = pinkTransparent
+            playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
+            playerInfo.playerButtonStyle.underlayColor = colors.pinkTransparent
           } 
           else if (playerInfo.role !== 'Alter Ego') { 
-            playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-            playerInfo.playerButtonStyle.underlayColor = blackTransparent
+            playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+            playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
           }
         })
-        setContinueButtonColor(pinkTransparent)
-        setContinueButtonTextColor('white')
+        setContinueButtonColor(colors.pinkTransparent)
+        setContinueButtonTextColor(colors.white)
         setContinueButtonDisabled(false) 
       }
       onContinue = async () => {
@@ -376,14 +376,14 @@ export default function NightTimeScreen({setTime}:Props) {
       setContinueButtonText('Attack')
       onPlayerClick = (playerIndex) => {
         gameContext.playersInfo.forEach(playerInfo => { 
-          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-          playerInfo.playerButtonStyle.underlayColor = blackTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+          playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
         })
-        gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = pinkTransparent
-        gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = pinkTransparent
+        gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.pinkTransparent
+        gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.pinkTransparent
         gameContext.blackenedAttack = playerIndex
-        setContinueButtonColor(pinkTransparent)
-        setContinueButtonTextColor('white')
+        setContinueButtonColor(colors.pinkTransparent)
+        setContinueButtonTextColor(colors.white)
         setContinueButtonDisabled(false)
       }
       onContinue = async () => {
@@ -423,8 +423,8 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   function disableContinueButton() {
-    setContinueButtonColor(greyTransparent)
-    setContinueButtonTextColor(darkGrey)
+    setContinueButtonColor(colors.greyTransparent)
+    setContinueButtonTextColor(colors.darkGrey)
     setContinueButtonDisabled(true)
   }
 

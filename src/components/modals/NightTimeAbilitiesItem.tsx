@@ -3,7 +3,7 @@ import { Modal, View, Text, TouchableHighlight } from "react-native"
 import { modalStyles } from "../../styles/styles"
 import { Picker } from '@react-native-picker/picker'
 import { GameContext } from "../../../AppContext"
-import { blackTransparent, greyTransparent } from "../../styles/colors"
+import { colors } from "../../styles/colors"
 
 export default function NightTimeAbilitiesItemsModal({visible, setVisible, playerIndex}:Props) {
   const gameContext = useContext(GameContext)
@@ -16,7 +16,7 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
           <View style={modalStyles.modalView}>
             <Text style={{...modalStyles.modalText}}>Enter Abilties or Items</Text>
             <View style={{borderWidth: 1, margin: 10}}>
-              <Picker style={{width: 250, borderWidth: 1, borderColor: 'black'}} selectedValue={playerAbility}
+              <Picker style={{width: 250, borderWidth: 1, borderColor: colors.black}} selectedValue={playerAbility}
                 onValueChange={(value) => {setPlayerAbility(value.toString())}}>
                 <Picker.Item key="" label="Select an ability" value=""/>
                 {KyokoKirigiri()}
@@ -38,7 +38,7 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                 onPress={() => { 
                   gameContext.playersInfo[playerIndex].useAbility = ''
                   gameContext.playersInfo[playerIndex].useItem = ''
-                  gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
+                  gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.blackTransparent
                   setPlayerAbility('')
                   setItemCard('')
                   setVisible(!visible) 
@@ -51,11 +51,11 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                   gameContext.playersInfo[playerIndex].useAbility = playerAbility
                   gameContext.playersInfo[playerIndex].useItem = itemCard
                   if (playerAbility !== '' || itemCard !== '') {
-                    gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = greyTransparent
-                    gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = greyTransparent
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.greyTransparent
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.greyTransparent
                   } else {
-                    gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = blackTransparent
-                    gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = blackTransparent
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.blackTransparent
+                    gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.blackTransparent
                   }
                   setPlayerAbility('')
                   setItemCard('')

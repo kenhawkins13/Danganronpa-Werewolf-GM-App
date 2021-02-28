@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { View, Text, TouchableHighlight, ImageBackground } from "react-native"
 import { GameContext } from "../../AppContext"
-import { blackTransparent, blueTransparent, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../styles/colors"
+import { colors } from "../styles/colors"
 import { appStyle } from "../styles/styles"
 import PlayersPage from "../components/PlayersPage"
 import RevealRoleModal from "../components/modals/RevealRole"
@@ -30,46 +30,46 @@ export default function WinnerDeclarationScreen() {
       playerInfo.playerButtonStyle.disabled = false
       switch (playerInfo.role) {
         case 'Spotless':
-          playerInfo.playerButtonStyle.textColor = 'white'
-          playerInfo.playerButtonStyle.backgroundColor = whiteTransparent
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = greyTransparent
+          playerInfo.playerButtonStyle.textColor = colors.white
+          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
           break
         case 'Alter Ego':
-          playerInfo.playerButtonStyle.textColor = greenTransparent
-          playerInfo.playerButtonStyle.backgroundColor = whiteTransparent
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = greyTransparent
+          playerInfo.playerButtonStyle.textColor = colors.greenTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
           break
         case 'Blackened':
-          playerInfo.playerButtonStyle.textColor = pinkTransparent
-          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = 'black'
+          playerInfo.playerButtonStyle.textColor = colors.pinkTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.black
           break
         case 'Traitor':
-          playerInfo.playerButtonStyle.textColor = greyTransparent
-          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = 'black'
+          playerInfo.playerButtonStyle.textColor = colors.greyTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.black
           break
         case 'Despair Disease Patient':
-          playerInfo.playerButtonStyle.textColor = blueTransparent
-          playerInfo.playerButtonStyle.backgroundColor = whiteTransparent 
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = greyTransparent
+          playerInfo.playerButtonStyle.textColor = colors.blueTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent 
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
           break
         case 'Monomi':
-          playerInfo.playerButtonStyle.textColor = pinkTransparent
-          playerInfo.playerButtonStyle.backgroundColor = whiteTransparent 
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = greyTransparent
+          playerInfo.playerButtonStyle.textColor = colors.pinkTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent 
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
           break
         case 'Ultimate Despair':
-          playerInfo.playerButtonStyle.textColor = 'black'
-          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
-          playerInfo.playerButtonStyle.borderColor = 'white'
-          playerInfo.playerButtonStyle.underlayColor = pink
+          playerInfo.playerButtonStyle.textColor = colors.black
+          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
+          playerInfo.playerButtonStyle.borderColor = colors.white
+          playerInfo.playerButtonStyle.underlayColor = colors.pink
           break
       }      
     })

@@ -6,7 +6,7 @@ import { GameContextType, RoleCount } from '../types/types'
 import AlertModal from '../components/modals/Alert'
 import PlayerInfoModal from '../components/modals/PlayerInfo'
 import PlayersPage from '../components/PlayersPage'
-import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { colors } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { appStyle } from '../styles/styles'
@@ -19,8 +19,8 @@ export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
   const { navigate } = useNavigation<any>()
   const [rotationComplete, setRotationComplete] = useState(false)
-  const [startButtonColor, setStartButtonColor] = useState(greyTransparent)
-  const [startButtonTextColor, setStartButtonTextColor] = useState(darkGrey)
+  const [startButtonColor, setStartButtonColor] = useState(colors.greyTransparent)
+  const [startButtonTextColor, setStartButtonTextColor] = useState(colors.darkGrey)
   const [startButtonDisabled, setStartButtonDisabled] = useState(true)
   const [playerInfoModalVisible, setPlayerInfoModalVisible] = useState(false)
   const [alertModalVisible, setAlertModalVisible] = useState(false)
@@ -31,12 +31,12 @@ export default function PlayersScreen() {
       ScreenOrientation.lockAsync(OrientationLock.LANDSCAPE)
       setRotationComplete(true)
       if (gameContext.playersInfo.every((value) => { return value.role !== ''})) {
-        setStartButtonColor(pinkTransparent)
-        setStartButtonTextColor('white')
+        setStartButtonColor(colors.pinkTransparent)
+        setStartButtonTextColor(colors.white)
         setStartButtonDisabled(false)
       } else {
-        setStartButtonColor(greyTransparent)
-        setStartButtonTextColor(darkGrey)
+        setStartButtonColor(colors.greyTransparent)
+        setStartButtonTextColor(colors.darkGrey)
         setStartButtonDisabled(true)
       }
     }})
@@ -69,9 +69,9 @@ export default function PlayersScreen() {
                 await sound.setVolumeAsync(.1)
                 await sound.playAsync()
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent })
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent })
+                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = colors.white })
                 setRotationComplete(false)
                 navigate('DirectionScreen')
               }}> 
@@ -85,9 +85,9 @@ export default function PlayersScreen() {
               disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={async () => {
               await Speech.stop()
               gameContext.playersInfo.forEach(playerInfo => {
-                playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-                playerInfo.playerButtonStyle.underlayColor = blackTransparent
-                playerInfo.playerButtonStyle.borderColor = 'white'
+                playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+                playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
+                playerInfo.playerButtonStyle.borderColor = colors.white
               })
               if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
                 gameContext.backgroundMusic.unloadAsync()

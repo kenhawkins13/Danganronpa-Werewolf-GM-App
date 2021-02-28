@@ -4,6 +4,7 @@ import { GameContext } from '../../AppContext'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
+import { colors } from '../styles/colors'
 
 export default function ItemsScreen() {
   const gameContext = useContext(GameContext)
@@ -57,7 +58,7 @@ function getBody(mode:string) {
             </Text>
           </View>
         </View>
-        <View style={{borderBottomColor: 'white', borderBottomWidth: 2, marginVertical: 10}}/>
+        <View style={{borderBottomColor: colors.white, borderBottomWidth: 2, marginVertical: 10}}/>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <View style={{flex: 1, margin: '5%'}}>

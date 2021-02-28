@@ -6,7 +6,7 @@ import { GameContext } from '../../AppContext'
 import PlayersPage from '../components/PlayersPage'
 import { goodMorningSpeech, morningTimeSpeech } from '../data/Speeches'
 import { roleInPlay } from '../data/Table'
-import { blackTransparent, darkGrey, greyTransparent, pinkTransparent } from '../styles/colors'
+import { colors } from '../styles/colors'
 import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { appStyle } from '../styles/styles'
 import { PlayerInfo } from '../types/types'
@@ -25,8 +25,8 @@ export default function MorningTimeScreen({setTime}:Props) {
   const { navigate } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [confirmationVisible, setConfirmationVisible] = useState(false)
-  const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
-  const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
+  const [continueButtonColor, setContinueButtonColor] = useState(colors.greyTransparent)
+  const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
   const [state, setState] = useState([])
 
@@ -105,7 +105,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   function MorningTimeLabel() {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: greyTransparent}}>
+        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: colors.greyTransparent}}>
           <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
             Morning{"\n"}of Day {gameContext.dayNumber}
           </Text>
@@ -137,9 +137,9 @@ export default function MorningTimeScreen({setTime}:Props) {
     victim = gameContext.playersInfo[gameContext.blackenedAttack]
     gameContext.playersInfo.forEach(playerInfo => {
       if (playerInfo === victim) {
-        victim.playerButtonStyle.textColor = 'white'
-        victim.playerButtonStyle.backgroundColor = pinkTransparent
-        playerInfo.playerButtonStyle.borderColor = 'white'
+        victim.playerButtonStyle.textColor = colors.white
+        victim.playerButtonStyle.backgroundColor = colors.pinkTransparent
+        playerInfo.playerButtonStyle.borderColor = colors.white
         playerInfo.playerButtonStyle.disabled = true
       } else {
         disablePlayerButton(playerInfo)
@@ -218,11 +218,11 @@ export default function MorningTimeScreen({setTime}:Props) {
       } while (!gameContext.playersInfo[gameContext.blackenedAttack].alive)
       gameContext.playersInfo.forEach(playerInfo => {
         if (playerInfo.playerIndex === gameContext.blackenedAttack) {
-          playerInfo.playerButtonStyle.textColor = 'white'
-          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
+          playerInfo.playerButtonStyle.textColor = colors.white
+          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
         } else {
-          playerInfo.playerButtonStyle.textColor = darkGrey
-          playerInfo.playerButtonStyle.backgroundColor = greyTransparent
+          playerInfo.playerButtonStyle.textColor = colors.darkGrey
+          playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
         }
       })
       await announceAttack()
@@ -331,8 +331,8 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
   
   function enableContinueButton() {
-    setContinueButtonColor(blackTransparent)
-    setContinueButtonTextColor('white')
+    setContinueButtonColor(colors.blackTransparent)
+    setContinueButtonTextColor(colors.white)
     setContinueButtonDisabled(false)
   }
 }

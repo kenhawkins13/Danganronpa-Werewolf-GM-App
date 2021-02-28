@@ -5,7 +5,7 @@ import { Image, View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import CountdownTimer from '../components/CountdownTimer'
 import PlayersPage from '../components/PlayersPage'
-import { blackTransparent, darkGrey, greyTransparent, pinkTransparent, yellowTransparent } from '../styles/colors'
+import { colors } from '../styles/colors'
 import { appStyle } from '../styles/styles'
 import { Audio } from 'expo-av'
 import { GameContextType } from '../types/types'
@@ -31,8 +31,8 @@ export default function DayTimeScreen({setTime}:Props) {
   const [timerVisible, setTimerVisible] = useState(false)
   const [votingTime, setVotingTime] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
-  const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
-  const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
+  const [continueButtonColor, setContinueButtonColor] = useState(colors.greyTransparent)
+  const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
   const [labelClassTrial, setLabelToClassTrial] = useState(false)
   const [state, setState] = useState([])
@@ -195,7 +195,7 @@ export default function DayTimeScreen({setTime}:Props) {
     if (labelClassTrial) {
       return (
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: pinkTransparent}}>
+          <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: colors.pinkTransparent}}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
               Class trial{"\n"}of Day {gameContext.dayNumber}
             </Text>
@@ -213,7 +213,7 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       return (
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: yellowTransparent}}>
+          <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: colors.yellowTransparent}}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
               Daytime{"\n"}of Day {gameContext.dayNumber}
             </Text>
@@ -300,11 +300,11 @@ export default function DayTimeScreen({setTime}:Props) {
     onPlayerClick = (playerIndex) => {
       gameContext.playersInfo.forEach(playerInfo => {
         if (playerInfo.playerIndex === playerIndex) {
-          playerInfo.playerButtonStyle.backgroundColor = pinkTransparent
-          playerInfo.playerButtonStyle.underlayColor = pinkTransparent 
+          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
+          playerInfo.playerButtonStyle.underlayColor = colors.pinkTransparent 
         } else {
-          playerInfo.playerButtonStyle.backgroundColor = blackTransparent
-          playerInfo.playerButtonStyle.underlayColor = blackTransparent
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+          playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
         }
       })
       votedPlayerIndex = playerIndex
@@ -371,14 +371,14 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   function enableContinueButton() {
-    setContinueButtonColor(blackTransparent)
-    setContinueButtonTextColor('white')
+    setContinueButtonColor(colors.blackTransparent)
+    setContinueButtonTextColor(colors.white)
     setContinueButtonDisabled(false)
   }
 
   function disableContinueButton() {
-    setContinueButtonColor(greyTransparent)
-    setContinueButtonTextColor(darkGrey)
+    setContinueButtonColor(colors.greyTransparent)
+    setContinueButtonTextColor(colors.darkGrey)
     setContinueButtonDisabled(true)
   }
 }

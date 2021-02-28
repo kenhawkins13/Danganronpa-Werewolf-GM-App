@@ -8,7 +8,7 @@ import { calculateRoles, requiredKills } from '../data/Table'
 import { GameContextType } from '../types/types'
 import { GameContext } from '../../AppContext'
 import { Audio } from 'expo-av'
-import { blackTransparent } from '../styles/colors'
+import { colors } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { startMusic } from '../assets/music/music';
@@ -46,11 +46,11 @@ export default function StartScreen () {
                   setGameMode(value as number)
                   gameContext.mode = value === 0 ? 'normal' : 'extreme'
                 }}
-                textColor='white'
+                textColor={colors.white}
                 textStyle={{ fontSize: 20}}
                 selectedTextStyle={{ fontSize: 20}}
                 selectedColor='#cc0066'
-                buttonColor='white'
+                buttonColor={colors.white}
                 borderRadius={15}
                 backgroundColor='rgba(0, 0, 0, 0)'
                 hasPadding={false}
@@ -76,7 +76,7 @@ export default function StartScreen () {
                   gameContext.playerCount = value
                   setPlayerCount(value)
                 }}
-                thumbTintColor='white'
+                thumbTintColor={colors.white}
                 minimumTrackTintColor="#FFFFFF"
                 maximumTrackTintColor="#000000"
               />
@@ -95,7 +95,7 @@ export default function StartScreen () {
                 fillContextInfo(gameContext)
                 navigate('DisclaimerScreen')
                 }}>
-                <Text style={{color: 'white', fontSize: 20}}>START GAME</Text>
+                <Text style={{color: colors.white, fontSize: 20}}>START GAME</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -148,7 +148,13 @@ function fillContextInfo(gameContext:GameContextType) {
       alive: true,
       useAbility: '',
       useItem: '',
-      playerButtonStyle: {disabled: false, textColor: 'white', backgroundColor: blackTransparent, borderColor: 'white', underlayColor: blackTransparent}
+      playerButtonStyle: {
+        disabled: false, 
+        textColor: colors.white, 
+        backgroundColor: colors.blackTransparent, 
+        borderColor: colors.white, 
+        underlayColor: colors.blackTransparent
+      }
     }
     if (gameContext.playersInfo.length > i) {
       gameContext.playersInfo[i] = playerInfo
