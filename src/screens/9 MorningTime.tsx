@@ -22,13 +22,13 @@ let onNo = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function MorningTimeScreen({setTime}:Props) {
-  const { push } = useNavigation<any>()
+  const { navigate } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [confirmationVisible, setConfirmationVisible] = useState(false)
   const [continueButtonColor, setContinueButtonColor] = useState(greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
-  const [array, setState] = useState([])
+  const [state, setState] = useState([])
 
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
@@ -38,7 +38,7 @@ export default function MorningTimeScreen({setTime}:Props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
+      <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()} onPlayerClick={() => {}}/>
     </View>
   )
 
@@ -294,7 +294,7 @@ export default function MorningTimeScreen({setTime}:Props) {
       speech = morningTimeSpeech(victim.name).bodyDiscovery3
       onSoundDone = async () => await speakThenPause(speech, 0, () => {
         gameContext.winnerSide = 'Hope'
-        push('WinnerDeclarationScreen')
+        navigate('WinnerDeclarationScreen')
       })
     } else {
       speech = morningTimeSpeech(victim.name).bodyDiscovery1

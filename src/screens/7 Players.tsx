@@ -17,7 +17,8 @@ import { sounds } from "../assets/sounds/sounds"
 
 export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
-  const { push } = useNavigation<any>()
+  const { navigate } = useNavigation<any>()
+  const [rotationComplete, setRotationComplete] = useState(false)
   const [startButtonColor, setStartButtonColor] = useState(greyTransparent)
   const [startButtonTextColor, setStartButtonTextColor] = useState(darkGrey)
   const [startButtonDisabled, setStartButtonDisabled] = useState(true)
@@ -28,6 +29,7 @@ export default function PlayersScreen() {
     const isFocused = useIsFocused()
     useEffect(() => { if (isFocused) {
       ScreenOrientation.lockAsync(OrientationLock.LANDSCAPE)
+      setRotationComplete(true)
       if (gameContext.playersInfo.every((value) => { return value.role !== ''})) {
         setStartButtonColor(pinkTransparent)
         setStartButtonTextColor('white')
@@ -43,7 +45,7 @@ export default function PlayersScreen() {
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1}} source={require('../assets/background/Setup.png')}>
         <View style={{ flex: 1 }}>
-          <PlayersPage middleSection = {PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
+          <PlayersPage visible={rotationComplete} middleSection={PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
             setPlayerIndex(playerIndex)
             setPlayerInfoModalVisible(true)
           }}/>
@@ -70,7 +72,8 @@ export default function PlayersScreen() {
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = blackTransparent })
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = blackTransparent })
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = 'white' })
-                push('DirectionScreen')
+                setRotationComplete(false)
+                navigate('DirectionScreen')
               }}> 
               <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
             </TouchableHighlight>
@@ -88,7 +91,7 @@ export default function PlayersScreen() {
               })
               if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
                 gameContext.backgroundMusic.unloadAsync()
-                push('SchoolAnnouncementScreen')
+                navigate('SchoolAnnouncementScreen')
               } else {
                 gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
                 setAlertModalVisible(true)

@@ -8,7 +8,7 @@ import { videos } from "../assets/videos/videos"
 
 export default function SchoolAnnouncementScreen() {
   const [videoPlaying, setVideoPlaying] = useState(true)
-  const { push } = useNavigation<any>()
+  const { navigate } = useNavigation<any>()
 
   if (videoPlaying) {
     return (
@@ -19,7 +19,7 @@ export default function SchoolAnnouncementScreen() {
               setVideoPlaying(false) 
               await speakThenPause(nightTimeSpeech.schoolAnnouncement1, 3, async () => {
                 await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, () => {
-                  push('GameScreen')
+                  navigate('GameScreen')
                 })
               })
             }

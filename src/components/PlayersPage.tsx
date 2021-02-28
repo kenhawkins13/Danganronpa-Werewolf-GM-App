@@ -1,29 +1,24 @@
-import { useIsFocused } from '@react-navigation/native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
-import * as ScreenOrientation from 'expo-screen-orientation'
-import { OrientationLock } from 'expo-screen-orientation'
 import { PlayerInfo } from '../types/types'
 import { greyTransparent } from '../styles/colors'
 
-export default function PlayersPage({middleSection, onPlayerClick}:Props) {
+export default function PlayersPage({visible, middleSection, onPlayerClick}:Props) {
   const gameContext = useContext(GameContext)
-  const [bool, setBool] = useState(false)
 
-  const isFocused = useIsFocused()
-  useEffect(() => { if (isFocused) {
-    ScreenOrientation.lockAsync(OrientationLock.LANDSCAPE)
-  }})
-
-  return (
-    <View style={{ flex: 1 }}>
-      {PlayerButtons(buttonIndexes(gameContext.playerCount))}
-      <View style={{ height: '60%', width: '60%', left: '20%', top: '20%', position: 'absolute' }}>
-        {middleSection}
+  if (visible) {
+    return (
+      <View style={{ flex: 1 }}>
+        {PlayerButtons(buttonIndexes(gameContext.playerCount))}
+        <View style={{ height: '60%', width: '60%', left: '20%', top: '20%', position: 'absolute' }}>
+          {middleSection}
+        </View>
       </View>
-    </View>
-  )
+    )
+  } else {
+    return (<></>)
+  }
   
   function PlayerButtons(buttonIndexes:number[]) {
     return (
@@ -37,16 +32,13 @@ export default function PlayersPage({middleSection, onPlayerClick}:Props) {
   
   function PlayerButton(playerIndex:number) {
     return (
-      <View key={'player' + playerIndex} style={{height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+      <View key={'player' + playerIndex} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <TouchableHighlight key={'player' + playerIndex + 1} 
           underlayColor={playerButtonStyle(gameContext.playersInfo[playerIndex]).underlayStyle.color}
           style={{...playerButtonStyle(gameContext.playersInfo[playerIndex]).buttonStyle}}
           disabled={gameContext.playersInfo[playerIndex].playerButtonStyle.disabled === true || 
             gameContext.playersInfo[playerIndex].alive === false}
-          onPress={() => { 
-            onPlayerClick(playerIndex)
-            setBool(!bool)
-          }}>
+          onPress={() => { onPlayerClick(playerIndex) }}>
           <Text adjustsFontSizeToFit style={playerButtonStyle(gameContext.playersInfo[playerIndex]).textStyle}>
             {gameContext.playersInfo[playerIndex].name}
           </Text>
@@ -56,7 +48,7 @@ export default function PlayersPage({middleSection, onPlayerClick}:Props) {
   }
 }
 
-type Props = {middleSection:JSX.Element, onPlayerClick:(playerIndex:number) => void}
+type Props = {visible: boolean, middleSection:JSX.Element, onPlayerClick:(playerIndex:number) => void}
 
 function playerButtonStyle(playerInfo:PlayerInfo) {
   let textColor = playerInfo.playerButtonStyle.textColor

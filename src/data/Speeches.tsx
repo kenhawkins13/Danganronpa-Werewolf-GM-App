@@ -42,7 +42,7 @@ export const goodMorningSpeech = (dayNumber:number) => {
 
 export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) => {
   return {
-    announceAttack: name1 + ", was attacked by the Blackened last night.",
+    announceAttack: name1 + " was attacked by the Blackened last night.",
     monomi1: "Did Moenoemi get in the way of the murder last night? ",
     monomi2: "Yes, " + name2 + " exploded and died to protect " + name1 + ".",
     monomi3: "Good riddance, I hated Moenoemi anyways.",

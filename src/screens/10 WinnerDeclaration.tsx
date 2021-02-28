@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
-import { View, Text, TouchableHighlight, DevSettings, ImageBackground } from "react-native"
+import { View, Text, TouchableHighlight, ImageBackground } from "react-native"
 import { GameContext } from "../../AppContext"
-import { blackTransparent, blueTransparent, darkGrey, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../styles/colors"
+import { blackTransparent, blueTransparent, greenTransparent, greyTransparent, pink, pinkTransparent, whiteTransparent } from "../styles/colors"
 import { appStyle } from "../styles/styles"
 import PlayersPage from "../components/PlayersPage"
 import RevealRoleModal from "../components/modals/RevealRole"
@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 
 export default function WinnerDeclarationScreen() {
   const gameContext = useContext(GameContext)
-  const navigation = useNavigation()
+  const { navigate } = useNavigation<any>()
   const [winnerBannerVisible, setWinnerBannerVisible] = useState(false)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [revealRoleModalVisible, setRevealRoleModalVisible] = useState(false)
@@ -77,7 +77,7 @@ export default function WinnerDeclarationScreen() {
       <View style={{flex: 1}}>
         <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} resizeMode='cover'
           source={require('../assets/background/Setup.png')}>
-          <PlayersPage middleSection={RestartButton()} onPlayerClick={(playerIndex) => {
+          <PlayersPage visible={true} middleSection={RestartButton()} onPlayerClick={(playerIndex) => {
             setPlayerIndex(playerIndex)
             setRevealRoleModalVisible(true)
           }}/>
@@ -126,7 +126,7 @@ export default function WinnerDeclarationScreen() {
           <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
           disabled={false} onPress={async () => {
             await gameContext.backgroundMusic.unloadAsync()           
-            navigation.navigate('StartScreen')
+            navigate('StartScreen')
            }}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>Restart</Text>
           </TouchableHighlight>

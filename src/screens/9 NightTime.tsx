@@ -49,7 +49,7 @@ export default function NightTimeScreen({setTime}:Props) {
 
   return (
     <View style={{flex: 1}}>
-      <PlayersPage middleSection={PlayersPageMiddleSection()}  onPlayerClick={(playerIndex) => {
+      <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()}  onPlayerClick={(playerIndex) => {
         setPlayerIndex(playerIndex)
         onPlayerClick(playerIndex)
         }}/>

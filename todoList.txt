@@ -1,6 +1,6 @@
 TODO:
 
-keep player names between games
+make OK button on RevealRole modal actually the whole screen
 include rulebook, link in disclaimer page
-make OK button on RevealRole modal actually the whole screen?
-is winnerdeclaration too slow to reveal after a trial? (b/c of all-rise sound and punishment-time video) 
+is winnerdeclaration too slow to reveal after a trial? (b/c of all-rise sound and punishment-time video)
+refactor colors to be one object

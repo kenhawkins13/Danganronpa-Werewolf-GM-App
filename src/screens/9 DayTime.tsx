@@ -25,7 +25,7 @@ let onDiscussionDone = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen({setTime}:Props) {
-  const { push } = useNavigation<any>()
+  const { navigate } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [videoVisible, setVideoVisible] = useState(false)
   const [timerVisible, setTimerVisible] = useState(false)
@@ -47,7 +47,7 @@ export default function DayTimeScreen({setTime}:Props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <PlayersPage middleSection={PlayersPageMiddleSection()} onPlayerClick={onPlayerClick}/>
+      <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()} onPlayerClick={onPlayerClick}/>
     </View>
   )
 
@@ -132,7 +132,7 @@ export default function DayTimeScreen({setTime}:Props) {
                       speech = dayTimeSpeech().tie3
                       onSpeechDone = async () => {
                         gameContext.winnerSide = 'Despair'
-                        push('WinnerDeclarationScreen')
+                        navigate('WinnerDeclarationScreen')
                       }
                       await speakThenPause(speech, 0, onSpeechDone)
                     }
@@ -343,17 +343,17 @@ export default function DayTimeScreen({setTime}:Props) {
     if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
       await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration1, 0, () => {
         gameContext.winnerSide = 'Hope'
-        push('WinnerDeclarationScreen')
+        navigate('WinnerDeclarationScreen')
       })
     } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
       await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration2, 0, () => {
         gameContext.winnerSide = 'Ultimate Despair'
-        push('WinnerDeclarationScreen')
+        navigate('WinnerDeclarationScreen')
       })
     } else if (gameContext.killsLeft === 0) {
       await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration3, 0, () => {
         gameContext.winnerSide = 'Despair'
-        push('WinnerDeclarationScreen')
+        navigate('WinnerDeclarationScreen')
       })
     } else {
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {

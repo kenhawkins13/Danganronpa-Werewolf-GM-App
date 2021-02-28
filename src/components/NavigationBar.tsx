@@ -1,26 +1,25 @@
 import { useNavigation } from "@react-navigation/native"
 import React from "react"
 import { TouchableHighlight, View, Text } from "react-native"
-import { pinkTransparent } from "../styles/colors"
 import { appStyle } from "../styles/styles"
 import { Audio } from 'expo-av'
 import { sounds } from "../assets/sounds/sounds"
 
 export default function NavigationBar({previousPage, nextPage, onPrevious, onNext}: Props) {
-  const navigation = useNavigation()
+  const { navigate } = useNavigation<any>()
     return (
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          {previousButton(navigation, previousPage, onPrevious)}
+          {previousButton(navigate, previousPage, onPrevious)}
         </View>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          {nextButton(navigation, nextPage, onNext)}
+          {nextButton(navigate, nextPage, onNext)}
         </View>
       </View>
     )
 }
 
-function previousButton(navigation:any, previousPage:string, onPrevious?:() => boolean) {
+function previousButton(navigate:any, previousPage:string, onPrevious?:() => boolean) {
   return (
     <TouchableHighlight style={{...appStyle.frame, width: 150, height: 50, alignItems: 'center', justifyContent: 'center'}} 
       onPress={async () => {
@@ -29,14 +28,14 @@ function previousButton(navigation:any, previousPage:string, onPrevious?:() => b
         })
         await sound.setVolumeAsync(.1)
         await sound.playAsync()
-        onButton(navigation, previousPage, onPrevious)
+        onButton(navigate, previousPage, onPrevious)
       }}>
       <Text style={appStyle.text}>PREVIOUS</Text>
     </TouchableHighlight>
   )
 }
 
-function nextButton(navigation:any, nextPage:string, onNext?:() => boolean) {
+function nextButton(navigate:any, nextPage:string, onNext?:() => boolean) {
   return (
     <TouchableHighlight style={{...appStyle.frame, width: 150, height: 50, alignItems: 'center', justifyContent: 'center'}} 
       onPress={async () => {
@@ -45,20 +44,20 @@ function nextButton(navigation:any, nextPage:string, onNext?:() => boolean) {
         })
         await sound.setVolumeAsync(.1)
         await sound.playAsync()
-        onButton(navigation, nextPage, onNext)
+        onButton(navigate, nextPage, onNext)
       }}>
       <Text style={appStyle.text}>NEXT</Text>
     </TouchableHighlight>
   )
 }
 
-function onButton(navigation: any, page: string, onButton?: () => boolean) {
+function onButton(navigate: any, page: string, onButton?: () => boolean) {
   if (onButton) {
     if (onButton()) {
-      navigation.navigate(page)
+      navigate(page)
     }
   } else {
-    navigation.navigate(page)
+    navigate(page)
   }
 }
 

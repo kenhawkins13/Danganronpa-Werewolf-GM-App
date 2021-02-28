@@ -18,7 +18,7 @@ export default function StartScreen () {
   const gameContext = useContext(GameContext)
   const [gameMode, setGameMode] = useState(0)
   const [playerCount, setPlayerCount] = useState(4)
-  const navigation = useNavigation()
+  const { navigate } = useNavigation<any>()
   
   // Returns true if screen is focused
   const isFocused = useIsFocused()
@@ -93,7 +93,7 @@ export default function StartScreen () {
                 await sound.playAsync()
                 await stopMusic(gameContext.backgroundMusic)
                 fillContextInfo(gameContext)
-                navigation.navigate('DisclaimerScreen')
+                navigate('DisclaimerScreen')
                 }}>
                 <Text style={{color: 'white', fontSize: 20}}>START GAME</Text>
               </TouchableHighlight>
@@ -134,22 +134,27 @@ function fillContextInfo(gameContext:GameContextType) {
   gameContext.vicePlayed = false,
   gameContext.tieVoteCount = 0,
   gameContext.winnerSide = ''
-
-  // Delete existing data
-  while (gameContext.playersInfo.length > 0) {
+  // Delete existing playerInfo element if more than playerCount
+  while (gameContext.playersInfo.length > gameContext.playerCount) {
     gameContext.playersInfo.pop()
   }
   for (let i = 0; i < gameContext.playerCount; i++) {
-    gameContext.playersInfo.push({
+    const playerName = gameContext.playersInfo.length > i ? gameContext.playersInfo[i].name : 'Player ' + (i+1).toString()
+    const playerInfo = {
       playerIndex: i,
-      name: 'Player ' + (i+1).toString(),
+      name: playerName,
       side: '',
       role: '',
       alive: true,
       useAbility: '',
       useItem: '',
       playerButtonStyle: {disabled: false, textColor: 'white', backgroundColor: blackTransparent, borderColor: 'white', underlayColor: blackTransparent}
-    })
+    }
+    if (gameContext.playersInfo.length > i) {
+      gameContext.playersInfo[i] = playerInfo
+    } else {
+      gameContext.playersInfo.push(playerInfo)
+    }
   }
   return true
 }
