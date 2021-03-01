@@ -23,14 +23,14 @@ export default function DirectionScreen() {
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
             <View style={{height: 28, justifyContent: 'center'}}>
               <Text style={{...appStyle.text, textAlign: 'center'}}>
-                -Input Roles-
+                -Setup-
               </Text>
               <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
                 onPress={async() => {
                   if (await Speech.isSpeakingAsync() === true) {
                     await Speech.stop()
                   } else {
-                    Speech.speak(speech1 + ' ' + speech2)
+                    Speech.speak(speech)
                   }
                 }}>
                 <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
@@ -64,10 +64,9 @@ export default function DirectionScreen() {
 }
 
 const body1 = "Place your phone in the center of the play area like so:"
-const body2 = "On the next page, have each player click the slot corresponding to their seating position and have them enter \
-their name and role. Do not swap seating after entering your information.\n\nUse the speaker icon on the next page to adjust the \
-volume so that everyone can hear the instructions clearly."
-const speech1 = "Place your phone in the center of the play area like so."
-const speech2 = "On the next page, have each player click the slot corresponding to their seating position and have them enter \
-their name and role. Do not swap seating as some of the later game play will be affected. Use the speaker icon to adjust the \
-volume so that everyone can hear the instructions clearly."
+const body2 = "On the next page, have each player click on the slot corresponding to their seating position and enter \
+their name and role.\n\nAdditionaly, use the speaker icon to test out the volume so that everyone can hear the instructions clearly.\
+\n\nDon't forget to turn off your phone's screen timeout."
+const speech = "Place your phone in the center of the play area like so. On the next page, have each player click on the slot \
+corresponding to their seating position and enter their name and role. Additionaly, use the speaker icon to test out the volume \
+so that everyone can hear the instructions clearly. Don't forget to turn off your phone's screen timeout."
