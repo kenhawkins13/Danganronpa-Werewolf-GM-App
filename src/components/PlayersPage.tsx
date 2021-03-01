@@ -35,7 +35,7 @@ export default function PlayersPage({visible, middleSection, onPlayerClick}:Prop
       <View key={'player' + playerIndex} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <TouchableHighlight key={'player' + playerIndex + 1} 
           underlayColor={playerButtonStyle(gameContext.playersInfo[playerIndex]).underlayStyle.color}
-          style={{...playerButtonStyle(gameContext.playersInfo[playerIndex]).buttonStyle}}
+          style={playerButtonStyle(gameContext.playersInfo[playerIndex]).buttonStyle}
           disabled={gameContext.playersInfo[playerIndex].playerButtonStyle.disabled === true || 
             gameContext.playersInfo[playerIndex].alive === false}
           onPress={() => { onPlayerClick(playerIndex) }}>

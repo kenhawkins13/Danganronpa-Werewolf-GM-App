@@ -50,8 +50,8 @@ export default function NightTimeScreen({setTime}:Props) {
   return (
     <View style={{flex: 1}}>
       <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
-          setPlayerIndex(playerIndex)
           onPlayerClick(playerIndex)
+          setPlayerIndex(playerIndex)
         }}/>
       <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={playerIndex}/>
       <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex} abilityOrItem={abilityOrItem}
@@ -185,7 +185,6 @@ export default function NightTimeScreen({setTime}:Props) {
         } else if (playerInfo.playerButtonStyle.disabled === false)
           playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
       })
-      setPlayerIndex(playerIndex)
       setContinueButtonColor(colors.pinkTransparent)
       setContinueButtonTextColor(colors.white)
       setContinueButtonDisabled(false)
@@ -293,7 +292,7 @@ export default function NightTimeScreen({setTime}:Props) {
       onPlayerClick = (playerIndex) => {
         const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
         if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
-          gameContext.playersInfo.forEach(playerInfo => { 
+          gameContext.playersInfo.forEach(playerInfo => {
             playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent 
             playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent 
           })
@@ -305,6 +304,7 @@ export default function NightTimeScreen({setTime}:Props) {
             gameContext.monomiProtect = -1
           }              
         }
+        setState([]) // re-render screen
       }
       await speakThenPause(nightTimeSpeech.monomi1, 1, async () => {
         await speakThenPause(nightTimeSpeech.monomi2, 0, () => {

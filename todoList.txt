@@ -1,4 +1,5 @@
 TODO:
 
+set screen timeout to greater than 3 minutes
 include rulebook, link in disclaimer page
 is winnerdeclaration too slow to reveal after a trial? (b/c of all-rise sound and punishment-time video)
