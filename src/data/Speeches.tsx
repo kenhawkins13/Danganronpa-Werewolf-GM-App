@@ -3,9 +3,9 @@ export const micCheckSpeech = "Ahem, Ahem! Testing, testing! Mike check, one two
 
 export const nightTimeSpeech = {
   schoolAnnouncement1: "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
-  Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone go to sleep.",
+  Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone, close your eyes and go to sleep.",
   schoolAnnouncement2: "It is now nighttime.",
-  schoolAnnouncement3: "Would anyone like to use an ability or item? Click on the player and enter any investigative abilities or items.",
+  schoolAnnouncement3: "Would anyone like to use an ability or item? Select your player and enter any investigative abilities or items.",
   schoolAnnouncement4: "Everyone go to sleep. The curfew is now in effect.",
   schoolAnnouncement5: "It is now nighttime. Everyone go to sleep. The curfew is now in effect.",
   schoolAnnouncement6: "Everyone should now be asleep.",
@@ -67,7 +67,7 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
       the class trial will begin!",
     daySpeech2: "It is the day time.",
     abilityOrItem: "Would anybody like to use an ability or item?",
-    discussion: "Discussion starts now.",
+    discussion: " minute discussion starts now.",
     abilityOrItemTrial: "Would anybody like to use an ability or item before voting?",
     trial: "Up next is the voting segment where each player points to who they think is the Blackened. \
       Click Continue when everyone is ready to vote.",

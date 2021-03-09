@@ -271,7 +271,7 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       onDiscussionDone = async () => await nightTime()
     }
-    speech = dayTimeSpeech().discussion
+    speech = (discussionTime / 60).toString() + dayTimeSpeech().discussion
     await speakThenPause(speech, 0, () => { setTimerVisible(true) })
   }
 
