@@ -113,7 +113,7 @@ export default function MorningTimeScreen({setTime}:Props) {
         <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
-              Speech.speak(speech)                
+              speakThenPause(speech)
             }
           }}>
           <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>

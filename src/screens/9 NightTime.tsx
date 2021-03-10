@@ -128,7 +128,7 @@ export default function NightTimeScreen({setTime}:Props) {
         <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
-              Speech.speak(nightTimeSpeech.schoolAnnouncement3)                
+              speakThenPause(nightTimeSpeech.schoolAnnouncement3)            
             }
           }}>
           <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
@@ -286,6 +286,7 @@ export default function NightTimeScreen({setTime}:Props) {
   async function monomi() {
     if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
       await gameContext.backgroundMusic.unloadAsync()
+      gameContext.backgroundMusic = ''
       await playMusic(true)
       abilityOrItem = 'Protect'
       setContinueButtonText('Continue')
@@ -324,6 +325,7 @@ export default function NightTimeScreen({setTime}:Props) {
     setTimerVisible(false)
     await speakThenPause(nightTimeSpeech.monomi3, 1, async () => {
       await gameContext.backgroundMusic.unloadAsync()
+      gameContext.backgroundMusic = ''
       await playMusic()
       await alterEgo()
     })
@@ -418,6 +420,7 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function morningTime() {
     await gameContext.backgroundMusic.unloadAsync()
+    gameContext.backgroundMusic = ''
     gameContext.dayNumber += 1
     setTime('MorningTimeScreen')
   }

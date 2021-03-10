@@ -9,13 +9,14 @@ victim reveal, playing despair pollution while speech.speak?
 flash Blackened during Traitors stage. grey on grey for normal players. normal style for Traitors
 while speaking, speaker icon is grey
 change speaker icon to speech2text icon
-during discussion, flash screen when countdown ends
+during discussion, flash countdown timer when countdown close to end and after it ends
 separate page for character cards and introduction
 when entering player info, 3 people didn't know to enter their name
 speaker icon to repeat symbol during game
 didn't give item on 3 question during morning (not sure what this means)
-make music quiet after discussion ends
 when to ask for Crystal Skull
 include the "It is night time of day #" on repeats
 when investigating, make player's button disabled like he's disabled
 Volume setting for music and voice (sliders)
+who received the most votes -> click one player -> turns pink -> click another player -> not pink (normal 4 player)
+kevin said monomi click didn't turn pink

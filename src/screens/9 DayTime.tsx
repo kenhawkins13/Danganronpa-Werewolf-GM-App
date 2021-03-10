@@ -22,6 +22,8 @@ let discussionTime:number
 let onContinue = () => {}
 let onPlayerClick = (playerIndex:number) => {}
 let onDiscussionDone = () => {}
+let isMusicPlaying = false
+const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen({setTime}:Props) {
@@ -76,7 +78,7 @@ export default function DayTimeScreen({setTime}:Props) {
                   <CountdownTimer timerKey={timerKey.toString()} duration={discussionTime} onDone={async () => {
                     if (timerVisible) {
                       speech = "Time is up"
-                      Speech.speak(speech)
+                      speakThenPause(speech)
                     }
                   }}/>
                 </View>
@@ -85,6 +87,7 @@ export default function DayTimeScreen({setTime}:Props) {
                     <TouchableHighlight style={{flex:1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
                       onPress={async () => {
                         await gameContext.backgroundMusic.unloadAsync()
+                        gameContext.backgroundMusic = ''
                         setTimerVisible(false)
                         disableContinueButton()
                         onDiscussionDone()
@@ -203,7 +206,7 @@ export default function DayTimeScreen({setTime}:Props) {
           <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
             onPress={async() => {
               if (await Speech.isSpeakingAsync() === false) {
-                Speech.speak(speech)                
+                speakThenPause(speech)
               }
             }}>
             <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
@@ -221,7 +224,7 @@ export default function DayTimeScreen({setTime}:Props) {
           <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
             onPress={async() => {
               if (await Speech.isSpeakingAsync() === false) {
-                Speech.speak(speech)                
+                speakThenPause(speech)
               }
             }}>
             <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
@@ -381,33 +384,35 @@ export default function DayTimeScreen({setTime}:Props) {
     setContinueButtonTextColor(colors.darkGrey)
     setContinueButtonDisabled(true)
   }
-}
 
-async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
-  const callback = async(seconds:number) => {
-    await sleep(seconds * 1000)
-    if (onDone) { onDone() }
+  async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
+    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.02) }
+    const callback = async(seconds:number) => {
+      if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.1) }
+      await sleep(seconds * 1000)
+      if (onDone) { onDone() }
+    }
+    Speech.speak(speech, {onDone: () => {callback(seconds)}})
   }
-  Speech.speak(speech, {onDone: () => {callback(seconds)}})
-}
 
-async function playMusic(gameContext:GameContextType) {
-  let music:any[]
-  if (gameContext.dayNumber === 1 || gameContext.blackenedAttack === -1) {
-    music = daytimeCalmMusic
-  } else if (gameContext.blackenedAttack === -2) {
-    music = daytimeAggressiveMusic
-  } else if (gameContext.tieVoteCount > 0) {
-    music = scrumMusic
-  } else {
-    music = classTrialMusic
+  async function playMusic(gameContext:GameContextType) {
+    let music:any[]
+    if (gameContext.dayNumber === 1 || gameContext.blackenedAttack === -1) {
+      music = daytimeCalmMusic
+    } else if (gameContext.blackenedAttack === -2) {
+      music = daytimeAggressiveMusic
+    } else if (gameContext.tieVoteCount > 0) {
+      music = scrumMusic
+    } else {
+      music = classTrialMusic
+    }
+    const randomNum = Math.floor(Math.random() * music.length)
+    const { sound } = await Audio.Sound.createAsync(music[randomNum], {}, updateMusicStatus)
+    gameContext.backgroundMusic = sound
+    await gameContext.backgroundMusic.setVolumeAsync(.1)
+    await gameContext.backgroundMusic.playAsync()
+    await gameContext.backgroundMusic.setIsLoopingAsync(true)
   }
-  const randomNum = Math.floor(Math.random() * music.length)
-  const { sound } = await Audio.Sound.createAsync(music[randomNum])
-  await sound.setVolumeAsync(.1)
-  await sound.playAsync()
-  await sound.setIsLoopingAsync(true)
-  gameContext.backgroundMusic = sound
 }
 
 type Props = {setTime:React.Dispatch<any>}
