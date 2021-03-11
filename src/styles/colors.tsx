@@ -1,4 +1,5 @@
 export const colors = {
+  invisible: 'rgba(0, 0, 0, 0)',
   black: 'rgb(0, 0, 0)',
   blackTransparent: 'rgba(0, 0, 0, 0.75)',
   blackLessTransparent: 'rgba(0, 0, 0, 0.9)',
