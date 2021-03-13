@@ -9,7 +9,6 @@ victim reveal, playing despair pollution while speech.speak?
 while speaking, speaker icon is grey
 change speaker icon to speech2text icon
 separate page for character cards and introduction
-when entering player info, 3 people didn't know to enter their name
 speaker icon to repeat symbol during game
 "didn't give item" on 3 question during morning (not sure what this means)
 when to ask for Crystal Skull

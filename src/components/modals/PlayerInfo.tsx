@@ -15,18 +15,21 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
       <View style={modalStyles.centeredView}>
         <View style={modalStyles.modalView}>
           <View style={{flexDirection: 'row', alignItems: 'center', margin: 10}}>
-            <Text style={{...modalStyles.modalText, width: 75, margin: 0}}>Name:</Text>
-            <TextInput style={modalStyles.modalTextInput} placeholder={gameContext.playersInfo[playerIndex].name} maxLength={15}
+            <Text style={{...modalStyles.modalText}}>Name:</Text>
+            <TextInput style={{...modalStyles.modalTextInput}} placeholder={gameContext.playersInfo[playerIndex].name} maxLength={15}
               placeholderTextColor={colors.black} onChangeText={(text) => {
                 text = text.trim()
                 gameContext.playersInfo[playerIndex].name=text
               }}/>
           </View>
-          <View style={{borderWidth: 1, borderColor: colors.black, margin: 10}}>
-            <Picker style={{width: 200}} itemStyle={{fontFamily: 'goodbyeDespair'}} dropdownIconColor='#ffffff' 
-            selectedValue={playerRole}  onValueChange={(value) => {setPlayerRole(value.toString())}}>
-              {getPickerItems(gameContext)}
-            </Picker>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{...modalStyles.modalText, textAlignVertical: 'center'}}>Role:</Text>
+            <View style={{borderWidth: 1, borderColor: colors.black, margin: 10}}>
+              <Picker style={{width: 150}} itemStyle={{fontFamily: 'goodbyeDespair'}} dropdownIconColor='#ffffff' 
+              selectedValue={playerRole}  onValueChange={(value) => {setPlayerRole(value.toString())}}>
+                {getPickerItems(gameContext)}
+              </Picker>
+            </View>
           </View>
           <View style={{flexDirection: 'row'}}>
             <TouchableHighlight

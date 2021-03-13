@@ -61,6 +61,7 @@ export const modalStyles = StyleSheet.create({
     fontSize: 16,
     borderColor: colors.black,
     borderBottomWidth: 1,
-    width: 125
+    width: 150,
+    marginHorizontal: 10
   }
 });
