@@ -6,13 +6,12 @@ is winnerdeclaration too slow to reveal after a trial (b/c of all-rise sound and
 Chiaki's new expansion ability can activate on morning Monomi dies. So need to ask for abilities/items during morning after monomi's death
 victim reveal, playing despair pollution while speech.speak?
 
-flash Blackened during Traitors stage. grey on grey for normal players. normal style for Traitors
 while speaking, speaker icon is grey
 change speaker icon to speech2text icon
 separate page for character cards and introduction
 when entering player info, 3 people didn't know to enter their name
 speaker icon to repeat symbol during game
-didn't give item on 3 question during morning (not sure what this means)
+"didn't give item" on 3 question during morning (not sure what this means)
 when to ask for Crystal Skull
 include the "It is night time of day #" on repeats
 when investigating, make player's button disabled like he's disabled

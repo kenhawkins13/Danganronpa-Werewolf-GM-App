@@ -264,8 +264,15 @@ export default function NightTimeScreen({setTime}:Props) {
       await speakThenPause(nightTimeSpeech.traitors1, 1, async () => {
         await speakThenPause(nightTimeSpeech.traitors2, 0, async () => {
           gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.role === 'Traitor') { playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent }
-            if (traitorInPlay && playerInfo.role === 'Blackened') { playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent }
+            if (playerInfo.role === 'Traitor') {
+              playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
+            } else if (traitorInPlay && playerInfo.role === 'Blackened') { 
+              playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent 
+            } else {
+              playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
+              playerInfo.playerButtonStyle.borderColor = colors.greyTransparent
+              playerInfo.playerButtonStyle.textColor = colors.greyTransparent
+            }
           })
           timerDuration = 10
           onTimerDone = async () => await traitorsSleep()

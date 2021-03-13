@@ -10,7 +10,7 @@ export const nightTimeSpeech = {
   schoolAnnouncement5: "It is now nighttime. Everyone go to sleep. The curfew is now in effect.",
   schoolAnnouncement6: "Everyone should now be asleep.",
   traitors1: "Traitors, wake up.",
-  traitors2: "On the screen, the traitors are revealed in grey and the blackened in pink.",
+  traitors2: "The traitors are highlighted in grey and the blackened is highlighted in pink.",
   traitors3: "Traitors, go back to sleep.",
   monomi1: "Moenoemi, wake up.",
   monomi2: "You have the option to protect someone. You have 15 seconds to decide.",
