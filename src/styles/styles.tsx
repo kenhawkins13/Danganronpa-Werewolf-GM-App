@@ -64,4 +64,10 @@ export const modalStyles = StyleSheet.create({
     width: 150,
     marginHorizontal: 10
   }
-});
+})
+
+export const iconStyles = StyleSheet.create({  
+  speaker: {
+    height: 28, width: 28, position:'absolute', right: 0, borderColor: colors.white, borderWidth: 2, padding: 2, borderRadius: 10
+  },
+})

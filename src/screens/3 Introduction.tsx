@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { View, Text, ImageBackground, Image, TouchableHighlight } from 'react-native'
+import { View, Text, ImageBackground, Image } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
@@ -8,6 +8,7 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import { Audio } from 'expo-av'
 import { monokumaMusic } from '../assets/music/music'
 import { GameContext } from '../../AppContext'
+import SpeakerButton from '../components/SpeakerButton'
 
 export default function IntroductionScreen() {
   const gameContext = useContext(GameContext)
@@ -30,16 +31,7 @@ export default function IntroductionScreen() {
               <Text style={{...appStyle.text, textAlign: 'center'}}>
                 -Introduction-
               </Text>
-              <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-                onPress={async() => {
-                  if (await Speech.isSpeakingAsync() === true) {
-                    await Speech.stop()
-                  } else {
-                    Speech.speak(speech1 + ' ' + speech2)
-                  }
-                }}>
-                <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-              </TouchableHighlight>
+              <SpeakerButton speech={speech}/>
             </View>
             <View>
               <Text style={{...appStyle.text}}>
@@ -79,8 +71,8 @@ const body2 = "Now, I'm sure all of you want out of this school as quick as poss
 I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
 academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
 Werewolf for the ultimate students.\n\nHow exciting!"
-const speech1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Moenoekuma!"
-const speech2 = "Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
+const speech = "Ahem students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Moenoekuma! \
+Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
 I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
 academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
 Werewolf for the ultimate students. How exciting!"

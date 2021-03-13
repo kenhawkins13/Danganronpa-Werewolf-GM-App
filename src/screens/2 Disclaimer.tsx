@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, ImageBackground, Image, Linking, TouchableHighlight } from 'react-native'
+import { View, Text, ImageBackground, Image, Linking } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
+import SpeakerButton from '../components/SpeakerButton'
 
 export default function DisclaimerScreen() {
   return (
@@ -17,16 +18,7 @@ export default function DisclaimerScreen() {
               <Text style={{...appStyle.text, textAlign: 'center'}}>
                 -Disclaimer-
               </Text>
-              <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-                onPress={async() => {
-                  if (await Speech.isSpeakingAsync() === true) {
-                    await Speech.stop()
-                  } else {
-                    Speech.speak(speech1 + ' ' + speech2)
-                  }
-                }}>
-                <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-              </TouchableHighlight>
+              <SpeakerButton speech={speech}/>
             </View>
             <View>
               <Text style={appStyle.text}>
@@ -62,7 +54,7 @@ const body1 = 'This app replaces the Monokuma (Gamemaster) role in the Danganron
 card game. So now, all the players can participate in the fun killing game. The cards from the original \
 game are still required to play and they can be found here:'
 const body2 = 'We hope this app allows you to share the Danganronpa experience with your friends. Enjoy!'
-const speech1 = 'This app replaces the Moenoekuma, game master, role in the Dawngawnrownpa 1, 2, Ultimate High School Werewolf \
+const speech = 'This app replaces the Moenoekuma, game master, role in the Dawngawnrownpa 1, 2, Ultimate High School Werewolf \
 card game. So now, all the players can participate in the fun killing game. The cards from the original \
-game are still required to play and can be found here.'
-const speech2 = 'We hope this app allows you to share the Dawngawnrownpa experience with your friends. Enjoy!'
+game are still required to play and can be found here. We hope this app allows you to share the Dawngawnrownpa experience with \
+your friends. Enjoy!'

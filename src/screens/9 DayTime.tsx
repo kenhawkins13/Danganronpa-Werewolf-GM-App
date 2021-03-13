@@ -14,6 +14,7 @@ import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic }
 import { dayTimeSpeech } from '../data/Speeches'
 import PunishmentTimeModal from '../components/modals/PunishmentTime'
 import { sounds } from '../assets/sounds/sounds'
+import { images } from '../assets/images/images'
 
 let speech = ''
 let votedPlayerIndex = -1
@@ -37,6 +38,7 @@ export default function DayTimeScreen({setTime}:Props) {
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
   const [labelClassTrial, setLabelToClassTrial] = useState(false)
+  const [speakerColor, setSpeakerColor] = useState(colors.white)
   const [state, setState] = useState([])
 
   const isFocused = useIsFocused()
@@ -203,13 +205,13 @@ export default function DayTimeScreen({setTime}:Props) {
               Class trial{"\n"}of Day {gameContext.dayNumber}
             </Text>
           </View>
-          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+          <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
             onPress={async() => {
               if (await Speech.isSpeakingAsync() === false) {
                 speakThenPause(speech)
               }
             }}>
-            <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
+            <Image style={{height: 30, width: 30, tintColor: speakerColor}} source={images.replay}/>
           </TouchableHighlight>
         </View>
       )      
@@ -221,13 +223,13 @@ export default function DayTimeScreen({setTime}:Props) {
               Daytime{"\n"}of Day {gameContext.dayNumber}
             </Text>
           </View>
-          <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+          <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
             onPress={async() => {
               if (await Speech.isSpeakingAsync() === false) {
                 speakThenPause(speech)
               }
             }}>
-            <Image style={{height: 28, width: 28}} source={require('../assets/images/Speaker.png')}/>
+            <Image style={{height: 30, width: 30, tintColor: speakerColor}} source={images.replay}/>
           </TouchableHighlight>
         </View>
       )
@@ -386,10 +388,12 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
+    setSpeakerColor(colors.greyTransparent)
     if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.02) }
     const callback = async(seconds:number) => {
       if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.1) }
       await sleep(seconds * 1000)
+      setSpeakerColor(colors.white)
       if (onDone) { onDone() }
     }
     Speech.speak(speech, {onDone: () => {callback(seconds)}})

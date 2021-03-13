@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
-import { View, Text, Image, ImageBackground, TouchableHighlight, } from 'react-native'
+import { View, Text, Image, ImageBackground, } from 'react-native'
 import { GameContext } from '../../AppContext'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
 import { colors } from '../styles/colors'
+import SpeakerButton from '../components/SpeakerButton'
 
 export default function ItemsScreen() {
   const gameContext = useContext(GameContext)
@@ -40,16 +41,7 @@ function getBody(mode:string) {
             <Text style={{...appStyle.text, textAlign: 'center'}}>
               -Items-
             </Text>
-            <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-              onPress={async () => {
-                if (await Speech.isSpeakingAsync() === true) {
-                  await Speech.stop()
-                } else {
-                  Speech.speak(body2)
-                }
-              }}>
-              <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-            </TouchableHighlight>
+            <SpeakerButton speech={body2}/>
           </View>
           <View>
             <Text style={appStyle.text}>
@@ -106,16 +98,7 @@ function getBody(mode:string) {
             <Text style={{...appStyle.text, textAlign: 'center'}}>
               -Items-
             </Text>
-            <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-              onPress={async() => {
-                if (await Speech.isSpeakingAsync() === true) {
-                  await Speech.stop()
-                } else{
-                  Speech.speak(body1)
-                }
-              }}>
-              <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-            </TouchableHighlight>
+            <SpeakerButton speech={body1}/>
           </View>
           <View>
             <Text style={appStyle.text}>

@@ -1,6 +1,6 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Image, ImageBackground, TouchableHighlight } from 'react-native'
+import { View, Text, ImageBackground, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import { GameContextType, RoleCount } from '../types/types'
 import AlertModal from '../components/modals/Alert'
@@ -14,6 +14,7 @@ import * as Speech from 'expo-speech'
 import { micCheckSpeech } from '../data/Speeches'
 import { Audio } from 'expo-av'
 import { sounds } from "../assets/sounds/sounds"
+import SpeakerButton from '../components/SpeakerButton'
 
 export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
@@ -102,16 +103,9 @@ export default function PlayersScreen() {
           </View>
         </View>
         <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
-          <TouchableHighlight style={{height: 28, width: 28, marginLeft: '10%'}}
-            onPress={async() => {
-              if (await Speech.isSpeakingAsync() === true) {
-                await Speech.stop()  
-              } else {
-                Speech.speak(micCheckSpeech)              
-              }
-            }}>
-            <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-          </TouchableHighlight>
+          <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center', marginLeft: '30%'}}>
+            <SpeakerButton speech={micCheckSpeech}/>
+          </View>
         </View>
       </View>
     )

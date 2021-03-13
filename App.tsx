@@ -23,6 +23,7 @@ import MorningTimeScreen from './src/screens/9 MorningTime'
 import DayTimeScreen from './src/screens/9 DayTime'
 import WinnerDeclarationScreen from './src/screens/10 WinnerDeclaration'
 import { sounds } from './src/assets/sounds/sounds'
+import { images } from './src/assets/images/images'
 
 export type RootStackParamList = {
   StartScreen: undefined
@@ -47,9 +48,10 @@ export default function App() {
 
   async function loadAssetsAsync() {
     const assets = [
+      ...Object.values(images),
       ...music,
-      ...videos,
       ...Object.values(sounds),
+      ...videos,
       require('./src/assets/background/Despair-Victory.png'),
       require('./src/assets/background/Ding-Dong-Bing-Bong.jpg'),
       require('./src/assets/background/Hope-Victory.png'),
@@ -59,11 +61,6 @@ export default function App() {
       require('./src/assets/background/Trial-Room.png'),
       require('./src/assets/background/Ultimate-Despair-Victory.png'),
       require('./src/assets/fonts/goodbyeDespair.ttf'),
-      require('./src/assets/images/Green-Check.png'),
-      require('./src/assets/images/Monokuma.png'),
-      require('./src/assets/images/Red-X.png'),
-      require('./src/assets/images/Speaker.png'),
-      require('./src/assets/images/Table.png'),
       require('./src/assets/ItemCards/Alter-Ball.png'),
       require('./src/assets/ItemCards/Reverse.jpg'),
       require('./src/assets/RoleCards/Alter-Ego.png'),

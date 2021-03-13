@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { View, Text, ImageBackground, Image, TouchableHighlight } from 'react-native'
+import { View, Text, ImageBackground, Image } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import RoleCards from '../components/RoleCards'
 import { GameContextType } from '../types/types'
@@ -11,11 +11,13 @@ import * as Speech from 'expo-speech'
 import { Audio } from 'expo-av'
 import { daytimeCalmMusic } from '../assets/music/music'
 import { colors } from '../styles/colors'
+import SpeakerButton from '../components/SpeakerButton'
 
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 
 export default function RolesScreen() {
+  const gameContext = useContext(GameContext)
   
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
@@ -23,7 +25,6 @@ export default function RolesScreen() {
     if (!isMusicPlaying) { playMusic() }    
   }}, [isFocused])
 
-  const gameContext = useContext(GameContext)
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1, padding: '2.5%'}} source={require('../assets/background/Setup.png')}>
@@ -37,16 +38,7 @@ export default function RolesScreen() {
                 <Text style={{...appStyle.text, textAlign: 'center'}}>
                   -Characters and Roles-
                 </Text>
-                <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-                  onPress={async() => {
-                    if (await Speech.isSpeakingAsync() === true) {
-                      await Speech.stop()
-                    } else {
-                      Speech.speak(speech1(gameContext.mode))
-                    }
-                  }}>
-                  <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-                </TouchableHighlight>
+                <SpeakerButton speech={speech(gameContext.mode)}/>
               </View>
               <View>
                 <Text style={{...appStyle.text}}>
@@ -239,7 +231,7 @@ const body1 = (gameMode:string) => `Prepare one character card for each player t
 gender, ultimate title, ${(extraText(gameMode))} and quotes.
 
 Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
-const speech1 = (gameMode:string) => `Prepare one character card for each player then have everyone introduce their character's name, gender, ultimate title, \
+const speech = (gameMode:string) => `Prepare one character card for each player then have everyone introduce their character's name, gender, ultimate title, \
 ${(extraText(gameMode))} and quotes. Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
 
 const extraText = (Mode:string) => {

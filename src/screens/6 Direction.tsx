@@ -1,11 +1,12 @@
 import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect } from 'react'
-import { View, Text, ImageBackground, Image, TouchableHighlight } from 'react-native'
+import { View, Text, ImageBackground, Image } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import { appStyle } from '../styles/styles'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import * as Speech from 'expo-speech'
+import SpeakerButton from '../components/SpeakerButton'
 
 export default function DirectionScreen() {
     const isFocused = useIsFocused()
@@ -25,16 +26,7 @@ export default function DirectionScreen() {
               <Text style={{...appStyle.text, textAlign: 'center'}}>
                 -Setup-
               </Text>
-              <TouchableHighlight style={{height: 28, width: 28, position:'absolute', right: 0}} 
-                onPress={async() => {
-                  if (await Speech.isSpeakingAsync() === true) {
-                    await Speech.stop()
-                  } else {
-                    Speech.speak(speech)
-                  }
-                }}>
-                <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
-              </TouchableHighlight>
+              <SpeakerButton speech={speech}/>
             </View>
             <View style={{flex:1}}>
               <Text style={{...appStyle.text}}>

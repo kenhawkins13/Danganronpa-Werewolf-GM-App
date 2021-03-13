@@ -12,6 +12,7 @@ import { appStyle } from '../styles/styles'
 import { PlayerInfo } from '../types/types'
 import { Audio } from 'expo-av'
 import { sounds } from '../assets/sounds/sounds'
+import { images } from '../assets/images/images'
 
 let speech = ''
 let victim:PlayerInfo
@@ -28,6 +29,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   const [continueButtonColor, setContinueButtonColor] = useState(colors.greyTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.darkGrey)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
+  const [speakerColor, setSpeakerColor] = useState(colors.white)
   const [state, setState] = useState([])
 
   const isFocused = useIsFocused()
@@ -110,13 +112,13 @@ export default function MorningTimeScreen({setTime}:Props) {
             Morning{"\n"}of Day {gameContext.dayNumber}
           </Text>
         </View>
-        <TouchableHighlight style={{height: 28, width: 28, position:'absolute', left: '35%'}}
+        <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
               speakThenPause(speech)
             }
           }}>
-          <Image style={{height: 28, width: 28,}} source={require('../assets/images/Speaker.png')}/>
+          <Image style={{height: 30, width: 30, tintColor: speakerColor}} source={images.replay}/>
         </TouchableHighlight>
       </View>
     )
@@ -335,14 +337,16 @@ export default function MorningTimeScreen({setTime}:Props) {
     setContinueButtonTextColor(colors.white)
     setContinueButtonDisabled(false)
   }
-}
 
-async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
-  const callback = async(seconds:number) => {
-    await sleep(seconds * 1000)
-    if (onDone) { onDone() }
+  async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
+    setSpeakerColor(colors.greyTransparent)
+    const callback = async(seconds:number) => {
+      await sleep(seconds * 1000)
+      setSpeakerColor(colors.white)
+      if (onDone) { onDone() }
+    }
+    Speech.speak(speech, {onDone: () => { callback(seconds) }})
   }
-  Speech.speak(speech, {onDone: () => {callback(seconds)}})
 }
 
 type Props = {setTime:React.Dispatch<any>}
