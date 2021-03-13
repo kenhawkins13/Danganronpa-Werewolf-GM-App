@@ -12,6 +12,7 @@ import { Audio } from 'expo-av'
 import { daytimeCalmMusic } from '../assets/music/music'
 import { colors } from '../styles/colors'
 import SpeakerButton from '../components/SpeakerButton'
+import { backgrounds } from '../assets/backgrounds/backgrounds'
 
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
@@ -27,7 +28,7 @@ export default function RolesScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground style={{flex: 1, padding: '2.5%'}} source={require('../assets/background/Setup.png')}>
+      <ImageBackground style={{flex: 1, padding: '2.5%'}} source={backgrounds.main}>
         <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
           <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={require('../assets/images/Monokuma.png')}/>
         </View>

@@ -15,6 +15,7 @@ import { micCheckSpeech } from '../data/Speeches'
 import { Audio } from 'expo-av'
 import { sounds } from "../assets/sounds/sounds"
 import SpeakerButton from '../components/SpeakerButton'
+import { backgrounds } from '../assets/backgrounds/backgrounds'
 
 export default function PlayersScreen() {
   const gameContext = useContext(GameContext)
@@ -44,7 +45,7 @@ export default function PlayersScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground style={{flex: 1}} source={require('../assets/background/Setup.png')}>
+      <ImageBackground style={{flex: 1}} source={backgrounds.main}>
         <View style={{ flex: 1 }}>
           <PlayersPage visible={rotationComplete} middleSection={PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
             setPlayerIndex(playerIndex)

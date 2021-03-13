@@ -8,6 +8,7 @@ import RevealRoleModal from "../components/modals/RevealRole"
 import { Audio } from 'expo-av'
 import { endMusic } from "../assets/music/music"
 import { useNavigation } from "@react-navigation/native"
+import { backgrounds } from "../assets/backgrounds/backgrounds"
 
 export default function WinnerDeclarationScreen() {
   const gameContext = useContext(GameContext)
@@ -76,7 +77,7 @@ export default function WinnerDeclarationScreen() {
     return (
       <View style={{flex: 1}}>
         <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} resizeMode='cover'
-          source={require('../assets/background/Setup.png')}>
+          source={backgrounds.main}>
           <PlayersPage visible={true} middleSection={RestartButton()} onPlayerClick={(playerIndex) => {
             setPlayerIndex(playerIndex)
             setRevealRoleModalVisible(true)
@@ -92,7 +93,7 @@ export default function WinnerDeclarationScreen() {
     setTimeout(() => { setWinnerBannerVisible(true) }, 10000)
     if (gameContext.winnerSide === 'Hope') {
       return (
-        <ImageBackground style={{flex: 1}} source={require('../assets/background/Hope-Victory.png')}>
+        <ImageBackground style={{flex: 1}} source={backgrounds.hopeVictory}>
           <TouchableHighlight style={{flex: 1}} onPress={() => setWinnerBannerVisible(true)}>
             <View style={{flex: 1}}/>
           </TouchableHighlight>
@@ -100,7 +101,7 @@ export default function WinnerDeclarationScreen() {
       )
     } else if (gameContext.winnerSide === 'Despair') {
       return (
-        <ImageBackground style={{flex: 1}} source={require('../assets/background/Despair-Victory.png')}>
+        <ImageBackground style={{flex: 1}} source={backgrounds.despairVictory}>
           <TouchableHighlight style={{flex: 1}} onPress={() => setWinnerBannerVisible(true)}>
             <View style={{flex: 1}}/>
           </TouchableHighlight>
@@ -108,7 +109,7 @@ export default function WinnerDeclarationScreen() {
       )
     } else if (gameContext.winnerSide === 'Ultimate Despair') {
       return (
-        <ImageBackground style={{flex: 1}} source={require('../assets/background/Ultimate-Despair-Victory.png')}>
+        <ImageBackground style={{flex: 1}} source={backgrounds.ultimateDespairVictory}>
           <TouchableHighlight style={{flex: 1}} onPress={() => setWinnerBannerVisible(true)}>
             <View style={{flex: 1}}/>
           </TouchableHighlight>

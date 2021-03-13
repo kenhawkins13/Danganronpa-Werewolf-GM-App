@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ImageBackground, View } from "react-native";
+import { backgrounds } from "../assets/backgrounds/backgrounds";
 import DayTimeScreen from "./9 DayTime";
 import MorningTimeScreen from "./9 MorningTime";
 import NightTimeScreen from "./9 NightTime";
@@ -10,7 +11,7 @@ export default function GameScreen() {
   return (
     <View style={{flex: 1}}>
       <ImageBackground style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }} resizeMode='cover'
-        source={require('../assets/background/Setup.png')}>
+        source={backgrounds.main}>
         {Screen()}
       </ImageBackground>
     </View>

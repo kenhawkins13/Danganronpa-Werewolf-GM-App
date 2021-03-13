@@ -13,6 +13,7 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { startMusic } from '../assets/music/music';
 import { sounds } from '../assets/sounds/sounds'
+import { backgrounds } from '../assets/backgrounds/backgrounds'
 
 export default function StartScreen () {
   const gameContext = useContext(GameContext)
@@ -33,7 +34,7 @@ export default function StartScreen () {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground style={{ width: '100%', height: '100%' }} source={require('../assets/background/Start.png')}>
+      <ImageBackground style={{ width: '100%', height: '100%' }} source={backgrounds.start}>
         <View style={{ flex: 4}}/>
         <View style={{ flex: 6, alignItems: 'center', justifyContent: 'space-evenly'}}>
           <View>

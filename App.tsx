@@ -24,6 +24,7 @@ import DayTimeScreen from './src/screens/9 DayTime'
 import WinnerDeclarationScreen from './src/screens/10 WinnerDeclaration'
 import { sounds } from './src/assets/sounds/sounds'
 import { images } from './src/assets/images/images'
+import { backgrounds } from './src/assets/backgrounds/backgrounds'
 
 export type RootStackParamList = {
   StartScreen: undefined
@@ -48,18 +49,11 @@ export default function App() {
 
   async function loadAssetsAsync() {
     const assets = [
+      ...Object.values(backgrounds),
       ...Object.values(images),
       ...music,
       ...Object.values(sounds),
       ...videos,
-      require('./src/assets/background/Despair-Victory.png'),
-      require('./src/assets/background/Ding-Dong-Bing-Bong.jpg'),
-      require('./src/assets/background/Hope-Victory.png'),
-      require('./src/assets/background/School-Announcement.png'),
-      require('./src/assets/background/Setup.png'),
-      require('./src/assets/background/Start.png'),
-      require('./src/assets/background/Trial-Room.png'),
-      require('./src/assets/background/Ultimate-Despair-Victory.png'),
       require('./src/assets/fonts/goodbyeDespair.ttf'),
       require('./src/assets/ItemCards/Alter-Ball.png'),
       require('./src/assets/ItemCards/Reverse.jpg'),

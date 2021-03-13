@@ -9,6 +9,7 @@ import { Audio } from 'expo-av'
 import { monokumaMusic } from '../assets/music/music'
 import { GameContext } from '../../AppContext'
 import SpeakerButton from '../components/SpeakerButton'
+import { backgrounds } from '../assets/backgrounds/backgrounds'
 
 export default function IntroductionScreen() {
   const gameContext = useContext(GameContext)
@@ -21,7 +22,7 @@ export default function IntroductionScreen() {
   
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground style={{flex: 1, padding: '2.5%'}} source={require('../assets/background/Setup.png')}>
+      <ImageBackground style={{flex: 1, padding: '2.5%'}} source={backgrounds.main}>
         <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
           <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={require('../assets/images/Monokuma.png')}/>
         </View>
