@@ -258,24 +258,22 @@ export default function NightTimeScreen({setTime}:Props) {
   async function traitors() {
     if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
       const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
-      gameContext.playersInfo.forEach(playerInfo => {
-        playerInfo.playerButtonStyle.textColor = colors.white
-        playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
-      })
       setContinueButtonText('Continue')
       await speakThenPause(nightTimeSpeech.traitors1, 1, async () => {
+        gameContext.playersInfo.forEach(playerInfo => {
+          if (playerInfo.role === 'Traitor') {
+            playerInfo.playerButtonStyle.textColor = colors.white
+            playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
+          } else if (traitorInPlay && playerInfo.role === 'Blackened') { 
+            playerInfo.playerButtonStyle.textColor = colors.white
+            playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent 
+          } else {
+            playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
+            playerInfo.playerButtonStyle.borderColor = colors.greyTransparent
+            playerInfo.playerButtonStyle.textColor = colors.greyTransparent
+          }
+        })
         await speakThenPause(nightTimeSpeech.traitors2, 0, async () => {
-          gameContext.playersInfo.forEach(playerInfo => {
-            if (playerInfo.role === 'Traitor') {
-              playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
-            } else if (traitorInPlay && playerInfo.role === 'Blackened') { 
-              playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent 
-            } else {
-              playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
-              playerInfo.playerButtonStyle.borderColor = colors.greyTransparent
-              playerInfo.playerButtonStyle.textColor = colors.greyTransparent
-            }
-          })
           timerDuration = 10
           onTimerDone = async () => await traitorsSleep()
           setTimerVisible(true)

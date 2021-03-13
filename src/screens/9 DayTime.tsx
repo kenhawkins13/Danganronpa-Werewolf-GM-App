@@ -314,6 +314,7 @@ export default function DayTimeScreen({setTime}:Props) {
       })
       votedPlayerIndex = playerIndex
       enableContinueButton()
+      setState([]) // re-render screen
     }
     speech = dayTimeSpeech().vote1
     await speakThenPause(speech, 2, async () => {
