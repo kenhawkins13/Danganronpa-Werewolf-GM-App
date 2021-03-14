@@ -1,50 +1,38 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, ImageBackground, Image } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
 import RoleCards from '../components/RoleCards'
 import { GameContextType } from '../types/types'
 import { appStyle } from '../styles/styles'
 import { GameContext } from '../../AppContext'
-import { useIsFocused } from '@react-navigation/native'
-import * as ScreenOrientation from 'expo-screen-orientation'
 import * as Speech from 'expo-speech'
-import { Audio } from 'expo-av'
-import { daytimeCalmMusic } from '../assets/music/music'
 import { colors } from '../styles/colors'
 import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
-
-let isMusicPlaying = false
-const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
+import { images } from '../assets/images/images'
 
 export default function RolesScreen() {
   const gameContext = useContext(GameContext)
-  
-  const isFocused = useIsFocused()
-  useEffect(() => { if (isFocused) {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-    if (!isMusicPlaying) { playMusic() }    
-  }}, [isFocused])
 
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1, padding: '2.5%'}} source={backgrounds.main}>
         <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
-          <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={require('../assets/images/Monokuma.png')}/>
+          <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={images.monokuma}/>
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
             <View>
               <View style={{height: 28, justifyContent: 'center'}}>
                 <Text style={{...appStyle.text, textAlign: 'center'}}>
-                  -Characters and Roles-
+                  -Roles-
                 </Text>
                 <SpeakerButton speech={speech(gameContext.mode)}/>
               </View>
               <View>
                 <Text style={{...appStyle.text}}>
                   {"\n"}
-                  {body1(gameContext.mode)}
+                  {body(gameContext.mode)}
                 </Text>
               </View>
             </View>
@@ -58,9 +46,7 @@ export default function RolesScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='IntroductionScreen' nextPage='ItemsScreen'onPrevious={() => {
-            isMusicPlaying = false
-            gameContext.backgroundMusic.unloadAsync()
+          <NavigationBar previousPage='CharactersScreen' nextPage='ItemsScreen'onPrevious={() => {
             Speech.stop()
             return true
           }} onNext={() => {
@@ -71,18 +57,6 @@ export default function RolesScreen() {
       </ImageBackground>
     </View>
   )
-  
-  async function playMusic() {
-    const randomNum = Math.floor(Math.random() * 5)
-    const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum], {}, updateMusicStatus)
-    gameContext.backgroundMusic = sound
-    await gameContext.backgroundMusic.setVolumeAsync(.1)
-    await gameContext.backgroundMusic.playAsync()
-    await gameContext.backgroundMusic.setIsLoopingAsync(false)
-    gameContext.backgroundMusic.setOnPlaybackStatusUpdate(async (playbackStatus:any) => {
-      if (playbackStatus.didJustFinish) { await playMusic() }
-    })
-  }
 }
 
 function DisplayNormalRoles(gameContext:GameContextType) {
@@ -92,7 +66,7 @@ function DisplayNormalRoles(gameContext:GameContextType) {
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
         <View style={{flex: 1}}/>
           <View style={{flex: 2}}>
-            <View style={{flex: 3, width: '100%'}}>
+            <View style={{flex: 3, marginHorizontal: '5%'}}>
               <RoleCards key={normalRoles[0].roles[0]} role={normalRoles[0].roles[0]} />
             </View>
             <View style={{flex: 1}}>
@@ -100,7 +74,7 @@ function DisplayNormalRoles(gameContext:GameContextType) {
             </View>
           </View>
           <View style={{flex: 2}}>
-            <View style={{flex: 3, width: '100%'}}>
+            <View style={{flex: 3, marginHorizontal: '5%'}}>
               <RoleCards key={normalRoles[1].roles[0]} role={normalRoles[1].roles[0]} />
             </View>
             <View style={{flex: 1}}>
@@ -108,7 +82,7 @@ function DisplayNormalRoles(gameContext:GameContextType) {
             </View>
           </View>
           <View style={{flex: 2}}>
-            <View style={{flex: 3, width: '100%'}}>
+            <View style={{flex: 3, marginHorizontal: '5%'}}>
               <RoleCards key={normalRoles[2].roles[0]} role={normalRoles[2].roles[0]} />
             </View>
             <View style={{flex: 1}}>
@@ -122,31 +96,31 @@ function DisplayNormalRoles(gameContext:GameContextType) {
     return (
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', marginVertical: '2.5%'}}>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, width: '100%'}}>
-            <RoleCards key={normalRoles[0].roles[0]} role={normalRoles[0].roles[0]} />
+          <View style={{flex: 3, marginHorizontal: '5%'}}>
+            <RoleCards key={normalRoles[0].roles[0]} role={normalRoles[0].roles[0]}/>
           </View>
           <View style={{flex: 1}}>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>{normalRoles[0].count}X</Text>
           </View>
         </View>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, width: '100%'}}>
-            <RoleCards key={normalRoles[1].roles[0]} role={normalRoles[1].roles[0]} />
+          <View style={{flex: 3, marginHorizontal: '5%'}}>
+            <RoleCards key={normalRoles[1].roles[0]} role={normalRoles[1].roles[0]}/>
           </View>
           <View style={{flex: 1}}>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>{normalRoles[1].count}X</Text>
           </View>
         </View>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, width: '100%'}}>
-            <RoleCards key={normalRoles[2].roles[0]} role={normalRoles[2].roles[0]} />
+          <View style={{flex: 3, marginHorizontal: '5%'}}>
+            <RoleCards key={normalRoles[2].roles[0]} role={normalRoles[2].roles[0]}/>
           </View>
           <View style={{flex: 1}}>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>{normalRoles[2].count}X</Text>
           </View>
         </View>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, width: '100%'}}>
+          <View style={{flex: 3, marginHorizontal: '5%'}}>
             <RoleCards key={normalRoles[3].roles[0]} role={normalRoles[3].roles[0]}/>
           </View>
           <View style={{flex: 1}}>
@@ -164,61 +138,55 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
     if (specialRoles.roles.length === 2) {
       return (
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{flex: 1}}/>
-            <View style={{flex: 1, justifyContent: 'center', height: '100%'}}>
-              <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>
-            </View>
-            <View style={{flex: 1}}>
-              <RoleCards key={specialRoles.roles[1]} role={specialRoles.roles[1]}/>
-            </View>
-            <View style={{flex: 1}}/>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 1, justifyContent: 'center', height: '100%'}}>
+            <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
           </View>
+          <View style={{flex: 1, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>
+          </View>
+          <View style={{flex: 1, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[1]} role={specialRoles.roles[1]}/>
+          </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     } else if (specialRoles.roles.length === 3) {
       return (
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{flex: 1}}/>
-            <View style={{flex: 2, justifyContent: 'center', height: '100%'}}>
-              <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
-            </View>
-            <View style={{flex: 2}}>
-              <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>
-            </View>
-            <View style={{flex: 2}}>
-              <RoleCards key={specialRoles.roles[1]} role={specialRoles.roles[1]}/>
-            </View>
-            <View style={{flex: 2}}>
-              <RoleCards key={specialRoles.roles[2]} role={specialRoles.roles[2]}/>
-            </View>
-            <View style={{flex: 1}}/>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 2, justifyContent: 'center', height: '100%'}}>
+            <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {specialRoles.count}</Text>
           </View>
+          <View style={{flex: 2, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>
+          </View>
+          <View style={{flex: 2, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[1]} role={specialRoles.roles[1]}/>
+          </View>
+          <View style={{flex: 2, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[2]} role={specialRoles.roles[2]}/>
+          </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     } else if (specialRoles.roles.length === 4) {
       return (
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{flex: 1, justifyContent: 'center', height: '100%'}}>
-              <Text style={{...appStyle.text, textAlign: 'center'}}>Draw {specialRoles.count}</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>
-            </View>
-            <View style={{flex: 1}}>
-              <RoleCards key={specialRoles.roles[1]} role={specialRoles.roles[1]}/>
-            </View>
-            <View style={{flex: 1}}>
-              <RoleCards key={specialRoles.roles[2]} role={specialRoles.roles[2]}/>
-            </View>
-            <View style={{flex: 1}}>
-              <RoleCards key={specialRoles.roles[3]} role={specialRoles.roles[3]}/>
-            </View>
+          <View style={{flex: 1, justifyContent: 'center', height: '100%'}}>
+            <Text style={{...appStyle.text, textAlign: 'center'}}>Draw {specialRoles.count}</Text>
+          </View>
+          <View style={{flex: 1, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[0]} role={specialRoles.roles[0]}/>
+          </View>
+          <View style={{flex: 1, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[1]} role={specialRoles.roles[1]}/>
+          </View>
+          <View style={{flex: 1, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[2]} role={specialRoles.roles[2]}/>
+          </View>
+          <View style={{flex: 1, marginHorizontal: '1%'}}>
+            <RoleCards key={specialRoles.roles[3]} role={specialRoles.roles[3]}/>
           </View>
         </View>
       )
@@ -228,17 +196,5 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
   }
 }
   
-const body1 = (gameMode:string) => `Prepare one character card for each player then have everyone introduce their character's name, \
-gender, ultimate title, ${(extraText(gameMode))} and quotes.
-
-Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
-const speech = (gameMode:string) => `Prepare one character card for each player then have everyone introduce their character's name, gender, ultimate title, \
-${(extraText(gameMode))} and quotes. Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
-
-const extraText = (Mode:string) => {
-  if (Mode === 'normal') {
-    return ''
-  } else if (Mode === 'extreme') {
-    return ' character ability,'
-  }
-}
+const body = (gameMode:string) => `Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
+const speech = (gameMode:string) => `Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`

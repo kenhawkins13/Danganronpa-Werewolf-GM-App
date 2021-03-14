@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { ImageBackground, View } from "react-native";
 import { backgrounds } from "../assets/backgrounds/backgrounds";
-import DayTimeScreen from "./9 DayTime";
-import MorningTimeScreen from "./9 MorningTime";
-import NightTimeScreen from "./9 NightTime";
+import DayTimeScreen from "./10 DayTime";
+import MorningTimeScreen from "./10 MorningTime";
+import NightTimeScreen from "./10 NightTime";
 
 export default function GameScreen() {
   const [screen, setScreen] = useState('NightTimeScreen')

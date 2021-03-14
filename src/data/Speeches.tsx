@@ -32,11 +32,13 @@ export const nightTimeSpeech = {
 }
 
 export const goodMorningSpeech = (dayNumber:number) => {
-  const days = ["zeroth", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight", "ninth"]
-  if (dayNumber < 10) {
+  const days = ["zeroth", "first", "second", "third", "fourth"]
+  if (dayNumber === 1) {
     return "Good morning, everyone! It is the morning of the " + days[dayNumber] + " day. Get ready to greet another beee-yutiful day"
+  } else if (dayNumber < 5) {
+    return "Good morning, everyone! It is the morning of the " + days[dayNumber] + " day."
   } else {
-    return "Good morning, everyone! What day is it today? I lost count. Does it mattter anyways? Get ready to greet another beee-yutiful day"
+    return "Good morning, everyone! What day is it today? I lost count. Does it mattter anyways?"
   }
 }
 
@@ -47,6 +49,7 @@ export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) =
     monomi2: "Yes, " + name2 + " exploded and died to protect " + name1 + ".",
     monomi3: "Good riddance, I hated Moenoemi anyways.",
     monomi4: "Of course not. Moenoemi is as useless as she is ugly.",
+    monomi5: "Nope.",
     victim1: name1 + ", discard one Item card.",
     victim2: name1 + ", would you like to use an ability or item to prevent your death?",
     playersAbilities: "Would anybody like to use an ability to protect " + name1 + "?",
@@ -63,14 +66,15 @@ export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) =
 
 export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
   return {
-    daySpeech1: "It is the day time. A body has been discovered! Now then, after a certain amount of time has passed, \
+    daySpeech1: "It is the day time.",
+    daySpeech2: "It is the day time. A body has been discovered! Now then, after a certain amount of time has passed, \
       the class trial will begin!",
-    daySpeech2: "It is the day time.",
     abilityOrItem: "Would anybody like to use an ability or item?",
     discussion: " minute discussion starts now.",
     abilityOrItemTrial: "Would anybody like to use an ability or item before voting?",
-    trial: "Up next is the voting segment where each player points to who they think is the Blackened. \
+    trial1: "Up next is the voting segment where each player points to who they think is the Blackened. \
       Click Continue when everyone is ready to vote.",
+    trial2: "Click Continue when everyone is ready to vote.",
     vote1: "Three. Two. One. Vote!",
     vote2: "Who received the most votes?",
     tie1: "Looks like we're gonna need another class trial between just the tied players",

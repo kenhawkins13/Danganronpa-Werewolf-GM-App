@@ -10,6 +10,7 @@ import { monokumaMusic } from '../assets/music/music'
 import { GameContext } from '../../AppContext'
 import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
+import { images } from '../assets/images/images'
 
 export default function IntroductionScreen() {
   const gameContext = useContext(GameContext)
@@ -24,7 +25,7 @@ export default function IntroductionScreen() {
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1, padding: '2.5%'}} source={backgrounds.main}>
         <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
-          <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={require('../assets/images/Monokuma.png')}/>
+          <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={images.monokuma}/>
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
@@ -45,7 +46,7 @@ export default function IntroductionScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='DisclaimerScreen' nextPage='RolesScreen' onPrevious={() => {
+          <NavigationBar previousPage='DisclaimerScreen' nextPage='CharactersScreen' onPrevious={() => {
             gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
             return true

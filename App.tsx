@@ -12,24 +12,30 @@ import { videos } from './src/assets/videos/videos'
 import StartScreen from './src/screens/1 Start'
 import DisclaimerScreen from './src/screens/2 Disclaimer'
 import IntroductionScreen from './src/screens/3 Introduction'
-import RolesScreen from './src/screens/4 Roles'
-import ItemsScreen from './src/screens/5 Items'
-import DirectionScreen from './src/screens/6 Direction'
-import PlayersScreen from './src/screens/7 Players'
-import SchoolAnnouncementScreen from './src/screens/8 SchoolAnnouncement'
-import GameScreen from './src/screens/9 GameScreen'
-import NightTimeScreen from './src/screens/9 NightTime'
-import MorningTimeScreen from './src/screens/9 MorningTime'
-import DayTimeScreen from './src/screens/9 DayTime'
-import WinnerDeclarationScreen from './src/screens/10 WinnerDeclaration'
+import RolesScreen from './src/screens/5 Roles'
+import ItemsScreen from './src/screens/6 Items'
+import DirectionScreen from './src/screens/7 Direction'
+import PlayersScreen from './src/screens/8 Players'
+import SchoolAnnouncementScreen from './src/screens/9 SchoolAnnouncement'
+import GameScreen from './src/screens/10 GameScreen'
+import NightTimeScreen from './src/screens/10 NightTime'
+import MorningTimeScreen from './src/screens/10 MorningTime'
+import DayTimeScreen from './src/screens/10 DayTime'
+import WinnerDeclarationScreen from './src/screens/11 WinnerDeclaration'
 import { sounds } from './src/assets/sounds/sounds'
 import { images } from './src/assets/images/images'
 import { backgrounds } from './src/assets/backgrounds/backgrounds'
+import { characters } from './src/assets/CharacterCards/characters'
+import { items } from './src/assets/ItemCards/items'
+import { roles } from './src/assets/RoleCards/roles'
+import { fonts } from './src/assets/fonts/fonts'
+import CharactersScreen from './src/screens/4 Characters'
 
 export type RootStackParamList = {
   StartScreen: undefined
   DisclaimerScreen: undefined
   IntroductionScreen: undefined
+  CharactersScreen: undefined
   RolesScreen: undefined
   ItemsScreen: undefined
   DirectionScreen: undefined
@@ -50,23 +56,17 @@ export default function App() {
   async function loadAssetsAsync() {
     const assets = [
       ...Object.values(backgrounds),
+      ...Object.values(characters),
+      ...Object.values(fonts),
       ...Object.values(images),
+      ...Object.values(items),
       ...music,
+      ...Object.values(roles),
       ...Object.values(sounds),
-      ...videos,
-      require('./src/assets/fonts/goodbyeDespair.ttf'),
-      require('./src/assets/ItemCards/Alter-Ball.png'),
-      require('./src/assets/ItemCards/Reverse.jpg'),
-      require('./src/assets/RoleCards/Alter-Ego.png'),
-      require('./src/assets/RoleCards/Blackened.png'),
-      require('./src/assets/RoleCards/Despair-Disease-Patient.png'),
-      require('./src/assets/RoleCards/Monomi.png'),
-      require('./src/assets/RoleCards/Spotless.png'),
-      require('./src/assets/RoleCards/Traitor.png'),
-      require('./src/assets/RoleCards/Ultimate-Despair.png'),
+      ...videos
     ]
     const cachedImages = assets.map(asset => { Asset.fromModule(asset).downloadAsync() })
-    const cachedFonts = [Font.loadAsync({goodbyeDespair: require('./src/assets/fonts/goodbyeDespair.ttf')})]
+    const cachedFonts = [Font.loadAsync({goodbyeDespair: fonts.goodbyeDespair})]
 
     return await Promise.all([...cachedImages, ...cachedFonts]) as unknown as void
   }
@@ -104,6 +104,7 @@ export default function App() {
               <RootStack.Screen name="StartScreen" component={StartScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="DisclaimerScreen" component={DisclaimerScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="IntroductionScreen" component={IntroductionScreen} options={{ headerShown: false }}/>
+              <RootStack.Screen name="CharactersScreen" component={CharactersScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="RolesScreen" component={RolesScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="ItemsScreen" component={ItemsScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="DirectionScreen" component={DirectionScreen} options={{ headerShown: false }}/>

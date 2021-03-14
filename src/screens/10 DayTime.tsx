@@ -15,6 +15,7 @@ import { dayTimeSpeech } from '../data/Speeches'
 import PunishmentTimeModal from '../components/modals/PunishmentTime'
 import { sounds } from '../assets/sounds/sounds'
 import { images } from '../assets/images/images'
+import { requiredKills } from '../data/Table'
 
 let speech = ''
 let votedPlayerIndex = -1
@@ -23,6 +24,7 @@ let discussionTime:number
 let onContinue = () => {}
 let onPlayerClick = (playerIndex:number) => {}
 let onDiscussionDone = () => {}
+let onTie = () => {}
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
@@ -117,41 +119,14 @@ export default function DayTimeScreen({setTime}:Props) {
             <View style={{flex: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
               <View style={{...appStyle.frame, height: '62.5%', width: '25%'}}>
                 <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-                  onPress={async () => {
-                    votedPlayerIndex = -1
-                    gameContext.tieVoteCount += 1
-                    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
-                    setVotingTime(false)
-                    disableContinueButton()
-                    let onSpeechDone = async () => {
-                      discussionTime = 60
-                      await discussion()
-                    }
-                    if (gameContext.tieVoteCount === 1) {
-                      speech = dayTimeSpeech().tie1
-                      await speakThenPause(speech, 1, onSpeechDone)
-                    } else if (gameContext.tieVoteCount === 2) {
-                      speech = dayTimeSpeech().tie2
-                      await speakThenPause(speech, 1, onSpeechDone)
-                    } else if (gameContext.tieVoteCount === 3) {
-                      speech = dayTimeSpeech().tie3
-                      onSpeechDone = async () => {
-                        gameContext.winnerSide = 'Despair'
-                        navigate('WinnerDeclarationScreen')
-                      }
-                      await speakThenPause(speech, 0, onSpeechDone)
-                    }
-                    }}>
+                  onPress={async () => { onTie() }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10}}>Tie</Text>
                 </TouchableHighlight>
               </View>
               <View style={{...appStyle.frame, height: '62.5%', width: '25%', backgroundColor: continueButtonColor}}>
                 <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
                   disabled={continueButtonDisabled} underlayColor={continueButtonColor} onPress={async () => {
-                    gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
-                    setVotingTime(false)
-                    disableContinueButton()
-                    await execution()
+                    onContinue()
                   }}>
                   <Text style={{...appStyle.text, textAlign: 'center', margin: 10, color: continueButtonTextColor}}>Select</Text>
                 </TouchableHighlight>
@@ -165,7 +140,7 @@ export default function DayTimeScreen({setTime}:Props) {
       const onVideoDone = async () => {
         await speakThenPause(dayTimeSpeech(votedPlayer).execution2, 1, () => {
           setVideoVisible(false)
-          declareWinner()
+          trialResult()
         })
       }
       return (
@@ -245,7 +220,7 @@ export default function DayTimeScreen({setTime}:Props) {
       onSpeechDone = async () => await discussion()
     }
     if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
-      speech = dayTimeSpeech().daySpeech1
+      speech = gameContext.killsLeft === requiredKills(gameContext.playerCount) - 1 ? dayTimeSpeech().daySpeech2 : dayTimeSpeech().daySpeech1
       const { sound } = await Audio.Sound.createAsync(sounds.dingDongBingBong2, {}, async (playbackStatus:any) => {
         if (playbackStatus.didJustFinish) {
           await sound.unloadAsync()
@@ -255,7 +230,7 @@ export default function DayTimeScreen({setTime}:Props) {
       await sound.setVolumeAsync(.1)
       await sound.playAsync()
     } else {
-      speech = dayTimeSpeech().daySpeech2
+      speech = dayTimeSpeech().daySpeech1
       await speakThenPause(speech, 1, onSpeechDone)
     }
   }
@@ -292,15 +267,56 @@ export default function DayTimeScreen({setTime}:Props) {
 
   async function trial() {
     onContinue = async () => await vote()
-    speech = dayTimeSpeech().trial
+    if (gameContext.killsLeft === requiredKills(gameContext.playerCount) - 1 && gameContext.tieVoteCount === 0) {
+      speech = dayTimeSpeech().trial1
+    } else {
+      speech = dayTimeSpeech().trial2
+    }
     await speakThenPause(speech, 0, enableContinueButton)
   }
 
   async function vote() {
     onContinue = async () => {
+      gameContext.tieVoteCount = 0
+      votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
       gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
       disableContinueButton()
-      await execution()
+      setVotingTime(false)
+      if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
+        await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration2, 0, () => {
+          gameContext.winnerSide = 'Ultimate Despair'
+          navigate('WinnerDeclarationScreen')
+        })
+      } else if (gameContext.killsLeft === 0 && requiredKills(gameContext.playerCount) > 1) {
+        await trialResult()
+      } else {
+        await execution()
+      }
+    }
+    onTie = async () => {
+      votedPlayerIndex = -1
+      gameContext.tieVoteCount += 1
+      gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
+      setVotingTime(false)
+      disableContinueButton()
+      let onSpeechDone = async () => {
+        discussionTime = 60
+        await discussion()
+      }
+      if (gameContext.tieVoteCount === 1) {
+        speech = dayTimeSpeech().tie1
+        await speakThenPause(speech, 1, onSpeechDone)
+      } else if (gameContext.tieVoteCount === 2) {
+        speech = dayTimeSpeech().tie2
+        await speakThenPause(speech, 1, onSpeechDone)
+      } else if (gameContext.tieVoteCount === 3) {
+        speech = dayTimeSpeech().tie3
+        onSpeechDone = async () => {
+          gameContext.winnerSide = 'Despair'
+          navigate('WinnerDeclarationScreen')
+        }
+        await speakThenPause(speech, 0, onSpeechDone)
+      }
     }
     onPlayerClick = (playerIndex) => {
       gameContext.playersInfo.forEach(playerInfo => {
@@ -328,9 +344,7 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function execution() {
-    gameContext.tieVoteCount = 0
     gameContext.playersInfo[votedPlayerIndex].alive = false
-    votedPlayer = gameContext.playersInfo[votedPlayerIndex].name
     if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
       gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
     }
@@ -345,15 +359,10 @@ export default function DayTimeScreen({setTime}:Props) {
     await sound.playAsync()
   }
 
-  async function declareWinner() {
+  async function trialResult() {
     if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
       await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration1, 0, () => {
         gameContext.winnerSide = 'Hope'
-        navigate('WinnerDeclarationScreen')
-      })
-    } else if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
-      await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration2, 0, () => {
-        gameContext.winnerSide = 'Ultimate Despair'
         navigate('WinnerDeclarationScreen')
       })
     } else if (gameContext.killsLeft === 0) {

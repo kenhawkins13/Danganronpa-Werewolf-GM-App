@@ -71,3 +71,11 @@ export const iconStyles = StyleSheet.create({
     height: 28, width: 28, position:'absolute', right: 0, borderColor: colors.white, borderWidth: 2, padding: 2, borderRadius: 10
   },
 })
+
+
+
+export const imageStyles = StyleSheet.create({
+  cards: {
+    flex: 1, resizeMode: 'contain', alignSelf: 'center', maxWidth: '100%'
+  }
+})

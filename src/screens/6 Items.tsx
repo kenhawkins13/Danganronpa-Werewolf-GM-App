@@ -7,6 +7,8 @@ import * as Speech from 'expo-speech'
 import { colors } from '../styles/colors'
 import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
+import { items } from '../assets/ItemCards/items'
+import { images } from '../assets/images/images'
 
 export default function ItemsScreen() {
   const gameContext = useContext(GameContext)
@@ -14,7 +16,7 @@ export default function ItemsScreen() {
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1, padding: '2.5%'}} source={backgrounds.main}>
         <View style={{flex: 2, alignItems: 'center', justifyContent: 'flex-end'}}>
-          <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={require('../assets/images/Monokuma.png')}/>
+          <Image style={{flex: 1, resizeMode: 'contain', marginTop: '10%'}} source={images.monokuma}/>
         </View>
         <View style={{ flex: 8 }}>
           {getBody(gameContext.mode)}
@@ -55,33 +57,33 @@ function getBody(mode:string) {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <View style={{flex: 1, margin: '5%'}}>
-              <Image style={{flex: 1, resizeMode: 'contain', alignSelf: 'center'}} source={require('../assets/images/Green-Check.png')}/>
+              <Image style={{flex: 1, resizeMode: 'contain', alignSelf: 'center'}} source={images.greenCheck}/>
             </View>
             <View style={{flex: 3}}>
               <Text style={{...appStyle.text, alignSelf: 'center', margin: '1%'}}>Redraw 2</Text>
               <View style={{flex: 1, flexDirection: 'row', margin: '5%'}}>
-                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={require('../assets/ItemCards/Alter-Ball.png')}/>
-                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={require('../assets/ItemCards/Alter-Ball.png')}/>
+                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={items.alterBall}/>
+                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={items.alterBall}/>
               </View>
             </View>
             <View style={{flex: 3}}>
             <Text style={{...appStyle.text, alignSelf: 'center', margin: '1%'}}>Redraw None</Text>
               <View style={{flex: 1, flexDirection: 'row', margin: '5%'}}>
-                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={require('../assets/ItemCards/Reverse.jpg')}/>
-                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={require('../assets/ItemCards/Reverse.jpg')}/>
+                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={items.reverse}/>
+                <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={items.reverse}/>
               </View>
             </View>
           </View>
           <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
               <View style={{flex: 1, margin: '5%'}}>
-                <Image style={{flex: 1, resizeMode: 'contain', alignSelf: 'center'}} source={require('../assets/images/Red-X.png')}/>
+                <Image style={{flex: 1, resizeMode: 'contain', alignSelf: 'center'}} source={images.redX}/>
               </View>
               <View style={{flex: 3}}>
                 <Text style={{...appStyle.text, alignSelf: 'center', margin: '1%'}}>Redraw 1</Text>
                 <View style={{flex: 1, flexDirection: 'row', margin: '5%'}}>
-                  <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={require('../assets/ItemCards/Alter-Ball.png')}/>
-                  <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={require('../assets/ItemCards/Reverse.jpg')}/>
+                  <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={items.alterBall}/>
+                  <Image style={{ flex: 1, resizeMode: 'contain', height: '100%', alignSelf: 'center' }} source={items.reverse}/>
                 </View>
               </View>
               <View style={{flex: 3}}>

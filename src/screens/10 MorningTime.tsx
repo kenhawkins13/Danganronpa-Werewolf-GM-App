@@ -5,7 +5,7 @@ import { Image, View, Text, TouchableHighlight } from 'react-native'
 import { GameContext } from '../../AppContext'
 import PlayersPage from '../components/PlayersPage'
 import { goodMorningSpeech, morningTimeSpeech } from '../data/Speeches'
-import { roleInPlay } from '../data/Table'
+import { requiredKills, roleInPlay } from '../data/Table'
 import { colors } from '../styles/colors'
 import { disablePlayerButton } from '../styles/playerButtonStyles'
 import { appStyle } from '../styles/styles'
@@ -173,7 +173,7 @@ export default function MorningTimeScreen({setTime}:Props) {
             await speakThenPause(speech, 1, async () => { await dayTime() })
           })
         } else {          
-          speech = morningTimeSpeech().monomi4
+          speech = gameContext.dayNumber === 2 ? morningTimeSpeech().monomi4 : morningTimeSpeech().monomi5
           onSpeechDone = async () => await victimActions1()
           await speakThenPause(speech, 1, onSpeechDone)
         }
