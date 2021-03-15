@@ -39,19 +39,17 @@ function getBody(mode:string) {
   if (mode === 'extreme') {
     return (
       <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
+        <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
+          <SpeakerButton speech={body2}/>
+        </View>
         <View>
-          <View style={{height: 28, justifyContent: 'center'}}>
-            <Text style={{...appStyle.text, textAlign: 'center'}}>
-              -Items-
-            </Text>
-            <SpeakerButton speech={body2}/>
-          </View>
-          <View>
-            <Text style={appStyle.text}>
-              {"\n"}
-              {body2}
-            </Text>
-          </View>
+          <Text style={{...appStyle.text, textAlign: 'center'}}>
+            -Items-
+          </Text>
+          <Text style={appStyle.text}>
+            {"\n"}
+            {body2}
+          </Text>
         </View>
         <View style={{borderBottomColor: colors.white, borderBottomWidth: 2, marginVertical: 10}}/>
         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -96,19 +94,17 @@ function getBody(mode:string) {
   } else {
     return (
       <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
+        <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
+          <SpeakerButton speech={body1}/>
+        </View>
         <View>
-          <View style={{height: 28, justifyContent: 'center'}}>
-            <Text style={{...appStyle.text, textAlign: 'center'}}>
-              -Items-
-            </Text>
-            <SpeakerButton speech={body1}/>
-          </View>
-          <View>
-            <Text style={appStyle.text}>
-              {"\n"}
-              {body1}
-            </Text>
-          </View>
+          <Text style={{...appStyle.text, textAlign: 'center'}}>
+            -Items-
+          </Text>
+          <Text style={appStyle.text}>
+            {"\n"}
+            {body1}
+          </Text>
         </View>
       </View>
     )

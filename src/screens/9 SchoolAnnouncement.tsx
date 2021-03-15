@@ -1,18 +1,20 @@
 import { Video } from "expo-av"
-import React from "react"
+import React, { useContext } from "react"
 import { View } from "react-native"
 import { nightTimeSpeech } from "../data/Speeches"
 import * as Speech from 'expo-speech'
 import { useNavigation } from "@react-navigation/native"
 import { videos } from "../assets/videos/videos"
+import { GameContext } from "../../AppContext"
 
 export default function SchoolAnnouncementScreen() {
+  const gameContext = useContext(GameContext)
   const { navigate } = useNavigation<any>()
 
   return (
     <View style={{flex: 1}}>
       <Video source={videos[0]} shouldPlay={true} resizeMode="cover"
-        style={{width: '100%', height: '100%'}} volume={0.1} onPlaybackStatusUpdate={async (playbackStatus:any) => {
+        style={{width: '100%', height: '100%'}} volume={gameContext.musicVolume} onPlaybackStatusUpdate={async (playbackStatus:any) => {
           if (playbackStatus.didJustFinish) {
             await speakThenPause(nightTimeSpeech.schoolAnnouncement1, 3, async () => {
               await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, () => {

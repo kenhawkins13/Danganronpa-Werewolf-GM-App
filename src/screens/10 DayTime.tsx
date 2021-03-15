@@ -227,7 +227,7 @@ export default function DayTimeScreen({setTime}:Props) {
           await speakThenPause(speech, 1, onSpeechDone)
         }
       })
-      await sound.setVolumeAsync(.1)
+      await sound.setVolumeAsync(gameContext.musicVolume)
       await sound.playAsync()
     } else {
       speech = dayTimeSpeech().daySpeech1
@@ -355,7 +355,7 @@ export default function DayTimeScreen({setTime}:Props) {
         await speakThenPause(speech, 1, () => setVideoVisible(true))
       }
     })
-    await sound.setVolumeAsync(.1)
+    await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
   }
 
@@ -399,9 +399,9 @@ export default function DayTimeScreen({setTime}:Props) {
 
   async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
     setSpeakerColor(colors.greyTransparent)
-    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.02) }
+    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume / 5) }
     const callback = async(seconds:number) => {
-      if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.1) }
+      if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume) }
       await sleep(seconds * 1000)
       setSpeakerColor(colors.white)
       if (onDone) { onDone() }
@@ -423,7 +423,7 @@ export default function DayTimeScreen({setTime}:Props) {
     const randomNum = Math.floor(Math.random() * music.length)
     const { sound } = await Audio.Sound.createAsync(music[randomNum], {}, updateMusicStatus)
     gameContext.backgroundMusic = sound
-    await gameContext.backgroundMusic.setVolumeAsync(.1)
+    await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume)
     await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setIsLoopingAsync(true)
   }

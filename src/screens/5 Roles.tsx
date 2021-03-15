@@ -22,19 +22,17 @@ export default function RolesScreen() {
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
+            <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
+              <SpeakerButton speech={speech}/>
+            </View>
             <View>
-              <View style={{height: 28, justifyContent: 'center'}}>
-                <Text style={{...appStyle.text, textAlign: 'center'}}>
-                  -Roles-
-                </Text>
-                <SpeakerButton speech={speech(gameContext.mode)}/>
-              </View>
-              <View>
-                <Text style={{...appStyle.text}}>
-                  {"\n"}
-                  {body(gameContext.mode)}
-                </Text>
-              </View>
+              <Text style={{...appStyle.text, textAlign: 'center'}}>
+                -Roles-
+              </Text>
+              <Text style={{...appStyle.text}}>
+                {"\n"}
+                {body}
+              </Text>
             </View>
             <View style={{borderBottomColor: colors.white, borderBottomWidth: 2, marginVertical: 10}}/>
             <View style={{flex: 4}}>
@@ -196,5 +194,5 @@ function DisplaySpecialRoles(gameContext:GameContextType) {
   }
 }
   
-const body = (gameMode:string) => `Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
-const speech = (gameMode:string) => `Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
+const body = `Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`
+const speech = `Shuffle the role cards shown in the chart below and secretly distribute one role card to each player.`

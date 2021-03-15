@@ -286,7 +286,7 @@ export default function MorningTimeScreen({setTime}:Props) {
         await onSoundDone()
       }
     })
-    await sound.setVolumeAsync(.1)
+    await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
     if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
       gameContext.alterEgoAlive = false

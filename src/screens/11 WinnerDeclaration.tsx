@@ -139,7 +139,7 @@ export default function WinnerDeclarationScreen() {
   async function playMusic() {
     const randomNum = Math.floor(Math.random() * endMusic.length)
     const { sound } = await Audio.Sound.createAsync(endMusic[randomNum])
-    await sound.setVolumeAsync(.1)
+    await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
     await sound.setIsLoopingAsync(true)
     gameContext.backgroundMusic = sound

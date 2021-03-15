@@ -34,19 +34,17 @@ export default function CharactersScreen() {
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
+            <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
+              <SpeakerButton speech={speech(gameContext.mode)}/>
+            </View>
             <View>
-              <View style={{height: 28, justifyContent: 'center'}}>
-                <Text style={{...appStyle.text, textAlign: 'center'}}>
-                  -Characters-
-                </Text>
-                <SpeakerButton speech={speech(gameContext.mode)}/>
-              </View>
-              <View>
-                <Text style={{...appStyle.text}}>
-                  {"\n"}
-                  {body(gameContext.mode)}
-                </Text>
-              </View>
+              <Text style={{...appStyle.text, textAlign: 'center'}}>
+                -Characters-
+              </Text>
+              <Text style={{...appStyle.text}}>
+                {"\n"}
+                {body(gameContext.mode)}
+              </Text>
             </View>
             <View style={{borderBottomColor: colors.white, borderBottomWidth: 2, marginVertical: 10}}/>
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
@@ -81,7 +79,7 @@ export default function CharactersScreen() {
     const randomNum = Math.floor(Math.random() * 5)
     const { sound } = await Audio.Sound.createAsync(daytimeCalmMusic[randomNum], {}, updateMusicStatus)
     gameContext.backgroundMusic = sound
-    await gameContext.backgroundMusic.setVolumeAsync(.1)
+    await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume)
     await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setIsLoopingAsync(false)
     gameContext.backgroundMusic.setOnPlaybackStatusUpdate(async (playbackStatus:any) => {

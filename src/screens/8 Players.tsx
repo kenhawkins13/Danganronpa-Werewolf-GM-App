@@ -60,53 +60,44 @@ export default function PlayersScreen() {
 
   function PlayersPageMiddleSection() {
     return (
-      <View style={{flex: 1, flexDirection: 'row'}}>
-        <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
-          <View style={{...appStyle.frame, height: '25%', width: '75%'}}>
-            <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}
-              onPress={async () => {
-                const { sound } = await Audio.Sound.createAsync(sounds.previousOption, {}, async (playbackStatus:any) => {
-                  if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
-                })
-                await sound.setVolumeAsync(.1)
-                await sound.playAsync()
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent })
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent })
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = colors.white })
-                setRotationComplete(false)
-                navigate('DirectionScreen')
-              }}> 
-              <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <View style={{...appStyle.frame, height: '25%', width: '75%', backgroundColor: startButtonColor}}>
-            <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-              disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={async () => {
-              await Speech.stop()
-              gameContext.playersInfo.forEach(playerInfo => {
-                playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
-                playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
-                playerInfo.playerButtonStyle.borderColor = colors.white
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
+        <View style={{...appStyle.frame, height: '25%', width: '25%'}}>
+          <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}
+            onPress={async () => {
+              const { sound } = await Audio.Sound.createAsync(sounds.previousOption, {}, async (playbackStatus:any) => {
+                if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
               })
-              if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
-                gameContext.backgroundMusic.unloadAsync()
-                navigate('SchoolAnnouncementScreen')
-              } else {
-                gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
-                setAlertModalVisible(true)
-              }
-            }}>
-              <Text adjustsFontSizeToFit={true} style={{...appStyle.text, color: startButtonTextColor, margin: '2.5%'}}>START</Text>
-            </TouchableHighlight>
-          </View>
+              await sound.setVolumeAsync(gameContext.musicVolume)
+              await sound.playAsync()
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent })
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = colors.white })
+              setRotationComplete(false)
+              navigate('DirectionScreen')
+            }}> 
+            <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
+          </TouchableHighlight>
         </View>
-        <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
-          <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center', marginLeft: '30%'}}>
-            <SpeakerButton speech={micCheckSpeech}/>
-          </View>
+        <View style={{...appStyle.frame, height: '25%', width: '25%', backgroundColor: startButtonColor}}>
+          <TouchableHighlight style={{height: '100%', width: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+            disabled={startButtonDisabled} underlayColor={startButtonColor} activeOpacity={1} onPress={async () => {
+            await Speech.stop()
+            gameContext.playersInfo.forEach(playerInfo => {
+              playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+              playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
+              playerInfo.playerButtonStyle.borderColor = colors.white
+            })
+            if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
+              gameContext.backgroundMusic.unloadAsync()
+              navigate('SchoolAnnouncementScreen')
+            } else {
+              gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })
+              setAlertModalVisible(true)
+            }
+          }}>
+            <Text adjustsFontSizeToFit={true} style={{...appStyle.text, color: startButtonTextColor, margin: '2.5%'}}>START</Text>
+          </TouchableHighlight>
         </View>
       </View>
     )

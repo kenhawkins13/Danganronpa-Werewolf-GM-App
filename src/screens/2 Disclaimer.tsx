@@ -16,26 +16,24 @@ export default function DisclaimerScreen() {
         </View>
         <View style={{flex: 8}}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
-          <View style={{height: 28, justifyContent: 'center'}}>
-              <Text style={{...appStyle.text, textAlign: 'center'}}>
-                -Disclaimer-
-              </Text>
+            <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
               <SpeakerButton speech={speech}/>
             </View>
-            <View>
-              <Text style={appStyle.text}>
-                {"\n"}
-                {body1}
-                {"\n"}
-              </Text>
-              <Text style={{...appStyle.text, color: 'lightblue'}} onPress={() => Linking.openURL('https://boardgamegeek.com/filepage/193245/translated-cards-print-play')}>
-                https://boardgamegeek.com/filepage/193245/translated-cards-print-play
-              </Text>
-              <Text style={appStyle.text}>
-                {"\n"}
-                {body2} 
-              </Text>
-            </View>
+            <Text style={{...appStyle.text, alignSelf: 'center'}}>
+              -Disclaimer-
+            </Text>
+            <Text style={appStyle.text}>
+              {"\n"}
+              {body1}
+              {"\n"}
+            </Text>
+            <Text style={{...appStyle.text, color: 'lightblue'}} onPress={() => Linking.openURL('https://boardgamegeek.com/filepage/193245/translated-cards-print-play')}>
+              https://boardgamegeek.com/filepage/193245/translated-cards-print-play
+            </Text>
+            <Text style={appStyle.text}>
+              {"\n"}
+              {body2} 
+            </Text>
           </View>
         </View>
         <View style={{ flex: 1 }}>

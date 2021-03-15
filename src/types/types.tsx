@@ -24,5 +24,6 @@ export type GameContextType = {
   vicePlayed:boolean,
   tieVoteCount:number,
   winnerSide:string,
-  backgroundMusic:any
+  backgroundMusic:any,
+  musicVolume:number
 }

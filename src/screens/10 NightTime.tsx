@@ -16,6 +16,7 @@ import { enablePlayerButton, disablePlayerButton } from '../styles/playerButtonS
 import { monomiMusic, nighttimeMusic } from '../assets/music/music'
 import { images } from '../assets/images/images'
 
+const NIGHTTIME_VOLUME_ADJUST = 3
 let abilityOrItem = ''
 let timerDuration = 0
 let previousPlayerIndex = -1
@@ -440,9 +441,9 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
     setSpeakerColor(colors.greyTransparent)
-    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(.1) }
+    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST / 5) }
     const callback = async(seconds:number) => {
-      if (gameContext.backgroundMusic && isMusicPlaying) {  await gameContext.backgroundMusic.setVolumeAsync(.5) }
+      if (gameContext.backgroundMusic && isMusicPlaying) {  await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST) }
       await sleep(seconds * 1000)
       setSpeakerColor(colors.white)
       if (onDone) { onDone() }
@@ -460,7 +461,7 @@ export default function NightTimeScreen({setTime}:Props) {
     }
     const { sound } = await Audio.Sound.createAsync(music, {}, updateMusicStatus)
     gameContext.backgroundMusic = sound
-    await gameContext.backgroundMusic.setVolumeAsync(.5)
+    await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST)
     await gameContext.backgroundMusic.playAsync()
     await gameContext.backgroundMusic.setIsLoopingAsync(true)
   }

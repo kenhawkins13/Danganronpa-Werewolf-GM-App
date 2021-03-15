@@ -1,22 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, ImageBackground, TouchableHighlight, BackHandler } from 'react-native'
+import { Text, View, Image, ImageBackground, TouchableHighlight, BackHandler, StyleSheet } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import SwitchSelector from 'react-native-switch-selector'
 import Slider from '@react-native-community/slider'
 import { appStyle } from '../styles/styles'
-import { calculateRoles, requiredKills } from '../data/Table'
-import { GameContextType } from '../types/types'
 import { GameContext } from '../../AppContext'
 import { Audio } from 'expo-av'
 import { colors } from '../styles/colors'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
-import { startMusic } from '../assets/music/music';
 import { sounds } from '../assets/sounds/sounds'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
+import { images } from '../assets/images/images'
+import { startMusic } from '../assets/music/music'
+import { GameContextType } from '../types/types'
+import { calculateRoles, requiredKills } from '../data/Table'
+import VolumeModal from '../components/modals/Volume'
 
 export default function StartScreen () {
   const gameContext = useContext(GameContext)
+  const [volumeModalVisible, setVolumeModalVisible] = useState(false)
   const [gameMode, setGameMode] = useState(0)
   const [playerCount, setPlayerCount] = useState(4)
   const { navigate } = useNavigation<any>()
@@ -35,9 +38,15 @@ export default function StartScreen () {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={{ width: '100%', height: '100%' }} source={backgrounds.start}>
-        <View style={{ flex: 4}}/>
-        <View style={{ flex: 6, alignItems: 'center', justifyContent: 'space-evenly'}}>
-          <View>
+        <View style={{ flex: 3}}/>
+        <View style={{ flex: 7, alignItems: 'center', justifyContent: 'space-evenly'}}>
+          <View style={{flex: 2, width: '75%', justifyContent: 'center'}}>
+            <TouchableHighlight style={{height: 45, width: 45, borderWidth: 2, borderColor: colors.white, borderRadius: 10, alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center'}} 
+            onPress={() => setVolumeModalVisible(true)}>
+              <Image source={images.volume} style={{height: 45, width: 45}}/>
+            </TouchableHighlight>
+          </View>
+          <View style={{flex: 2}}>
             <Text style={appStyle.text}>  Mode:</Text>
             <View style={{...appStyle.frame, width: 300, height: 50}}>
               <SwitchSelector
@@ -64,7 +73,7 @@ export default function StartScreen () {
               />
             </View>
           </View>
-          <View>
+          <View style={{flex: 2}}>
             <Text style={appStyle.text}>  Players: {playerCount}</Text>
             <View style={{...appStyle.frame, width: 300, height: 50}}>
               <Slider
@@ -83,16 +92,17 @@ export default function StartScreen () {
               />
             </View>
           </View>
-          <View>
+          <View style={{flex: 2}}>
             <Text> </Text>
             <View style={{...appStyle.frame, width: 300, height: 50}}>
               <TouchableHighlight style={styles.startGameButton} onPress={async() => {
                 const { sound } = await Audio.Sound.createAsync(sounds.revolver, {}, async (playbackStatus:any) => {
                   if (playbackStatus.didJustFinish) { await sound.unloadAsync() }
                 })
-                await sound.setVolumeAsync(.1)
+                await sound.setVolumeAsync(gameContext.musicVolume)
                 await sound.playAsync()
                 await stopMusic(gameContext.backgroundMusic)
+                gameContext.backgroundMusic = ''
                 fillContextInfo(gameContext)
                 navigate('DisclaimerScreen')
                 }}>
@@ -103,12 +113,13 @@ export default function StartScreen () {
         </View>
         <View style={{ flex: 1}}/>
       </ImageBackground>
+      <VolumeModal visible={volumeModalVisible} setVisible={setVolumeModalVisible} sound={gameContext.backgroundMusic}/>
     </View>
   )
 
   async function playMusic() {
     const { sound } = await Audio.Sound.createAsync(startMusic[0])
-    await sound.setVolumeAsync(.25)
+    await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
     gameContext.backgroundMusic = sound
   }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StatusBar, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { GameContext } from './AppContext'
+import { GameContext, MUSIC_VOLUME_DEFAULT } from './AppContext'
 import AppLoading from 'expo-app-loading'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
@@ -97,7 +97,8 @@ export default function App() {
           vicePlayed: false,
           tieVoteCount: 0,
           winnerSide: '',
-          backgroundMusic: ''
+          backgroundMusic: '',
+          musicVolume: MUSIC_VOLUME_DEFAULT
           }}>
           <NavigationContainer>
             <RootStack.Navigator>

@@ -6,4 +6,5 @@ export const images = {
   replay: require('./Replay.png'),
   speaker: require('./Speaker.png'),
   table: require('./Table.png'),
+  volume: require('./Volume.png')
 }

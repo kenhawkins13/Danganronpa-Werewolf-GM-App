@@ -29,20 +29,18 @@ export default function IntroductionScreen() {
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
-            <View style={{height: 28, justifyContent: 'center'}}>
-              <Text style={{...appStyle.text, textAlign: 'center'}}>
-                -Introduction-
-              </Text>
+            <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
               <SpeakerButton speech={speech}/>
             </View>
-            <View>
-              <Text style={{...appStyle.text}}>
-                {"\n"}
-                {body1}
-                {"\n\n"}
-                {body2}
-              </Text>
-            </View>
+            <Text style={{...appStyle.text, textAlign: 'center'}}>
+              -Introduction-
+            </Text>
+            <Text style={{...appStyle.text}}>
+              {"\n"}
+              {body1}
+              {"\n\n"}
+              {body2}
+            </Text>
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -62,7 +60,7 @@ export default function IntroductionScreen() {
 
   async function playMusic() {
     const { sound } = await Audio.Sound.createAsync(monokumaMusic[0])
-    await sound.setVolumeAsync(.1)
+    await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
     gameContext.backgroundMusic = sound
   }

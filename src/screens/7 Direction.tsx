@@ -24,23 +24,21 @@ export default function DirectionScreen() {
         </View>
         <View style={{ flex: 8 }}>
           <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
-            <View style={{height: 28, justifyContent: 'center'}}>
-              <Text style={{...appStyle.text, textAlign: 'center'}}>
-                -Setup-
-              </Text>
+            <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
               <SpeakerButton speech={speech}/>
             </View>
-            <View style={{flex:1}}>
-              <Text style={{...appStyle.text}}>
-                {"\n"}
-                {body1}
+            <Text style={{...appStyle.text, textAlign: 'center'}}>
+              -Setup-
+            </Text>
+            <Text style={{...appStyle.text}}>
+              {"\n"}
+              {body1}
+            </Text>
+            <Image source={images.table} 
+              style={{flex: 1, resizeMode: 'contain', alignSelf: 'center', margin: '5%'}}/>
+            <Text style={{...appStyle.text}}>
+              {body2}
               </Text>
-              <Image source={images.table} 
-                style={{flex: 1, resizeMode: 'contain', alignSelf: 'center', margin: '5%'}}/>
-              <Text style={{...appStyle.text}}>
-                {body2}
-              </Text>
-            </View>
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -59,8 +57,6 @@ export default function DirectionScreen() {
 
 const body1 = "Place your phone in the center of the play area like so:"
 const body2 = "On the next page, have each player click on the slot corresponding to their seating position and enter \
-their name and role.\n\nAdditionaly, use the speaker icon to test out the volume so that everyone can hear the instructions clearly.\
-\n\nDon't forget to turn off your phone's screen timeout."
+their name and role.\n\nDon't forget to turn off your phone's screen timeout."
 const speech = "Place your phone in the center of the play area like so. On the next page, have each player click on the slot \
-corresponding to their seating position and enter their name and role. Additionaly, use the speaker icon to test out the volume \
-so that everyone can hear the instructions clearly. Don't forget to turn off your phone's screen timeout."
+corresponding to their seating position and enter their name and role. Don't forget to turn off your phone's screen timeout."
