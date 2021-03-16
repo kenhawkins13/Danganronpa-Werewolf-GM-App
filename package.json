@@ -31,7 +31,8 @@
     "react-native-switch-selector": "^2.0.6",
     "react-native-web": "~0.13.12",
     "expo-asset": "~8.2.0",
-    "expo-font": "~8.3.0"
+    "expo-font": "~8.3.0",
+    "expo-keep-awake": "~8.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

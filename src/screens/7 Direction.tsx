@@ -57,6 +57,6 @@ export default function DirectionScreen() {
 
 const body1 = "Place your phone in the center of the play area like so:"
 const body2 = "On the next page, have each player click on the slot corresponding to their seating position and enter \
-their name and role.\n\nDon't forget to turn off your phone's screen timeout."
+their name and role. Do not swap seating positions as this will affect later gameplay."
 const speech = "Place your phone in the center of the play area like so. On the next page, have each player click on the slot \
-corresponding to their seating position and enter their name and role. Don't forget to turn off your phone's screen timeout."
+corresponding to their seating position and enter their name and role.  Do not swap seating positions as this will affect later game play."

@@ -8,6 +8,7 @@ import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
 import { music } from './src/assets/music/music'
 import { videos } from './src/assets/videos/videos'
+import { useKeepAwake } from 'expo-keep-awake'
 
 import StartScreen from './src/screens/1 Start'
 import DisclaimerScreen from './src/screens/2 Disclaimer'
@@ -52,6 +53,8 @@ const RootStack = createStackNavigator<RootStackParamList>()
 
 export default function App() {
   const [isReady, setIsReady] = useState(false)
+
+  useKeepAwake()
 
   async function loadAssetsAsync() {
     const assets = [
