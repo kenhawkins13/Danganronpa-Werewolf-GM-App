@@ -131,7 +131,7 @@ export default function NightTimeScreen({setTime}:Props) {
         <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
-              speakThenPause(nightTimeSpeech.schoolAnnouncement3)            
+              speakThenPause(nightTimeSpeech().schoolAnnouncement3)            
             }
           }}>
           <Image style={{height: 30, width: 30, tintColor: speakerColor}} source={images.replay}/>
@@ -156,12 +156,12 @@ export default function NightTimeScreen({setTime}:Props) {
       onContinue = async () => {
         setNightTimeLabelVisible(false)
         await playMusic()
-        await speakThenPause(nightTimeSpeech.schoolAnnouncement4, 3, async () => {
-          await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, async () => { await abilitiesOrItems() })
+        await speakThenPause(nightTimeSpeech().schoolAnnouncement4, 3, async () => {
+          await speakThenPause(nightTimeSpeech().schoolAnnouncement6, 3, async () => { await abilitiesOrItems() })
         })
       }
-      await speakThenPause(nightTimeSpeech.schoolAnnouncement2, 1, async () => {
-        await speakThenPause(nightTimeSpeech.schoolAnnouncement3, 0, () => {
+      await speakThenPause(nightTimeSpeech().schoolAnnouncement2, 1, async () => {
+        await speakThenPause(nightTimeSpeech().schoolAnnouncement3, 0, () => {
           gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
           setContinueButtonColor(colors.blackTransparent)
           setContinueButtonTextColor(colors.white)
@@ -171,8 +171,8 @@ export default function NightTimeScreen({setTime}:Props) {
     } else {
       setNightTimeLabelVisible(false)
       await playMusic()
-      await speakThenPause(nightTimeSpeech.schoolAnnouncement5, 3, async () => {
-        await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, async () => {
+      await speakThenPause(nightTimeSpeech().schoolAnnouncement5, 3, async () => {
+        await speakThenPause(nightTimeSpeech().schoolAnnouncement6, 3, async () => {
           await alterEgo()
         })
       })
@@ -222,23 +222,23 @@ export default function NightTimeScreen({setTime}:Props) {
     if (gameContext.playersInfo[playerIndex].useAbility === "Kyoko Kirigiri") {
       abilityOrItem = "Kyoko Kirigiri"
       gameContext.playersInfo[playerIndex].useAbility = ''
-      speech2 = nightTimeSpeech.kyokoKirigiri
+      speech2 = nightTimeSpeech().kyokoKirigiri
     } else if (gameContext.playersInfo[playerIndex].useAbility === "Yasuhiro Hagakure") {
       abilityOrItem = "Yasuhiro Hagakure"
       gameContext.playersInfo[playerIndex].useAbility = ''
-      speech2 = gameContext.playerCount < 7 ? nightTimeSpeech.yasuhiroHagakure1 : nightTimeSpeech.yasuhiroHagakure2
+      speech2 = gameContext.playerCount < 7 ? nightTimeSpeech().yasuhiroHagakure1 : nightTimeSpeech().yasuhiroHagakure2
     } else if (gameContext.playersInfo[playerIndex].useItem === 'Glasses') {
       abilityOrItem = 'Glasses'
       gameContext.playersInfo[playerIndex].useItem = ''
-      speech2 = nightTimeSpeech.glasses
+      speech2 = nightTimeSpeech().glasses
     } else if (gameContext.playersInfo[playerIndex].useItem === "Someone's Graduation Album") {
       abilityOrItem = "Someone's Graduation Album"
       gameContext.playersInfo[playerIndex].useItem = ''
-      speech2 = nightTimeSpeech.someonesGraduationAlbum
+      speech2 = nightTimeSpeech().someonesGraduationAlbum
     } else if (gameContext.playersInfo[playerIndex].useItem === 'Silent Receiver') {
       abilityOrItem = 'Silent Receiver'
       gameContext.playersInfo[playerIndex].useItem = ''
-      speech2 = nightTimeSpeech.silentReceiver
+      speech2 = nightTimeSpeech().silentReceiver
     }
     await speakThenPause(speech1, 1, async () => {
       await speakThenPause(speech2, 0, () => {
@@ -260,7 +260,7 @@ export default function NightTimeScreen({setTime}:Props) {
     if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
       const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
       setContinueButtonText('Continue')
-      await speakThenPause(nightTimeSpeech.traitors1, 1, async () => {
+      await speakThenPause(nightTimeSpeech().traitors1, 1, async () => {
         gameContext.playersInfo.forEach(playerInfo => {
           if (playerInfo.role === 'Traitor') {
             playerInfo.playerButtonStyle.textColor = colors.white
@@ -274,7 +274,7 @@ export default function NightTimeScreen({setTime}:Props) {
             playerInfo.playerButtonStyle.textColor = colors.greyTransparent
           }
         })
-        await speakThenPause(nightTimeSpeech.traitors2, 0, async () => {
+        await speakThenPause(nightTimeSpeech().traitors2, 0, async () => {
           timerDuration = 10
           onTimerDone = async () => await traitorsSleep()
           setTimerVisible(true)
@@ -288,7 +288,7 @@ export default function NightTimeScreen({setTime}:Props) {
   async function traitorsSleep() {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setTimerVisible(false)
-    await speakThenPause(nightTimeSpeech.traitors3, 2, blackened)
+    await speakThenPause(nightTimeSpeech().traitors3, 2, blackened)
   }
 
   async function monomi() {
@@ -315,8 +315,8 @@ export default function NightTimeScreen({setTime}:Props) {
         }
         setState([]) // re-render screen
       }
-      await speakThenPause(nightTimeSpeech.monomi1, 1, async () => {
-        await speakThenPause(nightTimeSpeech.monomi2, 0, () => {
+      await speakThenPause(nightTimeSpeech().monomi1, 1, async () => {
+        await speakThenPause(nightTimeSpeech().monomi2, 0, () => {
           gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo) })
           timerDuration = 15
           onTimerDone = async () => await monomiSleep()
@@ -331,7 +331,7 @@ export default function NightTimeScreen({setTime}:Props) {
   async function monomiSleep() {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setTimerVisible(false)
-    await speakThenPause(nightTimeSpeech.monomi3, 1, async () => {
+    await speakThenPause(nightTimeSpeech().monomi3, 1, async () => {
       await gameContext.backgroundMusic.unloadAsync()
       gameContext.backgroundMusic = ''
       await playMusic()
@@ -360,18 +360,18 @@ export default function NightTimeScreen({setTime}:Props) {
       onContinue = async () => {
         onRevealRoleModalOk = async () => {
           clearInterval(intervalId)
-          await speakThenPause(nightTimeSpeech.alterEgo3, 2, blackened)
+          await speakThenPause(nightTimeSpeech().alterEgo3, 2, blackened)
         }
         setRevealRoleModalVisible(true) 
       }
-      await speakThenPause(nightTimeSpeech.alterEgo1, 1, async () => {
-        await speakThenPause(nightTimeSpeech.alterEgo2, 0, () => {
+      await speakThenPause(nightTimeSpeech().alterEgo1, 1, async () => {
+        await speakThenPause(nightTimeSpeech().alterEgo2, 0, () => {
           gameContext.playersInfo.forEach(playerInfo => {
             if (playerInfo.role === 'Alter Ego') { disablePlayerButton(playerInfo) }
             else { enablePlayerButton(playerInfo) }
           })
           setContinueButtonText('Investigate')
-          intervalId = setInterval(async () => await speakThenPause("Alter ego, " + nightTimeSpeech.alterEgo2), 15000)
+          intervalId = setInterval(async () => await speakThenPause("Alter ego, " + nightTimeSpeech().alterEgo2), 15000)
           setState([]) // re-render screen if setContinueButtonText() doesn't
         })
       })
@@ -381,7 +381,7 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function blackened() {
-    if ((gameContext.dayNumber === 0 && gameContext.mode === 'extreme' || gameContext.dayNumber > 0) && !gameContext.vicePlayed) {
+    if (!gameContext.vicePlayed) {
       abilityOrItem = 'Attack'
       setContinueButtonText('Attack')
       onPlayerClick = (playerIndex) => {
@@ -398,31 +398,37 @@ export default function NightTimeScreen({setTime}:Props) {
       }
       onContinue = async () => {
         clearInterval(intervalId)
-        await speakThenPause(nightTimeSpeech.blackened5, 2, morningTime)
+        await speakThenPause(nightTimeSpeech().blackened6, 2, morningTime)
       }
       if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
-        await speakThenPause(nightTimeSpeech.blackened1, 1, async () => {
-          await speakThenPause(nightTimeSpeech.blackened2, 0, () => {
-            gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
-            intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech.blackened2), 15000)
-            setState([]) // re-render screen
+        await speakThenPause(nightTimeSpeech().blackened1, 2, async () => {
+          await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 1, async () => {
+            await speakThenPause(nightTimeSpeech().blackened3, 0, () => {
+              gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
+              intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech().blackened3), 15000)
+              setState([]) // re-render screen
+            })
+          })
+        })
+      } else if (gameContext.dayNumber === 0 && gameContext.mode === 'normal') {
+        await speakThenPause(nightTimeSpeech().blackened1, 2, async () => {
+          await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 1, async () => {
+            await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened6, 2, async () => {
+              await morningTime()
+            })
           })
         })
       } else if (gameContext.dayNumber > 0) {
-        await speakThenPause(nightTimeSpeech.blackened1, 1, async () => {
-          await speakThenPause(nightTimeSpeech.blackened3, 0, () => {
+        await speakThenPause(nightTimeSpeech().blackened1, 1, async () => {
+          await speakThenPause(nightTimeSpeech().blackened4, 0, () => {
             gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
-            intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech.blackened3), 15000)
+            intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech().blackened4), 15000)
             setState([]) // re-render screen
           })
         })
       }
     } else {
-      if (gameContext.vicePlayed === true) { 
-        await speakThenPause(nightTimeSpeech.blackened4, 1, morningTime) 
-      } else {
-        await morningTime()
-      }
+      await speakThenPause(nightTimeSpeech().blackened5, 1, morningTime)
     }
   }
 

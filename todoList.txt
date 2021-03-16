@@ -11,5 +11,4 @@ include the "It is night time of day #" on repeats
 kevin said monomi click didn't turn pink.
 make "nighttime of day #" label font size double so more legible? label can stretch a lot wider
 click continue and despair pollution plays. Continue button is enabled if Vice question is up next
-tell blackened how many kills he needs and how many class trials he needs to survive
 do same thing as GameScreen with Settings screens

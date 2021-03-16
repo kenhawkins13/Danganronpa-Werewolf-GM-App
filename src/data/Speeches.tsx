@@ -1,34 +1,38 @@
 // "Mike" is a misspelling of "mic" as it is misspelled in the game.
 export const micCheckSpeech = "Ahem, Ahem! Testing, testing! Mike check, one two! This is a test of the school broadcast system!"
 
-export const nightTimeSpeech = {
-  schoolAnnouncement1: "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
-  Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone, close your eyes and go to sleep.",
-  schoolAnnouncement2: "It is now nighttime.",
-  schoolAnnouncement3: "Would anyone like to use an ability or item? Select your player and enter any investigative abilities or items.",
-  schoolAnnouncement4: "Everyone go to sleep. The curfew is now in effect.",
-  schoolAnnouncement5: "It is now nighttime. Everyone go to sleep. The curfew is now in effect.",
-  schoolAnnouncement6: "Everyone should now be asleep.",
-  traitors1: "Traitors, wake up.",
-  traitors2: "The traitors are highlighted in grey and the blackened is highlighted in pink.",
-  traitors3: "Traitors, go back to sleep.",
-  monomi1: "Moenoemi, wake up.",
-  monomi2: "You have the option to protect someone. You have 15 seconds to decide.",
-  monomi3: "Moenoemi, go back to sleep.",
-  alterEgo1: "Alter ego, wake up.",
-  alterEgo2: "Investigate whether a player is on the side of hope or despair.",
-  alterEgo3: "Alter ego, go back to sleep.",
-  blackened1: "Blackened, wake up.",
-  blackened2: "Choose a player to attack. The victim will only lose an item card.",
-  blackened3: "Choose a player to attack.",
-  blackened4: "Oh no, vice was played this morning so the Blackened can't go murdering tonight. What a shame.",
-  blackened5: "U pu pu pu. Blackened, go back to sleep.",
-  kyokoKirigiri: "Investigate whether a player is on the side of hope or despair.",
-  yasuhiroHagakure1: 'Investigate whether a player is the despair disease patient.',
-  yasuhiroHagakure2: 'Investigate whether a player is Moenoemi.',
-  glasses: "Investigate whether a player is on the side of hope or despair.",
-  someonesGraduationAlbum: "Investigate whether a player is a traitor.",
-  silentReceiver: "Investigate whether a player is a spotless.",
+export const nightTimeSpeech = (killsLeft?:number) => {
+  return {
+    schoolAnnouncement1: "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
+    Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone, close your eyes and go to sleep.",
+    schoolAnnouncement2: "It is now nighttime.",
+    schoolAnnouncement3: "Would anyone like to use an ability or item? Select your player and enter any investigative abilities or items.",
+    schoolAnnouncement4: "Everyone go to sleep. The curfew is now in effect.",
+    schoolAnnouncement5: "It is now nighttime. Everyone go to sleep. The curfew is now in effect.",
+    schoolAnnouncement6: "Everyone should now be asleep.",
+    traitors1: "Traitors, wake up.",
+    traitors2: "The traitors are highlighted in grey and the blackened is highlighted in pink.",
+    traitors3: "Traitors, go back to sleep.",
+    monomi1: "Moenoemi, wake up.",
+    monomi2: "You have the option to protect someone. You have 15 seconds to decide.",
+    monomi3: "Moenoemi, go back to sleep.",
+    alterEgo1: "Alter ego, wake up.",
+    alterEgo2: "Investigate whether a player is on the side of hope or despair.",
+    alterEgo3: "Alter ego, go back to sleep.",
+    blackened1: "Blackened, wake up.",
+    blackened2: "You need to kill " + killsLeft + " " + personOrPeople(killsLeft!) + " and survive through " + killsLeft + " " +
+      trialOrTrials(killsLeft!) + "  to win.",
+    blackened3: "Choose a player to attack. The victim will only lose an item card.",
+    blackened4: "Choose a player to attack.",
+    blackened5: "Oh no, vice was played this morning so the Blackened can't go murdering tonight. What a shame.",
+    blackened6: "U pu pu pu. Blackened, go back to sleep.",
+    kyokoKirigiri: "Investigate whether a player is on the side of hope or despair.",
+    yasuhiroHagakure1: 'Investigate whether a player is the despair disease patient.',
+    yasuhiroHagakure2: 'Investigate whether a player is Moenoemi.',
+    glasses: "Investigate whether a player is on the side of hope or despair.",
+    someonesGraduationAlbum: "Investigate whether a player is a traitor.",
+    silentReceiver: "Investigate whether a player is a spotless.",
+  }
 }
 
 export const goodMorningSpeech = (dayNumber:number) => {
@@ -94,3 +98,5 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
 }
 
 const killOrKills = (num:number) => num === 1 ? "kill" : "kills"
+const personOrPeople = (num:number) => num === 1 ? "person" : "people"
+const trialOrTrials = (num:number) => num === 1 ? "trial" : "trials"

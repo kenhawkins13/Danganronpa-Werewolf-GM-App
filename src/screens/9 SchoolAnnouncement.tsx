@@ -16,8 +16,8 @@ export default function SchoolAnnouncementScreen() {
       <Video source={videos[0]} shouldPlay={true} resizeMode="cover"
         style={{width: '100%', height: '100%'}} volume={gameContext.musicVolume} onPlaybackStatusUpdate={async (playbackStatus:any) => {
           if (playbackStatus.didJustFinish) {
-            await speakThenPause(nightTimeSpeech.schoolAnnouncement1, 3, async () => {
-              await speakThenPause(nightTimeSpeech.schoolAnnouncement6, 3, () => {
+            await speakThenPause(nightTimeSpeech().schoolAnnouncement1, 3, async () => {
+              await speakThenPause(nightTimeSpeech().schoolAnnouncement6, 3, () => {
                 navigate('GameScreen')
               })
             })

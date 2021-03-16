@@ -373,9 +373,9 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
-        speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft1
+        speech = dayTimeSpeech(votedPlayer).killsLeft1
       } else {
-        speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft2
+        speech = dayTimeSpeech(votedPlayer).killsLeft2
       }
       await speakThenPause(speech, 1, nightTime)
     }
