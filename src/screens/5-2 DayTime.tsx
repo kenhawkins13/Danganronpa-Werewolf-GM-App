@@ -176,11 +176,11 @@ export default function DayTimeScreen({setTime}:Props) {
       return (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: colors.pinkTransparent}}>
-            <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
-              Class trial{"\n"}of Day {gameContext.dayNumber}
+            <Text numberOfLines={1} style={{...appStyle.text, fontSize: 20, textAlign: 'center', margin: '2.5%'}}>
+              Class trial of Day {gameContext.dayNumber}
             </Text>
           </View>
-          <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
+          <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: 260}}
             onPress={async() => {
               if (await Speech.isSpeakingAsync() === false) {
                 speakThenPause(speech)
@@ -194,11 +194,11 @@ export default function DayTimeScreen({setTime}:Props) {
       return (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: colors.yellowTransparent}}>
-            <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
-              Daytime{"\n"}of Day {gameContext.dayNumber}
+            <Text numberOfLines={1} style={{...appStyle.text, fontSize: 20, textAlign: 'center', margin: '2.5%'}}>
+              Daytime of Day {gameContext.dayNumber}
             </Text>
           </View>
-          <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
+          <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: 220}}
             onPress={async() => {
               if (await Speech.isSpeakingAsync() === false) {
                 speakThenPause(speech)

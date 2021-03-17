@@ -123,12 +123,12 @@ export default function NightTimeScreen({setTime}:Props) {
   function NightTimeLabel() {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: colors.blueTransparent}}>
-          <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
-            Nighttime{"\n"}of Day {gameContext.dayNumber}
+        <View style={{...appStyle.frame, height: '62.5%', justifyContent: 'center', backgroundColor: colors.blueTransparent}}>
+          <Text numberOfLines={1} style={{...appStyle.text, fontSize: 20, textAlign: 'center', margin: '2.5%'}}>
+            Nighttime of Day {gameContext.dayNumber}
           </Text>
         </View>
-        <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
+        <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: 240}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
               speakThenPause(nightTimeSpeech().schoolAnnouncement3)            
@@ -402,7 +402,7 @@ export default function NightTimeScreen({setTime}:Props) {
       }
       if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
         await speakThenPause(nightTimeSpeech().blackened1, 2, async () => {
-          await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 1, async () => {
+          await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 2, async () => {
             await speakThenPause(nightTimeSpeech().blackened3, 0, () => {
               gameContext.playersInfo.forEach(playerInfo => { enablePlayerButton(playerInfo) })
               intervalId = setInterval(async () => await speakThenPause("Blackened, " + nightTimeSpeech().blackened3), 15000)
@@ -412,7 +412,7 @@ export default function NightTimeScreen({setTime}:Props) {
         })
       } else if (gameContext.dayNumber === 0 && gameContext.mode === 'normal') {
         await speakThenPause(nightTimeSpeech().blackened1, 2, async () => {
-          await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 1, async () => {
+          await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 2, async () => {
             await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened6, 2, async () => {
               await morningTime()
             })

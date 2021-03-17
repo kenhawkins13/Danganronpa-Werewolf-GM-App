@@ -107,12 +107,12 @@ export default function MorningTimeScreen({setTime}:Props) {
   function MorningTimeLabel() {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <View style={{...appStyle.frame, minWidth: '30%', justifyContent: 'center', backgroundColor: colors.greyTransparent}}>
-          <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>
-            Morning{"\n"}of Day {gameContext.dayNumber}
+        <View style={{...appStyle.frame, height: '62.5%', minWidth: '30%', justifyContent: 'center', backgroundColor: colors.greyTransparent}}>
+          <Text style={{...appStyle.text, fontSize: 20, textAlign: 'center', margin: '2.5%'}}>
+            Morning of Day {gameContext.dayNumber}
           </Text>
         </View>
-        <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: '35%'}}
+        <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: 220}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
               speakThenPause(speech)
