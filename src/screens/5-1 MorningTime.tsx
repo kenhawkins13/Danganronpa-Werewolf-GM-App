@@ -278,35 +278,37 @@ export default function MorningTimeScreen({setTime}:Props) {
   async function bodyDiscovery() {
     gameContext.playersInfo[gameContext.blackenedAttack].alive = false
     gameContext.killsLeft -= 1
-    let onSoundDone = async () => {}
     const { sound } = await Audio.Sound.createAsync(sounds.despairPollution, {}, async (playbackStatus:any) => {
       if (playbackStatus.didJustFinish) {
         setState([]) // re-render screen
         await sound.unloadAsync()
-        await onSoundDone()
       }
     })
     await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
+    await sleep(1000)
     if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
       gameContext.alterEgoAlive = false
       speech = morningTimeSpeech(victim.name).bodyDiscovery2
-      onSoundDone = async () => await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
+      await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
     } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
       speech = morningTimeSpeech(victim.name).bodyDiscovery3
-      onSoundDone = async () => await speakThenPause(speech, 0, () => {
+      await speakThenPause(speech, 1, () => {
         gameContext.winnerSide = 'Hope'
         navigate('WinnerDeclarationScreen')
       })
     } else {
       speech = morningTimeSpeech(victim.name).bodyDiscovery1
-      onSoundDone = async () => await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
+      await speakThenPause(speech, 3, async () => { await abilitiesOrItems() })
     }
   }
 
   async function abilitiesOrItems() {
     if (gameContext.mode === 'extreme') {
-      onContinue = async () => await viceConfirmation()
+      onContinue = async () => {
+        disableContinueButton()
+        await viceConfirmation()
+      }
       speech = morningTimeSpeech().abilityOrItem
       await speakThenPause(speech, 0, enableContinueButton)
     } else {
@@ -321,7 +323,7 @@ export default function MorningTimeScreen({setTime}:Props) {
         await dayTime()
       }
       onNo = async () => await dayTime()
-      speech = morningTimeSpeech(victim.name).vice
+      speech = morningTimeSpeech().vice
       await speakThenPause(speech, 0, () => setConfirmationVisible(true))
     } else {
       await dayTime()
@@ -346,6 +348,12 @@ export default function MorningTimeScreen({setTime}:Props) {
       if (onDone) { onDone() }
     }
     Speech.speak(speech, {onDone: () => { callback(seconds) }})
+  }
+
+  function disableContinueButton() {
+    setContinueButtonColor(colors.greyTransparent)
+    setContinueButtonTextColor(colors.darkGrey)
+    setContinueButtonDisabled(true)
   }
 }
 

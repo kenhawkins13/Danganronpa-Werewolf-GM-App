@@ -59,7 +59,7 @@ export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) =
     playersAbilities: "Would anybody like to use an ability to protect " + name1 + "?",
     giveItems: name2 + " and " + name3 + ", would either of you like to give an item to " + name1 + "?",
     victim3: name1 + ", would you like to use a gifted item to save yourself?",
-    bodyDiscovery1: "U pu pu pu. " + name1 + " has been killed.",
+    bodyDiscovery1: "U pu pu pu pu. " + name1 + " has been killed.",
     bodyDiscovery2: "Buah hahaha! " + name1 + " is dead. They were the Alter Ego.",
     bodyDiscovery3: "Unbelievable, " + name1 + ". You managed to get yourself killed. You are the worst Blackened ever.",
     abilityOrItem: "Would anybody like to use an ability or item before moving on to day time?",
@@ -93,7 +93,7 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
     killsLeft1: "Buah hahaha. " + name + " was the Alter Ego. The game continues and the Blackened needs " + 
       killsLeft  + " more " + killOrKills(killsLeft!) + "to win.",
     killsLeft2: "U pu pu pu. " + name + " was not the Blackened player. The game continues and the Blackened needs " + killsLeft  + 
-    " more " + killOrKills(killsLeft!) + "to win."
+    " more " + killOrKills(killsLeft!) + " to win."
   }
 }
 
