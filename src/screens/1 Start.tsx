@@ -104,7 +104,7 @@ export default function StartScreen () {
                 await stopMusic(gameContext.backgroundMusic)
                 gameContext.backgroundMusic = ''
                 fillContextInfo(gameContext)
-                navigate('DisclaimerScreen')
+                navigate('SettingsScreen')
                 }}>
                 <Text style={{color: colors.white, fontSize: 20}}>START GAME</Text>
               </TouchableHighlight>

@@ -11,18 +11,13 @@ import { videos } from './src/assets/videos/videos'
 import { useKeepAwake } from 'expo-keep-awake'
 
 import StartScreen from './src/screens/1 Start'
-import DisclaimerScreen from './src/screens/2 Disclaimer'
-import IntroductionScreen from './src/screens/3 Introduction'
-import RolesScreen from './src/screens/5 Roles'
-import ItemsScreen from './src/screens/6 Items'
-import DirectionScreen from './src/screens/7 Direction'
-import PlayersScreen from './src/screens/8 Players'
-import SchoolAnnouncementScreen from './src/screens/9 SchoolAnnouncement'
-import GameScreen from './src/screens/10 GameScreen'
-import NightTimeScreen from './src/screens/10 NightTime'
-import MorningTimeScreen from './src/screens/10 MorningTime'
-import DayTimeScreen from './src/screens/10 DayTime'
-import WinnerDeclarationScreen from './src/screens/11 WinnerDeclaration'
+import SettingsScreen from './src/screens/2 SettingsScreen'
+import SchoolAnnouncementScreen from './src/screens/4 SchoolAnnouncement'
+import GameScreen from './src/screens/5 GameScreen'
+import NightTimeScreen from './src/screens/5-3 NightTime'
+import MorningTimeScreen from './src/screens/5-1 MorningTime'
+import DayTimeScreen from './src/screens/5-2 DayTime'
+import WinnerDeclarationScreen from './src/screens/6 WinnerDeclaration'
 import { sounds } from './src/assets/sounds/sounds'
 import { images } from './src/assets/images/images'
 import { backgrounds } from './src/assets/backgrounds/backgrounds'
@@ -30,16 +25,11 @@ import { characters } from './src/assets/CharacterCards/characters'
 import { items } from './src/assets/ItemCards/items'
 import { roles } from './src/assets/RoleCards/roles'
 import { fonts } from './src/assets/fonts/fonts'
-import CharactersScreen from './src/screens/4 Characters'
+import PlayersScreen from './src/screens/3 Players'
 
 export type RootStackParamList = {
   StartScreen: undefined
-  DisclaimerScreen: undefined
-  IntroductionScreen: undefined
-  CharactersScreen: undefined
-  RolesScreen: undefined
-  ItemsScreen: undefined
-  DirectionScreen: undefined
+  SettingsScreen: undefined
   PlayersScreen: undefined
   SchoolAnnouncementScreen: undefined
   GameScreen:undefined
@@ -106,12 +96,7 @@ export default function App() {
           <NavigationContainer>
             <RootStack.Navigator>
               <RootStack.Screen name="StartScreen" component={StartScreen} options={{ headerShown: false }}/>
-              <RootStack.Screen name="DisclaimerScreen" component={DisclaimerScreen} options={{ headerShown: false }}/>
-              <RootStack.Screen name="IntroductionScreen" component={IntroductionScreen} options={{ headerShown: false }}/>
-              <RootStack.Screen name="CharactersScreen" component={CharactersScreen} options={{ headerShown: false }}/>
-              <RootStack.Screen name="RolesScreen" component={RolesScreen} options={{ headerShown: false }}/>
-              <RootStack.Screen name="ItemsScreen" component={ItemsScreen} options={{ headerShown: false }}/>
-              <RootStack.Screen name="DirectionScreen" component={DirectionScreen} options={{ headerShown: false }}/>
+              <RootStack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="PlayersScreen" component={PlayersScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="SchoolAnnouncementScreen" component={SchoolAnnouncementScreen} options={{ headerShown: false }}/>
               <RootStack.Screen name="GameScreen" component={GameScreen} options={{ headerShown: false }}/>

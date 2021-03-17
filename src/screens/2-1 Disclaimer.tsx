@@ -6,8 +6,11 @@ import * as Speech from 'expo-speech'
 import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
 import { images } from '../assets/images/images'
+import { useNavigation } from '@react-navigation/native'
 
-export default function DisclaimerScreen() {
+export default function DisclaimerScreen({setScreen}:Props) {
+  const { navigate } = useNavigation<any>()
+  
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={{flex: 1, padding: '2.5%'}} source={backgrounds.main}>
@@ -37,18 +40,20 @@ export default function DisclaimerScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='StartScreen' nextPage='IntroductionScreen' onNext={() => {
+          <NavigationBar onNext={() => {
             Speech.stop()
-            return true
+            setScreen('IntroductionScreen')
           }} onPrevious={() => {
             Speech.stop()
-            return true
+            navigate('StartScreen')
           }}/>
         </View>
       </ImageBackground>
     </View>
   )
 }
+
+type Props = {setScreen:React.Dispatch<any>}
 
 const body1 = 'This app replaces the Monokuma (Gamemaster) role in the Danganronpa 1·2 Ultimate High School Werewolf \
 card game. So now, all the players can participate in the fun killing game. The cards from the original \

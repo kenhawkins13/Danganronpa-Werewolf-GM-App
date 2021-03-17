@@ -10,7 +10,7 @@ import { backgrounds } from '../assets/backgrounds/backgrounds'
 import { items } from '../assets/ItemCards/items'
 import { images } from '../assets/images/images'
 
-export default function ItemsScreen() {
+export default function ItemsScreen({setScreen}:Props) {
   const gameContext = useContext(GameContext)
   return (
     <View style={{ flex: 1 }}>
@@ -22,18 +22,20 @@ export default function ItemsScreen() {
           {getBody(gameContext.mode)}
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='RolesScreen' nextPage='DirectionScreen' onNext={() => {
+          <NavigationBar onNext={() => {
             Speech.stop()
-            return true
+            setScreen('DirectionScreen')
           }} onPrevious={() => {
             Speech.stop()
-            return true
+            setScreen('RolesScreen')
           }}/>
         </View>
       </ImageBackground>
     </View>
   )
 }
+
+type Props = {setScreen:React.Dispatch<any>}
 
 function getBody(mode:string) {
   if (mode === 'extreme') {

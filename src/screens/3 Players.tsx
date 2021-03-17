@@ -11,10 +11,8 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import { OrientationLock } from 'expo-screen-orientation'
 import { appStyle } from '../styles/styles'
 import * as Speech from 'expo-speech'
-import { micCheckSpeech } from '../data/Speeches'
 import { Audio } from 'expo-av'
 import { sounds } from "../assets/sounds/sounds"
-import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
 
 export default function PlayersScreen() {
@@ -74,7 +72,7 @@ export default function PlayersScreen() {
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent })
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.playerButtonStyle.borderColor = colors.white })
               setRotationComplete(false)
-              navigate('DirectionScreen')
+              navigate('SettingsScreen')
             }}> 
             <Text adjustsFontSizeToFit={true} style={{...appStyle.text, margin: '2.5%'}}>Back</Text>
           </TouchableHighlight>

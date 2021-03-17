@@ -12,7 +12,7 @@ import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
 import { images } from '../assets/images/images'
 
-export default function IntroductionScreen() {
+export default function IntroductionScreen({setScreen}:Props) {
   const gameContext = useContext(GameContext)
   
   const isFocused = useIsFocused()
@@ -44,14 +44,14 @@ export default function IntroductionScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='DisclaimerScreen' nextPage='CharactersScreen' onPrevious={() => {
+          <NavigationBar onPrevious={() => {
             gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
-            return true
+            setScreen('DisclaimerScreen')
           }} onNext={() => {
             gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
-            return true
+            setScreen('CharactersScreen')
           }}/>
         </View>
       </ImageBackground>
@@ -65,6 +65,8 @@ export default function IntroductionScreen() {
     gameContext.backgroundMusic = sound
   }
 }
+
+type Props = {setScreen:React.Dispatch<any>}
 
 const body1 = "Ahem... students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Monokuma!"
 const body2 = "Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \

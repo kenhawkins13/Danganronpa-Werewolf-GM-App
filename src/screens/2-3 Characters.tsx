@@ -17,7 +17,7 @@ import { characters } from '../assets/CharacterCards/characters'
 let isMusicPlaying = false
 const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 
-export default function CharactersScreen() {
+export default function CharactersScreen({setScreen}:Props) {
   const gameContext = useContext(GameContext)
   
   const isFocused = useIsFocused()
@@ -60,15 +60,15 @@ export default function CharactersScreen() {
             </View>
           </View>
         </View>
-        <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='IntroductionScreen' nextPage='RolesScreen'onPrevious={() => {
+        <View style={{flex: 1}}>
+          <NavigationBar onPrevious={() => {
             isMusicPlaying = false
             gameContext.backgroundMusic.unloadAsync()
             Speech.stop()
-            return true
+            setScreen('IntroductionScreen')
           }} onNext={() => {
             Speech.stop()
-            return true
+            setScreen('RolesScreen')
           }}/>
         </View>
       </ImageBackground>
@@ -87,6 +87,8 @@ export default function CharactersScreen() {
     })
   }
 }
+
+type Props = {setScreen:React.Dispatch<any>}
   
 const body = (gameMode:string) => `Prepare one character card for each player then have everyone introduce their character's name, \
 gender, ultimate title, ${(extraText(gameMode))} and quotes.`

@@ -11,7 +11,7 @@ import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
 import { images } from '../assets/images/images'
 
-export default function RolesScreen() {
+export default function RolesScreen({setScreen}:Props) {
   const gameContext = useContext(GameContext)
 
   return (
@@ -44,18 +44,20 @@ export default function RolesScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='CharactersScreen' nextPage='ItemsScreen'onPrevious={() => {
+          <NavigationBar onPrevious={() => {
             Speech.stop()
-            return true
+            setScreen('CharactersScreen')
           }} onNext={() => {
             Speech.stop()
-            return true
+            setScreen('ItemsScreen')
           }}/>
         </View>
       </ImageBackground>
     </View>
   )
 }
+
+type Props = {setScreen:React.Dispatch<any>}
 
 function DisplayNormalRoles(gameContext:GameContextType) {
   const normalRoles = gameContext.roleCounts.filter((roleCount) => roleCount.roles.length === 1 && roleCount.count !== 0)

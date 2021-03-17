@@ -1,4 +1,4 @@
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import React, { useEffect } from 'react'
 import { View, Text, ImageBackground, Image } from 'react-native'
 import NavigationBar from '../components/NavigationBar'
@@ -10,8 +10,10 @@ import SpeakerButton from '../components/SpeakerButton'
 import { backgrounds } from '../assets/backgrounds/backgrounds'
 import { images } from '../assets/images/images'
 
-export default function DirectionScreen() {
+export default function DirectionScreen({setScreen}:Props) {
     const isFocused = useIsFocused()
+    const { navigate } = useNavigation<any>()
+    
     useEffect(() => { if (isFocused) {
       ScreenOrientation.lockAsync(OrientationLock.PORTRAIT)
     }})
@@ -42,18 +44,20 @@ export default function DirectionScreen() {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <NavigationBar previousPage='ItemsScreen' nextPage='PlayersScreen' onNext={() => {
+          <NavigationBar onNext={() => {
             Speech.stop()
-            return true
+            navigate('PlayersScreen')
           }} onPrevious={() => {
             Speech.stop()
-            return true
+            setScreen('ItemsScreen')
           }}/>
         </View>
       </ImageBackground>
     </View>
   )
 }
+
+type Props = {setScreen:React.Dispatch<any>}
 
 const body1 = "Place your phone in the center of the play area like so:"
 const body2 = "On the next page, have each player click on the slot corresponding to their seating position and enter \
