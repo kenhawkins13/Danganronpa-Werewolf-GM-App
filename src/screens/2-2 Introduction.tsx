@@ -46,10 +46,12 @@ export default function IntroductionScreen({setScreen}:Props) {
         <View style={{ flex: 1 }}>
           <NavigationBar onPrevious={() => {
             gameContext.backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic = ''
             Speech.stop()
             setScreen('DisclaimerScreen')
           }} onNext={() => {
             gameContext.backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic = ''
             Speech.stop()
             setScreen('CharactersScreen')
           }}/>
@@ -60,9 +62,9 @@ export default function IntroductionScreen({setScreen}:Props) {
 
   async function playMusic() {
     const { sound } = await Audio.Sound.createAsync(monokumaMusic[0])
-    await sound.setVolumeAsync(gameContext.musicVolume)
-    await sound.playAsync()
     gameContext.backgroundMusic = sound
+    await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume)
+    await gameContext.backgroundMusic.playAsync()
   }
 }
 

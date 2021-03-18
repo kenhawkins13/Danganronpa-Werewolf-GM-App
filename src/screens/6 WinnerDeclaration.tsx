@@ -126,7 +126,8 @@ export default function WinnerDeclarationScreen() {
         <View style={{...appStyle.frame, height: '25%', minWidth: '25%'}}>
           <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
           disabled={false} onPress={async () => {
-            await gameContext.backgroundMusic.unloadAsync()           
+            await gameContext.backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic = ''
             navigate('StartScreen')
            }}>
             <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>Restart</Text>

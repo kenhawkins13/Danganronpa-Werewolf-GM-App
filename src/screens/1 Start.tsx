@@ -101,7 +101,7 @@ export default function StartScreen () {
                 })
                 await sound.setVolumeAsync(gameContext.musicVolume)
                 await sound.playAsync()
-                await stopMusic(gameContext.backgroundMusic)
+                await gameContext.backgroundMusic.unloadAsync()
                 gameContext.backgroundMusic = ''
                 fillContextInfo(gameContext)
                 navigate('SettingsScreen')
@@ -119,13 +119,9 @@ export default function StartScreen () {
 
   async function playMusic() {
     const { sound } = await Audio.Sound.createAsync(startMusic[0])
-    await sound.setVolumeAsync(gameContext.musicVolume)
-    await sound.playAsync()
     gameContext.backgroundMusic = sound
-  }
-  
-  async function stopMusic(sound:Audio.Sound) {
-    await sound.unloadAsync()
+    gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume)
+    gameContext.backgroundMusic.playAsync()
   }
 }
 

@@ -2,4 +2,3 @@ TODO:
 
 Chiaki's new expansion ability can activate on morning Monomi dies. So need to ask for abilities/items during morning after monomi's death
 when to ask for Crystal Skull
-speaker icon not working

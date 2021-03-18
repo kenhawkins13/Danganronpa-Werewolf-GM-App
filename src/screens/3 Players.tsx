@@ -88,6 +88,7 @@ export default function PlayersScreen() {
             })
             if (gameContext.playersInfo.every((value) => value.role !== '') && confirmPlayerRoles(gameContext)) {
               gameContext.backgroundMusic.unloadAsync()
+              gameContext.backgroundMusic = ''
               navigate('SchoolAnnouncementScreen')
             } else {
               gameContext.playersInfo.forEach(playerInfo => { playerInfo.role = '' })

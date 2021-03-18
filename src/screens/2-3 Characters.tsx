@@ -64,6 +64,7 @@ export default function CharactersScreen({setScreen}:Props) {
           <NavigationBar onPrevious={() => {
             isMusicPlaying = false
             gameContext.backgroundMusic.unloadAsync()
+            gameContext.backgroundMusic = ''
             Speech.stop()
             setScreen('IntroductionScreen')
           }} onNext={() => {
