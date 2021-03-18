@@ -30,12 +30,20 @@ export default function DisclaimerScreen({setScreen}:Props) {
               {body1}
               {"\n"}
             </Text>
+            <Text style={{...appStyle.text, color: 'lightblue'}} onPress={() => Linking.openURL('https://boardgamegeek.com/filepage/193246/danganronpa-rules')}>
+            https://boardgamegeek.com/filepage/193246/danganronpa-rules
+            </Text>
+            <Text style={appStyle.text}>
+              {"\n"}
+              {body2}
+              {"\n"}
+            </Text>
             <Text style={{...appStyle.text, color: 'lightblue'}} onPress={() => Linking.openURL('https://boardgamegeek.com/filepage/193245/translated-cards-print-play')}>
               https://boardgamegeek.com/filepage/193245/translated-cards-print-play
             </Text>
             <Text style={appStyle.text}>
               {"\n"}
-              {body2} 
+              {body3} 
             </Text>
           </View>
         </View>
@@ -56,10 +64,10 @@ export default function DisclaimerScreen({setScreen}:Props) {
 type Props = {setScreen:React.Dispatch<any>}
 
 const body1 = 'This app replaces the Monokuma (Gamemaster) role in the Danganronpa 1·2 Ultimate High School Werewolf \
-card game. So now, all the players can participate in the fun killing game. The cards from the original \
-game are still required to play and they can be found here:'
-const body2 = 'We hope this app allows you to share the Danganronpa experience with your friends. Enjoy!'
+card game. So now, all the players can participate in the fun killing game. The summary of the rules can be found here:'
+const body2 = 'The cards for the game can be found here:'
+const body3 = 'We hope this app allows you to share the Danganronpa experience with your friends. Enjoy!'
 const speech = 'This app replaces the Moenoekuma, game master, role in the Dawngawnrownpa 1, 2, Ultimate High School Werewolf \
-card game. So now, all the players can participate in the fun killing game. The cards from the original \
-game are still required to play and can be found here. We hope this app allows you to share the Dawngawnrownpa experience with \
-your friends. Enjoy!'
+card game. So now, all the players can participate in the fun killing game. The summary of the rules can be found here. \
+The cards for the game can be found here. \
+We hope this app allows you to share the Dawngawnrownpa experience with your friends. Enjoy!'
