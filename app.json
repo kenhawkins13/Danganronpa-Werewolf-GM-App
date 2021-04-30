@@ -4,7 +4,7 @@
     "slug": "Danganronpa-Werewolf-GM-App",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/Monokuma.png",
+    "icon": "./src/assets/images/Monokuma-White-Background.png",
     "splash": {
       "image": "./src/assets/backgrounds/Splash.png",
       "resizeMode": "contain",
@@ -17,7 +17,8 @@
       "src/assets/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.github.kenhawkins13.DanganronpaChouKoukouKyuuNoJinrouApp"
     },
     "android": {
       "package": "com.github.kenhawkins13.DanganronpaChouKoukouKyuuNoJinrouApp",
@@ -25,7 +26,7 @@
     },
     "web": {
       "bundleIdentifier": "com.github.kenhawkins13.DanganronpaChouKoukouKyuuNoJinrouApp",
-      "favicon": "./src/assets/images/Monokuma-Transparent.png"
+      "favicon": "./src/assets/images/Monokuma-White-Background.png"
     }
   }
 }
