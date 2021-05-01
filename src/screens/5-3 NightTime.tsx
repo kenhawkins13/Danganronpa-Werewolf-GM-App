@@ -257,7 +257,7 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function traitors() {
-    if (roleInPlay(gameContext.roleCounts, 'Traitor') && gameContext.dayNumber === 0) {
+    if (roleInPlay(gameContext.roleCountAll, 'Traitor') && gameContext.dayNumber === 0) {
       const traitorInPlay = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Traitor')
       setContinueButtonText('Continue')
       await speakThenPause(nightTimeSpeech().traitors1, 1, async () => {
@@ -292,7 +292,7 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function monomi() {
-    if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
+    if (roleInPlay(gameContext.roleCountAll, 'Monomi') && gameContext.dayNumber > 0 && !gameContext.monomiExploded && !gameContext.vicePlayed) {
       await gameContext.backgroundMusic.unloadAsync()
       gameContext.backgroundMusic = ''
       await playMusic(true)

@@ -80,7 +80,7 @@ export default function App() {
           mode: 'normal',
           playerCount: 4,
           killsLeft: 0,
-          roleCounts: [],
+          roleCountAll: [],
           playersInfo: [],
           dayNumber: 0,
           blackenedAttack: -1,

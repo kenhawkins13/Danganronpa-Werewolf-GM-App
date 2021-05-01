@@ -14,7 +14,7 @@ export type GameContextType = {
   mode:string,
   playerCount:number,
   killsLeft:number,
-  roleCounts:RoleCount[],
+  roleCountAll:RoleCount[],
   playersInfo:PlayerInfo[],
   dayNumber:number,
   blackenedAttack:number,

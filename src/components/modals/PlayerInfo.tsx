@@ -74,8 +74,8 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
 
 function getPickerItems(gameContext:GameContextType) {
   const pickerItems:JSX.Element[] = []
-  pickerItems.push(<Picker.Item key='' label='Select Your Role' value=''/>)
-  gameContext.roleCounts.forEach(neededRole  => {
+  pickerItems.push(<Picker.Item key='' label='Select Role' value=''/>)
+  gameContext.roleCountAll.forEach(neededRole  => {
     if (neededRole.count != 0) {
       neededRole.roles.forEach(role => {
         // if role does not exist in pickerItems, push new pickerItem

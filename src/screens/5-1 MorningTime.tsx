@@ -158,7 +158,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function monomi() {
-    if (roleInPlay(gameContext.roleCounts, 'Monomi') && gameContext.dayNumber > 1 && gameContext.monomiExploded === false  && gameContext.blackenedAttack !== -1) {
+    if (roleInPlay(gameContext.roleCountAll, 'Monomi') && gameContext.dayNumber > 1 && gameContext.monomiExploded === false  && gameContext.blackenedAttack !== -1) {
       speech = morningTimeSpeech().monomi1
       await speakThenPause(speech, 1, async () => {
         if (gameContext.blackenedAttack === gameContext.monomiProtect) {
@@ -296,6 +296,17 @@ export default function MorningTimeScreen({setTime}:Props) {
       await speakThenPause(speech, 1, () => {
         gameContext.winnerSide = 'Hope'
         navigate('WinnerDeclarationScreen')
+      })
+    } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Future Foundation') {
+      speech = morningTimeSpeech(victim.name).bodyDiscovery1
+      await speakThenPause(speech, 1, async () => {
+        speech = morningTimeSpeech(victim.name).bodyDiscovery4
+        await speakThenPause(speech, 1, async () => { 
+          onContinue = async () => {
+            await abilitiesOrItems()
+          }
+          enableContinueButton()
+        })
       })
     } else {
       speech = morningTimeSpeech(victim.name).bodyDiscovery1

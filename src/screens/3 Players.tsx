@@ -111,44 +111,46 @@ function confirmPlayerRoles(gameContext:GameContextType) {
       return false      
     }
   }
-  const countPlayersRoles:RoleCount[] = []
-  gameContext.roleCounts.forEach(roleCount => {
-    countPlayersRoles.push({roles: roleCount.roles, count:0})
+  const actualRoleCountAll:RoleCount[] = []
+  gameContext.roleCountAll.forEach(roleCount => {
+    actualRoleCountAll.push({roles: roleCount.roles, count:0})
   })
-  let countRandomRoles:RoleCount[] = []
-  if (gameContext.mode === 'extreme') {
+  let actualRandomRoles:RoleCount[] = []
+  // If there are random roles in, the last array item in countRoles will have multiple roles
+  const lastArrayItem = actualRoleCountAll.pop()!
+  const hasRandomRoles = lastArrayItem.roles.length > 1 ? true : false
+  if (hasRandomRoles) {
     // Take the randomRoles (last array item in countRoles) and break into individual RoleCounts to keep track of each role count
-    const lastArrayItem = countPlayersRoles.pop()!
     lastArrayItem.roles.forEach(role => {
-      countRandomRoles.push({roles: [role], count: 0})
+      actualRandomRoles.push({roles: [role], count: 0})
     })
   }
   gameContext.playersInfo.forEach(playerInfo => {
-    const countPlayerRole = countPlayersRoles.find((countRole) => {return areEqual(countRole.roles, [playerInfo.role])})!
-    const expectedCount = gameContext.roleCounts.find((roleCount) => {return areEqual(roleCount.roles, [playerInfo.role])})!.count
+    const actualRoleCount = actualRoleCountAll.find((roleCount) => {return areEqual(roleCount.roles, [playerInfo.role])})!
+    const expectedRoleCount = gameContext.roleCountAll.find((roleCount) => {return areEqual(roleCount.roles, [playerInfo.role])})!.count
     // If said role met its expected count, then +1 into one of the randomRoles
-    if (countPlayerRole.count == expectedCount && gameContext.mode === 'extreme') {
-      if (countRandomRoles.find((randomRole) => {return areEqual(randomRole.roles, countPlayerRole.roles)})) {
-        countRandomRoles.find((randomRole) => {return areEqual(randomRole.roles, countPlayerRole.roles)})!.count += 1
+    if (actualRoleCount.count == expectedRoleCount && hasRandomRoles) {
+      if (actualRandomRoles.find((randomRole) => {return areEqual(randomRole.roles, actualRoleCount.roles)})) {
+        actualRandomRoles.find((randomRole) => {return areEqual(randomRole.roles, actualRoleCount.roles)})!.count += 1
       }
     } else {
-      countPlayerRole.count += 1
+      actualRoleCount.count += 1
     }
   })
-  if (gameContext.mode === 'extreme') {
+  if (hasRandomRoles) {
     let randomRoles:string[] = []
     let randomRolesCount:number = 0
     // no role in randomRoles should have a count higher than 1
-    for (let i = 0; i < countRandomRoles.length; i++) {
-      if (countRandomRoles[i].count > 1) {
+    for (let i = 0; i < actualRandomRoles.length; i++) {
+      if (actualRandomRoles[i].count > 1) {
         return false      
       }
-      randomRoles.push(countRandomRoles[i].roles[0])
-      randomRolesCount += countRandomRoles[i].count
+      randomRoles.push(actualRandomRoles[i].roles[0])
+      randomRolesCount += actualRandomRoles[i].count
     }
-    countPlayersRoles.push({roles: randomRoles, count: randomRolesCount})
+    actualRoleCountAll.push({roles: randomRoles, count: randomRolesCount})
   }
-  if (areEqual(countPlayersRoles, gameContext.roleCounts)) {
+  if (areEqual(actualRoleCountAll, gameContext.roleCountAll)) {
     return true
   } else {
     return false

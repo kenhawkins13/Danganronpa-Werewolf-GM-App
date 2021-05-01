@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
 
 function fillContextInfo(gameContext:GameContextType) {
   gameContext.killsLeft = requiredKills(gameContext.playerCount)
-  gameContext.roleCounts = calculateRoles(gameContext.mode, gameContext.playerCount)
+  gameContext.roleCountAll = calculateRoles(gameContext.mode, gameContext.playerCount)
   gameContext.dayNumber = 0
   gameContext.blackenedAttack = -1,
   gameContext.alterEgoAlive = true,

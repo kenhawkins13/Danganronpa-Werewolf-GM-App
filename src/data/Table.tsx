@@ -175,16 +175,16 @@ const maniaxWithMonomi = {
     4:{number: 1, roles: ["Spotless", "Despair Disease Patient", "Zakemono"]},
     5:{number: 1, roles: ["Spotless", "Despair Disease Patient", "Zakemono"]},
     6:{number: 2, roles: ["Spotless", "Despair Disease Patient", "Zakemono"]},
-    7:{number: 3, roles: ["Future Foundation", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    8:{number: 3, roles: ["Future Foundation", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    9:{number: 4, roles: ["Spotless", "Future Foundation", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    10:{number: 3, roles: ["Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    11:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    12:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    13:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    14:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    15:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    16:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Ultimate Despair", "Remnants of Despair"]}
+    7:{number: 3, roles: ["Future Foundation", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    8:{number: 3, roles: ["Future Foundation", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    9:{number: 4, roles: ["Spotless", "Future Foundation", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    10:{number: 3, roles: ["Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    11:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    12:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    13:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    14:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    15:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    16:{number: 4, roles: ["Spotless", "Monomi", "Traitor", "Remnants of Despair", "Ultimate Despair"]}
   }
 }
 
@@ -220,16 +220,16 @@ const maniaxWithoutMonomi = {
     4:{number: 1, roles: ["Spotless", "Despair Disease Patient", "Zakemono"]},
     5:{number: 1, roles: ["Spotless", "Despair Disease Patient", "Zakemono"]},
     6:{number: 2, roles: ["Spotless", "Despair Disease Patient", "Zakemono"]},
-    7:{number: 2, roles: ["Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    8:{number: 2, roles: ["Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    9:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    10:{number: 2, roles: ["Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    11:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    12:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    13:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    14:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    15:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]},
-    16:{number: 3, roles: ["Spotless", "Traitor", "Ultimate Despair", "Remnants of Despair"]}
+    7:{number: 2, roles: ["Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    8:{number: 2, roles: ["Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    9:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    10:{number: 2, roles: ["Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    11:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    12:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    13:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    14:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    15:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]},
+    16:{number: 3, roles: ["Spotless", "Traitor", "Remnants of Despair", "Ultimate Despair"]}
   }
 }
 

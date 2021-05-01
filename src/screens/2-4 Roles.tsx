@@ -60,7 +60,7 @@ export default function RolesScreen({setScreen}:Props) {
 type Props = {setScreen:React.Dispatch<any>}
 
 function DisplayGuaranteedRoles(gameContext:GameContextType) {
-  const guaranteedRoles = gameContext.roleCounts.filter((roleCount) => roleCount.roles.length === 1 && roleCount.count !== 0)
+  const guaranteedRoles = gameContext.roleCountAll.filter((roleCount) => roleCount.roles.length === 1 && roleCount.count !== 0)
   if (guaranteedRoles.length === 3) {
     return (
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
@@ -178,7 +178,7 @@ function DisplayGuaranteedRoles(gameContext:GameContextType) {
 }
 
 function DisplayRandomRoles(gameContext:GameContextType) {
-  const randomRoles = gameContext.roleCounts.find((roleCount) => roleCount.roles.length > 1)
+  const randomRoles = gameContext.roleCountAll.find((roleCount) => roleCount.roles.length > 1)
   if (randomRoles) {
     if (randomRoles.roles.length === 2) {
       return (
