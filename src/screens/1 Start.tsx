@@ -54,11 +54,21 @@ export default function StartScreen () {
                 value={gameMode}
                 onPress={(value) => {
                   setGameMode(value as number)
-                  gameContext.mode = value === 0 ? 'normal' : 'extreme'
+                  switch (value) {
+                    case 0:
+                      gameContext.mode = 'normal'
+                      break
+                    case 1:
+                      gameContext.mode = 'extreme'
+                      break
+                    case 2:
+                      gameContext.mode = 'maniax'
+                      break
+                  }
                 }}
                 textColor={colors.white}
-                textStyle={{ fontSize: 20}}
-                selectedTextStyle={{ fontSize: 20}}
+                textStyle={{ fontSize: 16}}
+                selectedTextStyle={{ fontSize: 16}}
                 selectedColor='#cc0066'
                 buttonColor={colors.white}
                 borderRadius={15}
@@ -68,7 +78,8 @@ export default function StartScreen () {
                 style={{width: '100%', height: '100%'}}
                 options={[
                   { label: 'NORMAL', value: 0 },
-                  { label: 'EXTREME', value: 1 }
+                  { label: 'EXTREME', value: 1 },
+                  { label: 'MANIAX', value: 2 }
                 ]}
               />
             </View>
