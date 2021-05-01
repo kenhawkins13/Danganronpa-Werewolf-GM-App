@@ -100,7 +100,7 @@ gender, ultimate title, ${(extraText(gameMode))} and quotes.`
 const extraText = (Mode:string) => {
   if (Mode === 'normal') {
     return ''
-  } else if (Mode === 'extreme') {
+  } else {
     return ' character ability,'
   }
 }

@@ -12,8 +12,7 @@ export function calculateRoles(Mode: string, PlayerCount:number):RoleCount[] {
     case 'maniax':
       roleCount = maniaxWithoutMonomi
       break
-  }
-  
+  }  
   return (
     [
       {roles: ["Alter Ego"], count: roleCount.alterEgo[PlayerCount as keyof fourThruSixteen]},
@@ -28,7 +27,6 @@ export function calculateRoles(Mode: string, PlayerCount:number):RoleCount[] {
       {roles: ["Ultimate Despair"], count: roleCount.ultimateDespair[PlayerCount as keyof fourThruSixteen]},
       {roles: roleCount.randomRoles[PlayerCount as keyof fourThruSixteen].roles, count: roleCount.randomRoles[PlayerCount as keyof fourThruSixteen].number},
     ]
-
   )
 }
 

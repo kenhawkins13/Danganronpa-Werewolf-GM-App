@@ -151,7 +151,7 @@ export default function NightTimeScreen({setTime}:Props) {
       setNightTimeLabelVisible(false)
       await playMusic()
       await traitors()
-    } else if (gameContext.mode === 'extreme' && gameContext.dayNumber > 0) {
+    } else if (gameContext.mode !== 'normal' && gameContext.dayNumber > 0) {
       onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
       onContinue = async () => {
         setNightTimeLabelVisible(false)
@@ -400,7 +400,7 @@ export default function NightTimeScreen({setTime}:Props) {
         clearInterval(intervalId)
         await speakThenPause(nightTimeSpeech().blackened6, 2, morningTime)
       }
-      if (gameContext.dayNumber === 0 && gameContext.mode === 'extreme') {
+      if (gameContext.dayNumber === 0 && gameContext.mode !== 'normal') {
         await speakThenPause(nightTimeSpeech().blackened1, 2, async () => {
           await speakThenPause(nightTimeSpeech(gameContext.killsLeft).blackened2, 2, async () => {
             await speakThenPause(nightTimeSpeech().blackened3, 0, () => {

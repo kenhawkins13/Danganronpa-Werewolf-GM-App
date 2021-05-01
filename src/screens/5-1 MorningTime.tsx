@@ -148,10 +148,10 @@ export default function MorningTimeScreen({setTime}:Props) {
       }
     })
     setState([]) // re-render screen
-    if (gameContext.mode === 'extreme') {
+    if (roleInPlay(gameContext.roleCountAll, 'Monomi')) {
       onSpeechDone = async () => await monomi()
     } else {
-      onSpeechDone = async () => await bodyDiscovery()
+      onSpeechDone = async () => await victimActions1()
     }
     speech = morningTimeSpeech(victim.name).announceAttack
     await speakThenPause(speech, 1, onSpeechDone)
@@ -184,12 +184,12 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function victimActions1() {
-    if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber === 1 && gameContext.mode === 'extreme') {
+    if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber === 1 && gameContext.mode !== 'normal') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       onContinue = async () => await dayTime()
       speech = morningTimeSpeech(victim.name).victim1
       await speakThenPause(speech, 0, enableContinueButton)
-    } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'extreme') {
+    } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode !== 'normal') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       speech = morningTimeSpeech(victim.name).victim2
       await speakThenPause(speech, 0, () => {
@@ -315,7 +315,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItems() {
-    if (gameContext.mode === 'extreme') {
+    if (gameContext.mode !== 'normal') {
       onContinue = async () => {
         disableContinueButton()
         await viceConfirmation()

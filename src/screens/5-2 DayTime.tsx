@@ -214,7 +214,7 @@ export default function DayTimeScreen({setTime}:Props) {
   async function daySpeech() {
     let onSpeechDone = () => {}
     discussionTime = 180
-    if (gameContext.mode === 'extreme') {
+    if (gameContext.mode !== 'normal') {
       onSpeechDone = async () => await abilitiesOrItems()
     } else {
       onSpeechDone = async () => await discussion()
@@ -256,7 +256,7 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItemsTrial() {
-    if (gameContext.mode === 'extreme' && gameContext.tieVoteCount === 0) {
+    if (gameContext.mode !== 'normal' && gameContext.tieVoteCount === 0) {
       onContinue = async () => await trial()
       speech = dayTimeSpeech().abilityOrItemTrial
       await speakThenPause(speech, 0, enableContinueButton)

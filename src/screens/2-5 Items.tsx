@@ -38,7 +38,7 @@ export default function ItemsScreen({setScreen}:Props) {
 type Props = {setScreen:React.Dispatch<any>}
 
 function getBody(mode:string) {
-  if (mode === 'extreme') {
+  if (mode !== 'normal') {
     return (
       <View style={{...appStyle.frame, flex: 1, padding: '5%', margin: '2.5%'}}>
         <View style={{left: '100%', top: '2.5%', position: 'absolute'}}>
