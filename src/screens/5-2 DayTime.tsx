@@ -373,11 +373,27 @@ export default function DayTimeScreen({setTime}:Props) {
     } else {
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
-        speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft1
+        speech = dayTimeSpeech(votedPlayer).revealRole1
+        await speakThenPause(speech, 1, async () => {
+          speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
+          await speakThenPause(speech, 1, nightTime)
+        })
+      } else if (gameContext.playersInfo[votedPlayerIndex].role === 'Future Foundation') {
+        speech = dayTimeSpeech(votedPlayer).revealRole2
+        await speakThenPause(speech, 1, async () => {
+          onContinue = async () => {
+            speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
+            await speakThenPause(speech, 1, nightTime)
+          }
+          enableContinueButton()
+        })
       } else {
-        speech = dayTimeSpeech(votedPlayer, gameContext.killsLeft).killsLeft2
+        speech = dayTimeSpeech(votedPlayer).revealRole3
+        await speakThenPause(speech, 1, async () => {
+          speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
+          await speakThenPause(speech, 1, nightTime)
+        })
       }
-      await speakThenPause(speech, 1, nightTime)
     }
   }
 

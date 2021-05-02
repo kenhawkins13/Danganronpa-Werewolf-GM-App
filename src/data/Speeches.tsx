@@ -62,7 +62,8 @@ export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) =
     bodyDiscovery1: "U pu pu pu pu. " + name1 + " has been killed.",
     bodyDiscovery2: "Buah hahaha! " + name1 + " is dead. They were the Alter Ego.",
     bodyDiscovery3: "Unbelievable, " + name1 + ". You managed to get yourself killed. You are the worst Blackened ever.",
-    bodyDiscovery4: "Ahh, they were part of the Future Foundation. That means they get to give an item card to three players.",
+    bodyDiscovery4: name1 + " was Future Foundation and gets to pick three players to receive an item card. I know which 3 players \
+    I would pick. Know what I mean?",
     abilityOrItem: "Would anybody like to use an ability or item before moving on to day time?",
     amuletOfTakejin: name1 + ", did you play the item card, Amulet of Takayjin?",
     vice: "Was the item card, Vice, played?"
@@ -91,10 +92,11 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
     winnerDeclaration1: name + " was the Blackened.",
     winnerDeclaration2: name + " was the Ultimate Despair.",
     winnerDeclaration3: name + " was not the Blackened.",
-    killsLeft1: "Buah hahaha. " + name + " was the Alter Ego. The game continues and the Blackened needs " + 
-      killsLeft  + " more " + killOrKills(killsLeft!) + "to win.",
-    killsLeft2: "U pu pu pu. " + name + " was not the Blackened player. The game continues and the Blackened needs " + killsLeft  + 
-    " more " + killOrKills(killsLeft!) + " to win."
+    revealRole1: "Buah hahaha. " + name + " was the Alter Ego.",
+    revealRole2: name + " was Future Foundation and gets to pick three players to receive an item card. I know which 3 players \
+    I would pick. Know what I mean?",
+    revealRole3: "U pu pu pu. " + name + " was not the Blackened player.",
+    killsLeft: "The game continues and the Blackened needs " + killsLeft  + " more " + killOrKills(killsLeft!) + " to win."
   }
 }
 
