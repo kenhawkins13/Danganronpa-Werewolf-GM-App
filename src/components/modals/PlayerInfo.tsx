@@ -3,9 +3,9 @@ import { Modal, TouchableHighlight, View, Text } from "react-native"
 import { Picker } from '@react-native-picker/picker'
 import { TextInput } from "react-native-gesture-handler"
 import { modalStyles } from "../../styles/styles"
-import { GameContextType } from "../../types/types"
 import { GameContext } from "../../../AppContext"
 import { colors } from "../../styles/colors"
+import { hopeOrDespair } from "../../data/Table"
 
 export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props) {
   const gameContext = useContext(GameContext)
@@ -27,7 +27,7 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
             <View style={{borderWidth: 1, borderColor: colors.black, margin: 10}}>
               <Picker style={{width: 150}} itemStyle={{fontFamily: 'goodbyeDespair'}} dropdownIconColor='#ffffff' 
               selectedValue={playerRole}  onValueChange={(value) => {setPlayerRole(value.toString())}}>
-                {getPickerItems(gameContext)}
+                {getPickerItems()}
               </Picker>
             </View>
           </View>
@@ -50,8 +50,7 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
               onPress={() => {
                 if (playerRole !== '') {
                   gameContext.playersInfo[playerIndex].role = playerRole
-                  gameContext.playersInfo[playerIndex].side = 
-                    ['Spotless', 'Alter Ego', 'Ultimate Despair'].indexOf(playerRole) !== -1 ? 'Hope' : 'Despair'
+                  gameContext.playersInfo[playerIndex].side = hopeOrDespair(gameContext.roleCountAll, playerRole)
                   gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.greyTransparent
                   gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.greyTransparent
                 } else {
@@ -70,22 +69,22 @@ export default function PlayerInfoModal({visible, setVisible, playerIndex}:Props
       </View>
     </Modal>
   )
-}
 
-function getPickerItems(gameContext:GameContextType) {
-  const pickerItems:JSX.Element[] = []
-  pickerItems.push(<Picker.Item key='' label='Select Role' value=''/>)
-  gameContext.roleCountAll.forEach(neededRole  => {
-    if (neededRole.count != 0) {
-      neededRole.roles.forEach(role => {
-        // if role does not exist in pickerItems, push new pickerItem
-        if (pickerItems.find((value) => { return value.key === role }) == undefined) {
-          pickerItems.push(<Picker.Item key={role} label={role} value={role}/>)
-        }
-      })
-    }
-  })
-  return pickerItems
+  function getPickerItems() {
+    const pickerItems:JSX.Element[] = []
+    pickerItems.push(<Picker.Item key='' label='Select Role' value=''/>)
+    gameContext.roleCountAll.forEach(neededRole  => {
+      if (neededRole.count != 0) {
+        neededRole.roles.forEach(role => {
+          // if role does not exist in pickerItems, push new pickerItem
+          if (pickerItems.find((value) => { return value.key === role }) == undefined) {
+            pickerItems.push(<Picker.Item key={role} label={role} value={role}/>)
+          }
+        })
+      }
+    })
+    return pickerItems
+  }
 }
 
 type Props = {visible: boolean, setVisible: React.Dispatch<any>, playerIndex:number}

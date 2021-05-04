@@ -126,13 +126,31 @@ export default function MorningTimeScreen({setTime}:Props) {
 
   async function morningSpeech() {
     gameContext.vicePlayed = false
-    if (gameContext.blackenedAttack !== -1) {
-      onSpeechDone = async () => await announceAttack()
-    } else {
-      onSpeechDone = async () => await dayTime()
-    }
+    onSpeechDone = async () => await remnantsOfDespairFound()
     speech = goodMorningSpeech(gameContext.dayNumber)
     await speakThenPause(speech, 1, onSpeechDone)
+  }
+
+  async function remnantsOfDespairFound() {
+    if (gameContext.remnantsOfDespairFound === true) {
+      gameContext.remnantsOfDespairFound = false
+      const remnant = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Remnants of Despair')!
+      speech = morningTimeSpeech(remnant.name).remnantFound
+      onSpeechDone = async () => {
+        if (gameContext.blackenedAttack !== -1) {
+          await announceAttack()
+        } else {
+          await dayTime()
+        }
+      }
+      await speakThenPause(speech, 2, onSpeechDone)
+    } else {
+      if (gameContext.blackenedAttack !== -1) {
+        await announceAttack()
+      } else {
+        await dayTime()
+      }
+    }
   }
 
   async function announceAttack() {
@@ -293,7 +311,7 @@ export default function MorningTimeScreen({setTime}:Props) {
       await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
     } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
       speech = morningTimeSpeech(victim.name).bodyDiscovery3
-      await speakThenPause(speech, 1, () => {
+      await speakThenPause(speech, 0, () => {
         gameContext.winnerSide = 'Hope'
         navigate('WinnerDeclarationScreen')
       })

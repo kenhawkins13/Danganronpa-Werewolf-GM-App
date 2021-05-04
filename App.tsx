@@ -87,6 +87,7 @@ export default function App() {
           alterEgoAlive: true,
           monomiExploded: false,
           monomiProtect: -1,
+          remnantsOfDespairFound: false,
           vicePlayed: false,
           tieVoteCount: 0,
           winnerSide: '',

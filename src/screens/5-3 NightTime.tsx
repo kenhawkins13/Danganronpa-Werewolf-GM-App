@@ -19,6 +19,7 @@ import { images } from '../assets/images/images'
 const NIGHTTIME_VOLUME_ADJUST = 3
 let abilityOrItem = ''
 let timerDuration = 0
+let currentPlayerIndex = -1
 let previousPlayerIndex = -1
 let onTimerDone = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
@@ -39,7 +40,7 @@ export default function NightTimeScreen({setTime}:Props) {
   const [continueButtonColor, setContinueButtonColor] = useState(colors.blackTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.blackTransparent)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
-  const [playerIndex, setPlayerIndex] = useState(0)
+  // const [playerIndex, setPlayerIndex] = useState(0)
   const [speakerColor, setSpeakerColor] = useState(colors.white)
   const [state, setState] = useState([])
 
@@ -54,10 +55,11 @@ export default function NightTimeScreen({setTime}:Props) {
     <View style={{flex: 1}}>
       <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
           onPlayerClick(playerIndex)
-          setPlayerIndex(playerIndex)
+          // setPlayerIndex(playerIndex)
+          currentPlayerIndex = playerIndex
         }}/>
-      <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={playerIndex}/>
-      <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={playerIndex} abilityOrItem={abilityOrItem}
+      <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={currentPlayerIndex}/>
+      <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={currentPlayerIndex} abilityOrItem={abilityOrItem}
         onOk={() => {
           gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
           onRevealRoleModalOk()
@@ -355,14 +357,19 @@ export default function NightTimeScreen({setTime}:Props) {
         })
         setContinueButtonColor(colors.pinkTransparent)
         setContinueButtonTextColor(colors.white)
-        setContinueButtonDisabled(false) 
+        setContinueButtonDisabled(false)
+        setState([]) // re-render screen
       }
       onContinue = async () => {
+        if (gameContext.playersInfo[currentPlayerIndex].role === 'Remnants of Despair') {
+          gameContext.remnantsOfDespairFound = true
+          gameContext.playersInfo[currentPlayerIndex].alive = false
+        }
         onRevealRoleModalOk = async () => {
           clearInterval(intervalId)
           await speakThenPause(nightTimeSpeech().alterEgo3, 2, blackened)
         }
-        setRevealRoleModalVisible(true) 
+        setRevealRoleModalVisible(true)
       }
       await speakThenPause(nightTimeSpeech().alterEgo1, 1, async () => {
         await speakThenPause(nightTimeSpeech().alterEgo2, 0, () => {
@@ -395,6 +402,7 @@ export default function NightTimeScreen({setTime}:Props) {
         setContinueButtonColor(colors.pinkTransparent)
         setContinueButtonTextColor(colors.white)
         setContinueButtonDisabled(false)
+        setState([]) // re-render screen
       }
       onContinue = async () => {
         clearInterval(intervalId)

@@ -48,6 +48,7 @@ export const goodMorningSpeech = (dayNumber:number) => {
 
 export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) => {
   return {
+    remnantFound: "Last night, Alter Ego uncovered that " + name1 + " was a Remnant of Despair! Farewell, my obedient servant.",
     announceAttack: name1 + " was attacked by the Blackened last night.",
     monomi1: "Did Moenoemi get in the way of the murder last night? ",
     monomi2: "Yes, " + name2 + " exploded and died to protect " + name1 + ".",
@@ -96,7 +97,7 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
     revealRole2: name + " was Future Foundation and gets to pick three players to receive an item card. I know which 3 players \
     I would pick. Know what I mean?",
     revealRole3: "U pu pu pu. " + name + " was not the Blackened player.",
-    killsLeft: "The game continues and the Blackened needs " + killsLeft  + " more " + killOrKills(killsLeft!) + " to win."
+    killsLeft: "The fun continues and the Blackened needs " + killsLeft  + " more " + killOrKills(killsLeft!) + " to win."
   }
 }
 

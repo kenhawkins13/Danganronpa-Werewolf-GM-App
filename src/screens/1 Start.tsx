@@ -150,6 +150,7 @@ function fillContextInfo(gameContext:GameContextType) {
   gameContext.alterEgoAlive = true,
   gameContext.monomiExploded = false,
   gameContext.monomiProtect = -1,
+  gameContext.remnantsOfDespairFound = false,
   gameContext.vicePlayed = false,
   gameContext.tieVoteCount = 0,
   gameContext.winnerSide = ''

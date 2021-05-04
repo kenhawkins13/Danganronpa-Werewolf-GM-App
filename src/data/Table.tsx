@@ -30,16 +30,26 @@ export function calculateRoles(Mode: string, PlayerCount:number):RoleCount[] {
   )
 }
 
-export function roleInPlay(roleCounts:RoleCount[], role:string):boolean {
-  const roleCount = roleCounts.find((value) => { return areEqual(value.roles, [role]) })!
-  if (roleCount.count > 0) {
+export function roleInPlay(roleCountAll:RoleCount[], role:string):boolean {
+  const roleCount = roleCountAll.find((value) => { return areEqual(value.roles, [role]) })
+  if (roleCount?.count && roleCount.count > 0) {
     return true
   }
-  const randomRoles = roleCounts[roleCounts.length - 1]
-  if (randomRoles.roles.includes(role)) {
+  const randomRoles = roleCountAll[roleCountAll.length - 1]
+  if (randomRoles.roles.includes(role) ) {
     return true
   }
   return false
+}
+
+export function hopeOrDespair(roleCountAll:RoleCount[], role: string) {
+  if (['Spotless', 'Alter Ego', 'Ultimate Despair', 'Future Foundation'].includes(role)) {
+    return 'Hope'
+  } else if (role === 'Blackened' && roleInPlay(roleCountAll, 'Remnants of Despair')) {
+    return 'Hope'
+  } else {
+    return 'Despair'
+  }
 }
 
 function areEqual(array1: any[], array2: any[]):boolean {

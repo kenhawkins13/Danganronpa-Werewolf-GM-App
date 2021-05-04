@@ -1,10 +1,10 @@
 TODO:
 
 MANIAX
-when alter ego investigates, add Maniax roles
-add remnant of despair ability
+remnants of despair didn't make Blackened on side of hope, also has to die when investigated
+items and character abilities
 
-change langauge on 0th night, from Attack to Select for Blackened attack. Just say, select a player. They lose item card
+change langauge on 0th night, from Attack to Select for Blackened attack. Just say, select a player. They lose item card. (also in morning speech)
 Chiaki's new expansion ability can activate on morning Monomi dies. So need to ask for abilities/items during morning after monomi's death
 when to ask for Crystal Skull
 info icon next to game mode to explain the difference between normal and extreme

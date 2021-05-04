@@ -21,6 +21,7 @@ export type GameContextType = {
   alterEgoAlive:boolean,
   monomiExploded:boolean,
   monomiProtect:number,
+  remnantsOfDespairFound:boolean,
   vicePlayed:boolean,
   tieVoteCount:number,
   winnerSide:string,
