@@ -171,7 +171,7 @@ export default function MorningTimeScreen({setTime}:Props) {
     } else {
       onSpeechDone = async () => await victimActions1()
     }
-    speech = morningTimeSpeech(victim.name).announceAttack
+    speech = gameContext.dayNumber === 1 ? morningTimeSpeech(victim.name).announceAttack1 : morningTimeSpeech(victim.name).announceAttack2
     await speakThenPause(speech, 1, onSpeechDone)
   }
 

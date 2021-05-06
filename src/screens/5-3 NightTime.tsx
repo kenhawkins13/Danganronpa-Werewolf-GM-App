@@ -390,7 +390,11 @@ export default function NightTimeScreen({setTime}:Props) {
   async function blackened() {
     if (!gameContext.vicePlayed) {
       abilityOrItem = 'Attack'
-      setContinueButtonText('Attack')
+      if (gameContext.dayNumber === 0) {
+        setContinueButtonText('Select')
+      } else {
+        setContinueButtonText('Attack')
+      }
       onPlayerClick = (playerIndex) => {
         gameContext.playersInfo.forEach(playerInfo => { 
           playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
@@ -406,7 +410,8 @@ export default function NightTimeScreen({setTime}:Props) {
       }
       onContinue = async () => {
         clearInterval(intervalId)
-        await speakThenPause(nightTimeSpeech().blackened6, 2, morningTime)
+        const speech = gameContext.dayNumber === 0 ? nightTimeSpeech().blackened6 : nightTimeSpeech().blackened7
+        await speakThenPause(speech, 2, morningTime)
       }
       if (gameContext.dayNumber === 0 && gameContext.mode !== 'normal') {
         await speakThenPause(nightTimeSpeech().blackened1, 2, async () => {

@@ -22,10 +22,11 @@ export const nightTimeSpeech = (killsLeft?:number) => {
     blackened1: "Blackened, wake up.",
     blackened2: "You need to kill " + killsLeft + " " + personOrPeople(killsLeft!) + " and survive through " + killsLeft + " " +
       trialOrTrials(killsLeft!) + "  to win.",
-    blackened3: "Choose a player to attack. The victim will only lose an item card.",
+    blackened3: "Now select a player. That player will lose one item card.",
     blackened4: "Choose a player to attack.",
     blackened5: "Oh no, vice was played this morning so the Blackened can't go murdering tonight. What a shame.",
-    blackened6: "U pu pu pu. Blackened, go back to sleep.",
+    blackened6: "Blackened, go back to sleep.",
+    blackened7: "U pu pu pu. Blackened, go back to sleep.",
     kyokoKirigiri: "Investigate whether a player is on the side of hope or despair.",
     yasuhiroHagakure1: 'Investigate whether a player is the despair disease patient.',
     yasuhiroHagakure2: 'Investigate whether a player is Moenoemi.',
@@ -49,7 +50,8 @@ export const goodMorningSpeech = (dayNumber:number) => {
 export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) => {
   return {
     remnantFound: "Last night, Alter Ego uncovered that " + name1 + " was a Remnant of Despair! Farewell, my obedient servant.",
-    announceAttack: name1 + " was attacked by the Blackened last night.",
+    announceAttack1: name1 + " was picked last night.",
+    announceAttack2: name1 + " was attacked by the Blackened last night.",
     monomi1: "Did Moenoemi get in the way of the murder last night? ",
     monomi2: "Yes, " + name2 + " exploded and died to protect " + name1 + ".",
     monomi3: "Good riddance, I hated Moenoemi anyways.",
