@@ -144,6 +144,8 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function schoolAnnouncement() {
     gameContext.blackenedAttack = -1
+    gameContext.nekomaruNidaiEscort = -1
+    gameContext.nekomaruNidaiIndex = -1
     setNightTimeLabelVisible(true)
     disableContinueButton()
     onPlayerClick = () => {}
@@ -182,18 +184,6 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItems() {
-    onContinue = async () => { setRevealRoleModalVisible(true) }
-    onPlayerClick = (playerIndex) => {
-      gameContext.playersInfo.forEach(playerInfo => {
-        if (playerInfo.playerIndex === playerIndex) {
-          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
-        } else if (playerInfo.playerButtonStyle.disabled === false)
-          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
-      })
-      setContinueButtonColor(colors.pinkTransparent)
-      setContinueButtonTextColor(colors.white)
-      setContinueButtonDisabled(false)
-    }
     for (let i = 0; i < gameContext.playerCount; i++) {
       if (gameContext.playersInfo[i].useAbility || gameContext.playersInfo[i].useItem) {
        await abilitiesOrItemsSpeech(i)
@@ -205,7 +195,23 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItemsSpeech(playerIndex:number) { 
-    setContinueButtonText('Investigate')  
+    onPlayerClick = (playerIndex) => {
+      gameContext.playersInfo.forEach(playerInfo => {
+        if (playerInfo.playerIndex === playerIndex) {
+          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
+        } else if (playerInfo.playerButtonStyle.disabled === false)
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
+      })
+      if (abilityOrItem === "Nekomaru Nidai (Maniax)") {
+        gameContext.nekomaruNidaiEscort = playerIndex
+      }
+      setContinueButtonColor(colors.pinkTransparent)
+      setContinueButtonTextColor(colors.white)
+      setContinueButtonDisabled(false)
+      setState([]) // re-render screen
+    }
+    setContinueButtonText('Investigate')
+    onContinue = async () => { setRevealRoleModalVisible(true) }
     onRevealRoleModalOk = async () => {
       clearInterval(intervalId)
       if (gameContext.playersInfo[playerIndex].useAbility === '' && gameContext.playersInfo[playerIndex].useItem === '') {
@@ -225,6 +231,17 @@ export default function NightTimeScreen({setTime}:Props) {
       abilityOrItem = "Kyoko Kirigiri"
       gameContext.playersInfo[playerIndex].useAbility = ''
       speech2 = nightTimeSpeech().kyokoKirigiri
+    } else if (gameContext.playersInfo[playerIndex].useAbility === "Kyoko Kirigiri (Maniax)") {
+      abilityOrItem = "Kyoko Kirigiri (Maniax)"
+      gameContext.playersInfo[playerIndex].useAbility = ''
+      speech2 = nightTimeSpeech().kyokoKirigiriManiax
+    } else if (gameContext.playersInfo[playerIndex].useAbility === "Nekomaru Nidai (Maniax)") {
+      setContinueButtonText('Select')
+      onContinue = onRevealRoleModalOk
+      abilityOrItem = "Nekomaru Nidai (Maniax)"
+      gameContext.playersInfo[playerIndex].useAbility = ''
+      gameContext.nekomaruNidaiIndex = playerIndex
+      speech2 = nightTimeSpeech().nekomaruNidaiManiax
     } else if (gameContext.playersInfo[playerIndex].useAbility === "Yasuhiro Hagakure") {
       abilityOrItem = "Yasuhiro Hagakure"
       gameContext.playersInfo[playerIndex].useAbility = ''

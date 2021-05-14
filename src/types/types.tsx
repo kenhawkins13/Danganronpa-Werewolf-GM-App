@@ -22,6 +22,8 @@ export type GameContextType = {
   monomiExploded:boolean,
   monomiProtect:number,
   remnantsOfDespairFound:boolean,
+  nekomaruNidaiEscort:number,
+  nekomaruNidaiIndex:number,
   vicePlayed:boolean,
   tieVoteCount:number,
   winnerSide:string,

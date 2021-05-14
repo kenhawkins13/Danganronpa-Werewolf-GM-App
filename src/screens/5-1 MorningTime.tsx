@@ -166,11 +166,7 @@ export default function MorningTimeScreen({setTime}:Props) {
       }
     })
     setState([]) // re-render screen
-    if (roleInPlay(gameContext.roleCountAll, 'Monomi')) {
-      onSpeechDone = async () => await monomi()
-    } else {
-      onSpeechDone = async () => await victimActions1()
-    }
+    onSpeechDone = async () => await monomi()
     speech = gameContext.dayNumber === 1 ? morningTimeSpeech(victim.name).announceAttack1 : morningTimeSpeech(victim.name).announceAttack2
     await speakThenPause(speech, 1, onSpeechDone)
   }
@@ -192,22 +188,41 @@ export default function MorningTimeScreen({setTime}:Props) {
           })
         } else {          
           speech = gameContext.dayNumber === 2 ? morningTimeSpeech().monomi4 : morningTimeSpeech().monomi5
-          onSpeechDone = async () => await victimActions1()
+          onSpeechDone = async () => await nekomaruNidaiManiax()
           await speakThenPause(speech, 1, onSpeechDone)
         }
       })
+    } else {
+      await nekomaruNidaiManiax()
+    }
+  }
+
+  async function nekomaruNidaiManiax() {
+    if (gameContext.nekomaruNidaiEscort != -1) {
+      const playerName = gameContext.playersInfo[gameContext.nekomaruNidaiIndex].name
+      await speakThenPause(morningTimeSpeech(playerName).nekomaruNidaiManiax1, 1, async () => {
+        if (gameContext.nekomaruNidaiEscort === gameContext.blackenedAttack) {
+          speech = morningTimeSpeech(playerName).nekomaruNidaiManiax2
+          gameContext.blackenedAttack = -2
+        } else {
+          speech = morningTimeSpeech(playerName).nekomaruNidaiManiax3
+        }
+        await speakThenPause(speech, 1, async () => {
+          await victimActions1()
+        })
+      })      
     } else {
       await victimActions1()
     }
   }
 
   async function victimActions1() {
-    if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber === 1 && gameContext.mode !== 'normal') {
+    if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber === 1 && gameContext.mode !== 'normal') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       onContinue = async () => await dayTime()
       speech = morningTimeSpeech(victim.name).victim1
       await speakThenPause(speech, 0, enableContinueButton)
-    } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode !== 'normal') {
+    } else if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1 && gameContext.mode !== 'normal') {
       victim = gameContext.playersInfo[gameContext.blackenedAttack]
       speech = morningTimeSpeech(victim.name).victim2
       await speakThenPause(speech, 0, () => {
@@ -221,7 +236,7 @@ export default function MorningTimeScreen({setTime}:Props) {
         onNo = async () => await playersAbilities()
         setConfirmationVisible(true)
       })          
-    } else if (gameContext.blackenedAttack !== -1 && gameContext.dayNumber > 1 && gameContext.mode === 'normal') {
+    } else if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1 && gameContext.mode === 'normal') {
       await bodyDiscovery()
     } else {
       await dayTime()

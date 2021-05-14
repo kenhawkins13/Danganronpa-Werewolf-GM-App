@@ -50,6 +50,10 @@ function revealText(gameContext:GameContextType, playerIndex:number, abilityOrIt
       break
     case "Reveal Roles":
       string = gameContext.playersInfo[playerIndex].role
+    case "Kyoko Kirigiri (Maniax)":
+      const roles = ['Future Foundation', 'Zakemono', 'Remnants of Despair']
+      string = roles.includes(gameContext.playersInfo[playerIndex].role) ? 'Maniax' : 'Not\nManiax'
+
   }
   return string
 }

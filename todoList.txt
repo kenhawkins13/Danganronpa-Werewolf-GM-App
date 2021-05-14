@@ -1,7 +1,7 @@
 TODO:
 
 MANIAX
-items and character abilities
+items
 change victory screen to winners and losers
 
 Customize roles

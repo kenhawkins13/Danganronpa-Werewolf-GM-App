@@ -9,6 +9,13 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
   const gameContext = useContext(GameContext)
   const [itemCard, setItemCard] = useState('')
   const [playerAbility, setPlayerAbility] = useState('')
+
+  const KyokoKirigiri = () => 
+    gameContext.dayNumber >= 4 ? <Picker.Item key="Kyoko Kirigiri" label="Kyoko Kirigiri" value="Kyoko Kirigiri"/> : null
+  const KyokoKirigiriManiax = () => 
+    gameContext.mode === 'maniax' ? <Picker.Item key="Kyoko Kirigiri (Maniax)" label="Kyoko Kirigiri (Maniax)" value="Kyoko Kirigiri (Maniax)"/> : null
+  const NekomaruNidaiManiax = () => 
+    gameContext.mode === 'maniax' ? <Picker.Item key="Nekomaru Nidai (Maniax)" label="Nekomaru Nidai (Maniax)" value="Nekomaru Nidai (Maniax)"/> : null
   return (
     <View>
       <Modal animationType="slide" transparent={true} visible={visible} >
@@ -20,6 +27,8 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                 onValueChange={(value) => {setPlayerAbility(value.toString())}}>
                 <Picker.Item key="" label="Select an ability" value=""/>
                 {KyokoKirigiri()}
+                {KyokoKirigiriManiax()}
+                {NekomaruNidaiManiax()}
                 <Picker.Item key="Yasuhiro Hagakure" label="Yasuhiro Hagakure" value="Yasuhiro Hagakure"/>
               </Picker>
             </View>
@@ -69,13 +78,6 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
       </Modal>
     </View>
   )
-  function KyokoKirigiri() {
-    if (gameContext.dayNumber >= 4) {
-      return (<Picker.Item key="Kyoko Kirigiri" label="Kyoko Kirigiri" value="Kyoko Kirigiri"/>)
-    } else {
-      return (null)
-    }
-  }
 }
 
 type Props = {visible:boolean, setVisible:React.Dispatch<any>, playerIndex:number}

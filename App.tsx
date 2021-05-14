@@ -88,6 +88,8 @@ export default function App() {
           monomiExploded: false,
           monomiProtect: -1,
           remnantsOfDespairFound: false,
+          nekomaruNidaiEscort: -1,
+          nekomaruNidaiIndex: -1,
           vicePlayed: false,
           tieVoteCount: 0,
           winnerSide: '',
