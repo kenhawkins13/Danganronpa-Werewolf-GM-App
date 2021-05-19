@@ -258,14 +258,27 @@ export default function NightTimeScreen({setTime}:Props) {
       abilityOrItem = 'Silent Receiver'
       gameContext.playersInfo[playerIndex].useItem = ''
       speech2 = nightTimeSpeech().silentReceiver
-    }
+    } else if (gameContext.playersInfo[playerIndex].useItem === "Emperor's Thong") {
+      abilityOrItem = "Emperor's Thong"
+      gameContext.playersInfo[playerIndex].useItem = ''
+      speech2 = nightTimeSpeech().emperorsThong
+    } else if (gameContext.playersInfo[playerIndex].useItem === 'Secrets of Omoplata') {
+      abilityOrItem = 'Secrets of Omoplata'
+      gameContext.playersInfo[playerIndex].useItem = ''
+      speech2 = nightTimeSpeech().secretsOfOmoplata
+    }    
     await speakThenPause(speech1, 1, async () => {
       await speakThenPause(speech2, 0, () => {
         gameContext.playersInfo.forEach(playerInfo => {
-          if (playerInfo.playerIndex === playerIndex) {
+          if (playerInfo.playerIndex === playerIndex || abilityOrItem === 'Secrets of Omoplata') {
             disablePlayerButton(playerInfo)
           } else {
             enablePlayerButton(playerInfo)
+          }
+          if (abilityOrItem === 'Secrets of Omoplata') {
+            setContinueButtonColor(colors.pinkTransparent)
+            setContinueButtonTextColor(colors.white)
+            setContinueButtonDisabled(false)           
           }
           setState([]) // re-render screen
         })
@@ -358,12 +371,14 @@ export default function NightTimeScreen({setTime}:Props) {
     })
   }
 
-  async function alterEgo() {
-    if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
+  async function alterEgo() {   
+    if (gameContext.easterEggIndex !== -1) {
+      await speakThenPause(nightTimeSpeech(0, gameContext.playersInfo[gameContext.easterEggIndex].name).alterEgo4, 1, blackened)
+    } else if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {
       abilityOrItem = 'Alter Ego'
       onPlayerClick = (playerIndex) => {
         gameContext.playersInfo.forEach(playerInfo => {
-          if (playerInfo.playerIndex === playerIndex) { 
+          if (playerInfo.playerIndex === playerIndex) {  
             playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
             playerInfo.playerButtonStyle.underlayColor = colors.pinkTransparent
           } 

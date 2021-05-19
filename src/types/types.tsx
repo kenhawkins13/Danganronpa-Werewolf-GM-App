@@ -25,6 +25,7 @@ export type GameContextType = {
   nekomaruNidaiEscort:number,
   nekomaruNidaiIndex:number,
   vicePlayed:boolean,
+  easterEggIndex:number
   tieVoteCount:number,
   winnerSide:string,
   backgroundMusic:any,

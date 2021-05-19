@@ -16,6 +16,12 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
     gameContext.mode === 'maniax' ? <Picker.Item key="Kyoko Kirigiri (Maniax)" label="Kyoko Kirigiri (Maniax)" value="Kyoko Kirigiri (Maniax)"/> : null
   const NekomaruNidaiManiax = () => 
     gameContext.mode === 'maniax' ? <Picker.Item key="Nekomaru Nidai (Maniax)" label="Nekomaru Nidai (Maniax)" value="Nekomaru Nidai (Maniax)"/> : null
+  const EasterEgg = () => 
+    gameContext.mode === 'maniax' ? <Picker.Item key="Easter Egg" label="Easter Egg" value="Easter Egg"/> : null
+  const EmperorsThong = () => 
+    gameContext.mode === 'maniax' ? <Picker.Item key="Emperor's Thong" label="Emperor's Thong" value="Emperor's Thong"/> : null
+  const SecretsOfOmoplata = () => 
+    gameContext.mode === 'maniax' ? <Picker.Item key="Secrets of Omoplata" label="Secrets of Omoplata" value="Secrets of Omoplata"/> : null
   return (
     <View>
       <Modal animationType="slide" transparent={true} visible={visible} >
@@ -39,6 +45,9 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                 <Picker.Item key="Glasses" label="Glasses" value="Glasses"/>
                 <Picker.Item key="Someone's Graduation Album" label="Someone's Graduation Album" value="Someone's Graduation Album"/>
                 <Picker.Item key="Silent Receiver" label="Silent Receiver" value="Silent Receiver"/>
+                {EasterEgg()}
+                {EmperorsThong()}
+                {SecretsOfOmoplata()}
               </Picker>
             </View>
             <View style={{flexDirection: 'row'}}>
@@ -58,7 +67,11 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                 style={{...modalStyles.button}}
                 onPress={() => {
                   gameContext.playersInfo[playerIndex].useAbility = playerAbility
-                  gameContext.playersInfo[playerIndex].useItem = itemCard
+                  if (itemCard === 'Easter Egg') {
+                    gameContext.easterEggIndex = playerIndex                    
+                  } else {
+                    gameContext.playersInfo[playerIndex].useItem = itemCard
+                  }
                   if (playerAbility !== '' || itemCard !== '') {
                     gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.greyTransparent
                     gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.greyTransparent

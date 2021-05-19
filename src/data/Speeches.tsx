@@ -1,7 +1,7 @@
 // "Mike" is a misspelling of "mic" as it is misspelled in the game.
 export const micCheckSpeech = "Ahem, Ahem! Testing, testing! Mike check, one two! This is a test of the school broadcast system!"
 
-export const nightTimeSpeech = (killsLeft?:number) => {
+export const nightTimeSpeech = (killsLeft?:number, name?:string) => {
   return {
     schoolAnnouncement1: "Mm, ahem, this is a school announcement. It is now 10 p.m. As such, it is officially nighttime. \
     Okay then. Sweet dreams, everyone! Good night, sleep tight, don't let the bed bugs bite. Everyone, close your eyes and go to sleep.",
@@ -11,14 +11,15 @@ export const nightTimeSpeech = (killsLeft?:number) => {
     schoolAnnouncement5: "It is now nighttime. Everyone go to sleep. The curfew is now in effect.",
     schoolAnnouncement6: "Everyone should now be asleep.",
     traitors1: "Traitors, wake up.",
-    traitors2: "The traitors are highlighted in grey and the blackened is highlighted in pink.",
+    traitors2: "The Traitors are highlighted in grey and the Blackened is highlighted in pink.",
     traitors3: "Traitors, go back to sleep.",
     monomi1: "Moenoemi, wake up.",
     monomi2: "You have the option to protect someone. You have 15 seconds to decide.",
     monomi3: "Moenoemi, go back to sleep.",
     alterEgo1: "Alter ego, wake up.",
-    alterEgo2: "Investigate whether a player is on the side of hope or despair.",
+    alterEgo2: "Investigate whether a player is on the side of Hope or Despair.",
     alterEgo3: "Alter ego, go back to sleep.",
+    alterEgo4: name + " played Easter Egg last night so Alter Ego does not get to investigate tonight. A hahahaha!",
     blackened1: "Blackened, wake up.",
     blackened2: "You need to kill " + killsLeft + " " + personOrPeople(killsLeft!) + " and survive through " + killsLeft + " " +
       trialOrTrials(killsLeft!) + "  to win.",
@@ -27,14 +28,16 @@ export const nightTimeSpeech = (killsLeft?:number) => {
     blackened5: "Oh no, vice was played this morning so the Blackened can't go murdering tonight. What a shame.",
     blackened6: "Blackened, go back to sleep.",
     blackened7: "U pu pu pu. Blackened, go back to sleep.",
-    kyokoKirigiri: "Investigate whether a player is on the side of hope or despair.",
+    kyokoKirigiri: "Investigate whether a player is on the side of Hope or Despair.",
     kyokoKirigiriManiax: "Investigate whether a player is one of the Maniax roles.",
     nekomaruNidaiManiax: "Select a player to escort.",
-    yasuhiroHagakure1: 'Investigate whether a player is the despair disease patient.',
+    yasuhiroHagakure1: 'Investigate whether a player is the Despair Disease Patient.',
     yasuhiroHagakure2: 'Investigate whether a player is Moenoemi.',
-    glasses: "Investigate whether a player is on the side of hope or despair.",
-    someonesGraduationAlbum: "Investigate whether a player is a traitor.",
-    silentReceiver: "Investigate whether a player is a spotless.",
+    glasses: "Investigate whether a player is on the side of Hope or Despair.",
+    someonesGraduationAlbum: "Investigate whether a player is a Traitor.",
+    silentReceiver: "Investigate whether a player is a Spotless.",
+    emperorsThong: "Investigate whether a player is Ultimate Despair.",
+    secretsOfOmoplata: "Investigate whether there is a Remnant of Despair in the group."
   }
 }
 
@@ -93,7 +96,7 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
     vote2: "Who received the most votes?",
     tie1: "Looks like we're gonna need another class trial between just the tied players",
     tie2: "Another tie? Alright, I'm gonna give you guys one more class trial but if it's a tie again, I'm gonna to give the victory \
-    to the despair side.",
+    to the Despair side.",
     tie3: "A promise is a promise. Despair wins.",
     execution1: "Let's give it everything we've got! IIIIIT'S PUNISHMENT TIME!",
     execution2: name + " has been executed.",

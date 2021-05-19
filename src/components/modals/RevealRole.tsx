@@ -34,7 +34,7 @@ function revealText(gameContext:GameContextType, playerIndex:number, abilityOrIt
   let string = ''
   switch (abilityOrItem) {
     case "Yasuhiro Hagakure":
-      const role = gameContext.playerCount < 7 ? 'Despair Disease Patient' : 'Monomi'
+      let role = gameContext.playerCount < 7 ? 'Despair Disease Patient' : 'Monomi'
       string = gameContext.playersInfo[playerIndex].role === role ? role : 'Not\n' + role
       break
     case "Alter Ego":
@@ -50,9 +50,22 @@ function revealText(gameContext:GameContextType, playerIndex:number, abilityOrIt
       break
     case "Reveal Roles":
       string = gameContext.playersInfo[playerIndex].role
+      break
     case "Kyoko Kirigiri (Maniax)":
-      const roles = ['Future Foundation', 'Zakemono', 'Remnants of Despair']
+      let roles = ['Future Foundation', 'Zakemono', 'Remnants of Despair']
       string = roles.includes(gameContext.playersInfo[playerIndex].role) ? 'Maniax' : 'Not\nManiax'
+      break
+    case "Emperor's Thong":
+      role = 'Ultimate Despair'
+      const roleFormatted = 'Ultimate\nDespair'
+      string = gameContext.playersInfo[playerIndex].role === role ? roleFormatted : 'Not\n' + roleFormatted
+      break
+    case "Secrets of Omoplata":
+      string = gameContext.playersInfo.find(playerInfo => playerInfo.role === 'Remnants of Despair') ? 'Yes' : 'No'
+      break
+
+
+
 
   }
   return string

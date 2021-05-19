@@ -91,6 +91,7 @@ export default function App() {
           nekomaruNidaiEscort: -1,
           nekomaruNidaiIndex: -1,
           vicePlayed: false,
+          easterEggIndex: -1,
           tieVoteCount: 0,
           winnerSide: '',
           backgroundMusic: '',

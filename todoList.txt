@@ -1,7 +1,6 @@
 TODO:
 
 MANIAX
-items
 change victory screen to winners and losers
 
 Customize roles

@@ -154,6 +154,7 @@ function fillContextInfo(gameContext:GameContextType) {
   gameContext.nekomaruNidaiEscort = -1,
   gameContext.nekomaruNidaiIndex = -1,
   gameContext.vicePlayed = false,
+  gameContext.easterEggIndex = -1,
   gameContext.tieVoteCount = 0,
   gameContext.winnerSide = ''
   // Delete existing playerInfo element if more than playerCount
