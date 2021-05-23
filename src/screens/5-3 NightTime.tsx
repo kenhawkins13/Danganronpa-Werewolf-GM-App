@@ -19,7 +19,7 @@ import { images } from '../assets/images/images'
 const NIGHTTIME_VOLUME_ADJUST = 3
 let abilityOrItem = ''
 let timerDuration = 0
-let currentPlayerIndex = -1
+let currentPlayerIndex = 0
 let previousPlayerIndex = -1
 let onTimerDone = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
@@ -48,15 +48,14 @@ export default function NightTimeScreen({setTime}:Props) {
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setState([]) // re-render screen
-    schoolAnnouncement()
+    setup()
   }}, [isFocused])
 
   return (
     <View style={{flex: 1}}>
       <PlayersPage visible={true} middleSection={PlayersPageMiddleSection()} onPlayerClick={(playerIndex) => {
-          onPlayerClick(playerIndex)
-          // setPlayerIndex(playerIndex)
           currentPlayerIndex = playerIndex
+          onPlayerClick(playerIndex)
         }}/>
       <NightTimeAbilitiesItemsModal visible={nightTimeAbilitiesItemsModallVisible} setVisible={setNightTimeAbilitiesItemsModallVisible} playerIndex={currentPlayerIndex}/>
       <RevealRoleModal visible={revealRoleModalVisible} setVisible={setRevealRoleModalVisible} playerIndex={currentPlayerIndex} abilityOrItem={abilityOrItem}
@@ -142,10 +141,17 @@ export default function NightTimeScreen({setTime}:Props) {
     )
   }
 
-  async function schoolAnnouncement() {
+  async function setup() {
     gameContext.blackenedAttack = -1
     gameContext.nekomaruNidaiEscort = -1
     gameContext.nekomaruNidaiIndex = -1
+    const remnantsOfDespair = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Remnants of Despair')
+    const blackend = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Blackened')
+    blackend!.side = remnantsOfDespair && remnantsOfDespair.alive ? 'Hope' : 'Despair'
+    await schoolAnnouncement()
+  }
+
+  async function schoolAnnouncement() {
     setNightTimeLabelVisible(true)
     disableContinueButton()
     onPlayerClick = () => {}
@@ -371,7 +377,7 @@ export default function NightTimeScreen({setTime}:Props) {
     })
   }
 
-  async function alterEgo() {   
+  async function alterEgo() {
     if (gameContext.easterEggIndex !== -1) {
       await speakThenPause(nightTimeSpeech(0, gameContext.playersInfo[gameContext.easterEggIndex].name).alterEgo4, 1, blackened)
     } else if (gameContext.dayNumber > 0 && gameContext.alterEgoAlive) {

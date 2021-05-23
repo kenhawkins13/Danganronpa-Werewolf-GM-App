@@ -63,10 +63,6 @@ function revealText(gameContext:GameContextType, playerIndex:number, abilityOrIt
     case "Secrets of Omoplata":
       string = gameContext.playersInfo.find(playerInfo => playerInfo.role === 'Remnants of Despair') ? 'Yes' : 'No'
       break
-
-
-
-
   }
   return string
 }

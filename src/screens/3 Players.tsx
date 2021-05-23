@@ -117,9 +117,9 @@ function confirmPlayerRoles(gameContext:GameContextType) {
   })
   let actualRandomRoles:RoleCount[] = []
   // If there are random roles in, the last array item in countRoles will have multiple roles
-  const lastArrayItem = actualRoleCountAll.pop()!
-  const hasRandomRoles = lastArrayItem.roles.length > 1 ? true : false
+  const hasRandomRoles = actualRoleCountAll[actualRoleCountAll.length - 1].roles.length > 1 ? true : false
   if (hasRandomRoles) {
+    const lastArrayItem = actualRoleCountAll.pop()!
     // Take the randomRoles (last array item in countRoles) and break into individual RoleCounts to keep track of each role count
     lastArrayItem.roles.forEach(role => {
       actualRandomRoles.push({roles: [role], count: 0})
@@ -143,7 +143,7 @@ function confirmPlayerRoles(gameContext:GameContextType) {
     // no role in randomRoles should have a count higher than 1
     for (let i = 0; i < actualRandomRoles.length; i++) {
       if (actualRandomRoles[i].count > 1) {
-        return false      
+        return false
       }
       randomRoles.push(actualRandomRoles[i].roles[0])
       randomRolesCount += actualRandomRoles[i].count

@@ -26,53 +26,28 @@ export default function WinnerDeclarationScreen() {
     )
   } 
   else {
+    gameContext.playersInfo.map((playerInfo) => { 
+      if (playerInfo.role === 'Ultimate Despair') {
+        playerInfo.side = 'Ultimate Despair'
+      }
+      if (playerInfo.role === 'Blackend') {
+        playerInfo.side = 'Despair'
+      }
+    })
     gameContext.playersInfo.forEach(playerInfo => {
       playerInfo.alive = true
       playerInfo.playerButtonStyle.disabled = false
-      switch (playerInfo.role) {
-        case 'Spotless':
-          playerInfo.playerButtonStyle.textColor = colors.white
-          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
-          break
-        case 'Alter Ego':
-          playerInfo.playerButtonStyle.textColor = colors.greenTransparent
-          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
-          break
-        case 'Blackened':
-          playerInfo.playerButtonStyle.textColor = colors.pinkTransparent
-          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.black
-          break
-        case 'Traitor':
-          playerInfo.playerButtonStyle.textColor = colors.greyTransparent
-          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.black
-          break
-        case 'Despair Disease Patient':
-          playerInfo.playerButtonStyle.textColor = colors.blueTransparent
-          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent 
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
-          break
-        case 'Monomi':
-          playerInfo.playerButtonStyle.textColor = colors.pinkTransparent
-          playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent 
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
-          break
-        case 'Ultimate Despair':
-          playerInfo.playerButtonStyle.textColor = colors.black
-          playerInfo.playerButtonStyle.backgroundColor = colors.pinkTransparent
-          playerInfo.playerButtonStyle.borderColor = colors.white
-          playerInfo.playerButtonStyle.underlayColor = colors.pink
-          break
-      }      
+      if (playerInfo.side === gameContext.winnerSide) {
+        playerInfo.playerButtonStyle.textColor = colors.black
+        playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent
+        playerInfo.playerButtonStyle.borderColor = colors.white
+        playerInfo.playerButtonStyle.underlayColor = colors.greyTransparent
+      } else {
+        playerInfo.playerButtonStyle.textColor = colors.darkGrey
+        playerInfo.playerButtonStyle.backgroundColor = colors.greyTransparent
+        playerInfo.playerButtonStyle.borderColor = colors.darkGrey
+        playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent
+      }
     })
     return (
       <View style={{flex: 1}}>
@@ -122,17 +97,24 @@ export default function WinnerDeclarationScreen() {
 
   function RestartButton() {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <View style={{...appStyle.frame, height: '25%', minWidth: '25%'}}>
-          <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
-          disabled={false} onPress={async () => {
-            await gameContext.backgroundMusic.unloadAsync()
-            gameContext.backgroundMusic = ''
-            navigate('StartScreen')
-           }}>
-            <Text style={{...appStyle.text, textAlign: 'center', margin: '2.5%'}}>Restart</Text>
-          </TouchableHighlight>
+      <View style={{flex: 1}}>
+      <View style={{flex: 1}}/>
+        <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{...appStyle.text, fontSize: 30}}>CONGRATULATIONS</Text>
         </View>
+        <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
+          <View style={{...appStyle.frame, height: '75%', minWidth: '25%'}}>
+            <TouchableHighlight style={{flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}} 
+            disabled={false} onPress={async () => {
+              await gameContext.backgroundMusic.unloadAsync()
+              gameContext.backgroundMusic = ''
+              navigate('StartScreen')
+            }}>
+              <Text style={{...appStyle.text, textAlign: 'center', margin: '1%'}}>Restart</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      <View style={{flex: 1}}/>
       </View>
     )
   }

@@ -45,8 +45,6 @@ export function roleInPlay(roleCountAll:RoleCount[], role:string):boolean {
 export function hopeOrDespair(roleCountAll:RoleCount[], role: string) {
   if (['Spotless', 'Alter Ego', 'Ultimate Despair', 'Future Foundation'].includes(role)) {
     return 'Hope'
-  } else if (role === 'Blackened' && roleInPlay(roleCountAll, 'Remnants of Despair')) {
-    return 'Hope'
   } else {
     return 'Despair'
   }
