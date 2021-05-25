@@ -132,7 +132,8 @@ export default function NightTimeScreen({setTime}:Props) {
         <TouchableHighlight style={{height: 30, width: 30, position:'absolute', left: 240}}
           onPress={async() => {
             if (await Speech.isSpeakingAsync() === false) {
-              speakThenPause(nightTimeSpeech().schoolAnnouncement3)            
+              const speech = gameContext.dayNumber === 1 ? nightTimeSpeech().schoolAnnouncement3 : nightTimeSpeech().schoolAnnouncement4
+              speakThenPause(speech)            
             }
           }}>
           <Image style={{height: 30, width: 30, tintColor: speakerColor}} source={images.replay}/>
@@ -166,12 +167,13 @@ export default function NightTimeScreen({setTime}:Props) {
       onContinue = async () => {
         setNightTimeLabelVisible(false)
         await playMusic()
-        await speakThenPause(nightTimeSpeech().schoolAnnouncement4, 3, async () => {
-          await speakThenPause(nightTimeSpeech().schoolAnnouncement6, 3, async () => { await abilitiesOrItems() })
+        await speakThenPause(nightTimeSpeech().schoolAnnouncement5, 3, async () => {
+          await speakThenPause(nightTimeSpeech().schoolAnnouncement7, 3, async () => { await abilitiesOrItems() })
         })
       }
       await speakThenPause(nightTimeSpeech().schoolAnnouncement2, 1, async () => {
-        await speakThenPause(nightTimeSpeech().schoolAnnouncement3, 0, () => {
+        const speech = gameContext.dayNumber === 1 ? nightTimeSpeech().schoolAnnouncement3 : nightTimeSpeech().schoolAnnouncement4
+        await speakThenPause(speech, 0, () => {
           gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
           setContinueButtonColor(colors.blackTransparent)
           setContinueButtonTextColor(colors.white)
@@ -181,8 +183,8 @@ export default function NightTimeScreen({setTime}:Props) {
     } else {
       setNightTimeLabelVisible(false)
       await playMusic()
-      await speakThenPause(nightTimeSpeech().schoolAnnouncement5, 3, async () => {
-        await speakThenPause(nightTimeSpeech().schoolAnnouncement6, 3, async () => {
+      await speakThenPause(nightTimeSpeech().schoolAnnouncement6, 3, async () => {
+        await speakThenPause(nightTimeSpeech().schoolAnnouncement7, 3, async () => {
           await alterEgo()
         })
       })

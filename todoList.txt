@@ -1,6 +1,5 @@
 TODO:
 
-"select your player and enter any investigative abilities or items" only need to be said once
 hammer noise before winner declaration speech (without video version)
 Customize roles
 Chiaki's new expansion ability can activate on morning Monomi dies. So need to ask for abilities/items during morning after monomi's death
