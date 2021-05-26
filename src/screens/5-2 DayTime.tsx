@@ -282,16 +282,7 @@ export default function DayTimeScreen({setTime}:Props) {
       gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
       disableContinueButton()
       setVotingTime(false)
-      if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
-        await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration2, 0, () => {
-          gameContext.winnerSide = 'Ultimate Despair'
-          navigate('WinnerDeclarationScreen')
-        })
-      } else if (gameContext.killsLeft === 0 && requiredKills(gameContext.playerCount) > 1) {
-        await trialResult()
-      } else {
-        await execution()
-      }
+      await execution()
     }
     onTie = async () => {
       votedPlayerIndex = -1
@@ -351,15 +342,24 @@ export default function DayTimeScreen({setTime}:Props) {
     const { sound } = await Audio.Sound.createAsync(sounds.allRise, {}, async (playbackStatus:any) => {
       if (playbackStatus.didJustFinish) {
         await sound.unloadAsync()
-        speech = dayTimeSpeech(votedPlayer).execution1
-        await speakThenPause(speech, 1, () => setVideoVisible(true))
+        if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')?.playerIndex) {
+          await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration2, 0, () => {
+            gameContext.winnerSide = 'Ultimate Despair'
+            navigate('WinnerDeclarationScreen')
+          })
+        } else if (gameContext.killsLeft === 0 && requiredKills(gameContext.playerCount) > 1) {
+          await trialResult()
+        } else {
+          speech = dayTimeSpeech(votedPlayer).execution1
+          await speakThenPause(speech, 1, () => setVideoVisible(true))
+        }
       }
     })
     await sound.setVolumeAsync(gameContext.musicVolume)
     await sound.playAsync()
   }
 
-  async function trialResult() {
+  async function trialResult() {    
     if (votedPlayerIndex === gameContext.playersInfo.find((value) => value.role === 'Blackened')?.playerIndex) {
       await speakThenPause(dayTimeSpeech(votedPlayer).winnerDeclaration1, 0, () => {
         gameContext.winnerSide = 'Hope'
