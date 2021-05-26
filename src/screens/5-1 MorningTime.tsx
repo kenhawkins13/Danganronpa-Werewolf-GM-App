@@ -16,6 +16,7 @@ import { images } from '../assets/images/images'
 
 let speech = ''
 let victim:PlayerInfo
+let didMonomiProtect = false
 let onSpeechDone = () => {}
 let onContinue = () => {}
 let onYes = () => {}
@@ -176,6 +177,7 @@ export default function MorningTimeScreen({setTime}:Props) {
       speech = morningTimeSpeech().monomi1
       await speakThenPause(speech, 1, async () => {
         if (gameContext.blackenedAttack === gameContext.monomiProtect) {
+          didMonomiProtect = true
           const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
           gameContext.monomiExploded = true
           gameContext.blackenedAttack = monomi
@@ -184,7 +186,7 @@ export default function MorningTimeScreen({setTime}:Props) {
           speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi2
           await speakThenPause(speech, 1, async () => {
             speech = morningTimeSpeech().monomi3
-            await speakThenPause(speech, 1, async () => { await dayTime() })
+            await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
           })
         } else {          
           speech = gameContext.dayNumber === 2 ? morningTimeSpeech().monomi4 : morningTimeSpeech().monomi5
@@ -348,7 +350,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function abilitiesOrItems() {
-    if (gameContext.mode !== 'normal') {
+    if ((gameContext.mode === 'extreme' && !didMonomiProtect) || gameContext.mode === 'maniax') {
       onContinue = async () => {
         disableContinueButton()
         await viceConfirmation()
@@ -361,7 +363,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function viceConfirmation() {
-    if (gameContext.killsLeft !== 0) {
+    if (gameContext.killsLeft !== 0 && !didMonomiProtect) {
       onYes = async () => {
         gameContext.vicePlayed = true
         await dayTime()
