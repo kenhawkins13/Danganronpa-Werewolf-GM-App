@@ -247,7 +247,7 @@ export default function DayTimeScreen({setTime}:Props) {
     await playMusic(gameContext)
     if (gameContext.blackenedAttack >= 0 && gameContext.dayNumber > 1) {
       setLabelToClassTrial(true)
-      onDiscussionDone = async () => await abilitiesOrItemsTrial()
+      onDiscussionDone = async () => await abilitiesOrItemsBeforeTrial()
     } else {
       onDiscussionDone = async () => await nightTime()
     }
@@ -255,10 +255,10 @@ export default function DayTimeScreen({setTime}:Props) {
     await speakThenPause(speech, 0, () => { setTimerVisible(true) })
   }
 
-  async function abilitiesOrItemsTrial() {
+  async function abilitiesOrItemsBeforeTrial() {
     if (gameContext.mode !== 'normal' && gameContext.tieVoteCount === 0) {
       onContinue = async () => await trial()
-      speech = dayTimeSpeech().abilityOrItemTrial
+      speech = dayTimeSpeech().abilityOrItemBeforeTrial
       await speakThenPause(speech, 0, enableContinueButton)
     } else {
       await trial()
@@ -376,14 +376,14 @@ export default function DayTimeScreen({setTime}:Props) {
         speech = dayTimeSpeech(votedPlayer).revealRole1
         await speakThenPause(speech, 1, async () => {
           speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
-          await speakThenPause(speech, 1, nightTime)
+          await speakThenPause(speech, 1, abilitiesOrItemsAfterTrial)
         })
       } else if (gameContext.playersInfo[votedPlayerIndex].role === 'Future Foundation') {
         speech = dayTimeSpeech(votedPlayer).revealRole2
         await speakThenPause(speech, 1, async () => {
           onContinue = async () => {
             speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
-            await speakThenPause(speech, 1, nightTime)
+            await speakThenPause(speech, 1, abilitiesOrItemsAfterTrial)
           }
           enableContinueButton()
         })
@@ -391,9 +391,19 @@ export default function DayTimeScreen({setTime}:Props) {
         speech = dayTimeSpeech(votedPlayer).revealRole3
         await speakThenPause(speech, 1, async () => {
           speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
-          await speakThenPause(speech, 1, nightTime)
+          await speakThenPause(speech, 1, abilitiesOrItemsAfterTrial)
         })
       }
+    }
+  }
+
+  async function abilitiesOrItemsAfterTrial() {
+    if (gameContext.mode !== 'normal') {
+      onContinue = async () => await nightTime()
+      speech = dayTimeSpeech().abilityOrItemAfterTrial
+      await speakThenPause(speech, 0, enableContinueButton)
+    } else {
+      await nightTime()
     }
   }
 

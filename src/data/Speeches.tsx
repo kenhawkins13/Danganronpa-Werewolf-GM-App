@@ -89,7 +89,7 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
       the class trial will begin!",
     abilityOrItem: "Would anybody like to use an ability or item?",
     discussion: " minute discussion starts now.",
-    abilityOrItemTrial: "Would anybody like to use an ability or item before voting?",
+    abilityOrItemBeforeTrial: "Would anybody like to use an ability or item before voting?",
     trial1: "Up next is the voting segment where each player points to who they think is the Blackened. \
       Click Continue when everyone is ready to vote.",
     trial2: "Click Continue when everyone is ready to vote.",
@@ -108,7 +108,8 @@ export const dayTimeSpeech = (name?:string, killsLeft?:number) => {
     revealRole2: name + " was Future Foundation and gets to pick three players to receive an item card. I know which 3 players \
     I would pick. Know what I mean?",
     revealRole3: "U pu pu pu. " + name + " was not the Blackened player.",
-    killsLeft: "The fun continues and the Blackened needs " + killsLeft  + " more " + killOrKills(killsLeft!) + " to win."
+    killsLeft: "The fun continues and the Blackened needs " + killsLeft  + " more " + killOrKills(killsLeft!) + " to win.",
+    abilityOrItemAfterTrial: "Would anybody like to use an ability or item before moving on to nighttime?"
   }
 }
 
