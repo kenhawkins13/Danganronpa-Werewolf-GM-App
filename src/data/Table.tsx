@@ -12,6 +12,9 @@ export function calculateRoles(Mode: string, PlayerCount:number):RoleCount[] {
     case 'maniax':
       roleCount = maniaxWithoutMonomi
       break
+    case 'maniax with Monomi':
+      roleCount = maniaxWithMonomi
+      break
   }  
   return (
     [

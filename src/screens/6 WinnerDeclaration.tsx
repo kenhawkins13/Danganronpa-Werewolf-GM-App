@@ -26,15 +26,14 @@ export default function WinnerDeclarationScreen() {
     )
   } 
   else {
-    gameContext.playersInfo.map((playerInfo) => { 
+    gameContext.playersInfo.forEach((playerInfo) => { 
       if (playerInfo.role === 'Ultimate Despair') {
         playerInfo.side = 'Ultimate Despair'
-      }
-      if (playerInfo.role === 'Blackend') {
+      } else if (playerInfo.role === 'Blackened') {
         playerInfo.side = 'Despair'
+      } else if (playerInfo.role === 'Monomi') {
+        playerInfo.side = 'Hope'
       }
-    })
-    gameContext.playersInfo.forEach(playerInfo => {
       playerInfo.alive = true
       playerInfo.playerButtonStyle.disabled = false
       if (playerInfo.side === gameContext.winnerSide) {

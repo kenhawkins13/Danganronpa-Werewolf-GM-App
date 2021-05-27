@@ -13,10 +13,11 @@ export type PlayerInfo = {
 export type GameContextType = {
   mode:string,
   playerCount:number,
-  killsLeft:number,
+  customizeRolesMode:string,
   roleCountAll:RoleCount[],
   playersInfo:PlayerInfo[],
   dayNumber:number,
+  killsLeft:number,
   blackenedAttack:number,
   alterEgoAlive:boolean,
   monomiExploded:boolean,

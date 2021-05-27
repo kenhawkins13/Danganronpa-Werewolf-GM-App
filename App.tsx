@@ -79,10 +79,11 @@ export default function App() {
         <GameContext.Provider value={{
           mode: 'normal',
           playerCount: 4,
-          killsLeft: 0,
+          customizeRolesMode: '',
           roleCountAll: [],
           playersInfo: [],
           dayNumber: 0,
+          killsLeft: 0,
           blackenedAttack: -1,
           alterEgoAlive: true,
           monomiExploded: false,

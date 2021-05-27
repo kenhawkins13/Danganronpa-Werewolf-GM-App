@@ -54,17 +54,7 @@ export default function StartScreen () {
                 value={gameMode}
                 onPress={(value) => {
                   setGameMode(value as number)
-                  switch (value) {
-                    case 0:
-                      gameContext.mode = 'normal'
-                      break
-                    case 1:
-                      gameContext.mode = 'extreme'
-                      break
-                    case 2:
-                      gameContext.mode = 'maniax'
-                      break
-                  }
+                  gameContext.customizeRolesMode = ''
                 }}
                 textColor={colors.white}
                 textStyle={{ fontSize: 16}}
@@ -134,56 +124,70 @@ export default function StartScreen () {
     gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume)
     gameContext.backgroundMusic.playAsync()
   }
+  
+  function fillContextInfo(gameContext:GameContextType) {
+    switch (gameMode) {
+      case 0:
+        gameContext.mode = 'normal'
+        break
+      case 1:
+        gameContext.mode = 'extreme'
+        break
+      case 2:
+        gameContext.mode = 'maniax'
+        break
+    }
+    if (gameContext.customizeRolesMode === '') {
+      gameContext.customizeRolesMode = gameContext.mode
+    }
+    gameContext.roleCountAll = calculateRoles(gameContext.customizeRolesMode, gameContext.playerCount)
+    gameContext.dayNumber = 0
+    gameContext.killsLeft = requiredKills(gameContext.playerCount)
+    gameContext.blackenedAttack = -1,
+    gameContext.alterEgoAlive = true,
+    gameContext.monomiExploded = false,
+    gameContext.monomiProtect = -1,
+    gameContext.remnantsOfDespairFound = false,
+    gameContext.nekomaruNidaiEscort = -1,
+    gameContext.nekomaruNidaiIndex = -1,
+    gameContext.vicePlayed = false,
+    gameContext.easterEggIndex = -1,
+    gameContext.tieVoteCount = 0,
+    gameContext.winnerSide = ''
+    // Delete existing playerInfo element if more than playerCount
+    while (gameContext.playersInfo.length > gameContext.playerCount) {
+      gameContext.playersInfo.pop()
+    }
+    for (let i = 0; i < gameContext.playerCount; i++) {
+      const playerName = gameContext.playersInfo.length > i ? gameContext.playersInfo[i].name : 'Player ' + (i+1).toString()
+      const playerInfo = {
+        playerIndex: i,
+        name: playerName,
+        side: '',
+        role: '',
+        alive: true,
+        useAbility: '',
+        useItem: '',
+        playerButtonStyle: {
+          disabled: false, 
+          textColor: colors.white, 
+          backgroundColor: colors.blackTransparent, 
+          borderColor: colors.white, 
+          underlayColor: colors.blackTransparent
+        }
+      }
+      if (gameContext.playersInfo.length > i) {
+        gameContext.playersInfo[i] = playerInfo
+      } else {
+        gameContext.playersInfo.push(playerInfo)
+      }
+    }
+    return true
+  }
 }
-
+  
 const styles = StyleSheet.create({
   startGameButton: {
     flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
   }
 })
-
-function fillContextInfo(gameContext:GameContextType) {
-  gameContext.killsLeft = requiredKills(gameContext.playerCount)
-  gameContext.roleCountAll = calculateRoles(gameContext.mode, gameContext.playerCount)
-  gameContext.dayNumber = 0
-  gameContext.blackenedAttack = -1,
-  gameContext.alterEgoAlive = true,
-  gameContext.monomiExploded = false,
-  gameContext.monomiProtect = -1,
-  gameContext.remnantsOfDespairFound = false,
-  gameContext.nekomaruNidaiEscort = -1,
-  gameContext.nekomaruNidaiIndex = -1,
-  gameContext.vicePlayed = false,
-  gameContext.easterEggIndex = -1,
-  gameContext.tieVoteCount = 0,
-  gameContext.winnerSide = ''
-  // Delete existing playerInfo element if more than playerCount
-  while (gameContext.playersInfo.length > gameContext.playerCount) {
-    gameContext.playersInfo.pop()
-  }
-  for (let i = 0; i < gameContext.playerCount; i++) {
-    const playerName = gameContext.playersInfo.length > i ? gameContext.playersInfo[i].name : 'Player ' + (i+1).toString()
-    const playerInfo = {
-      playerIndex: i,
-      name: playerName,
-      side: '',
-      role: '',
-      alive: true,
-      useAbility: '',
-      useItem: '',
-      playerButtonStyle: {
-        disabled: false, 
-        textColor: colors.white, 
-        backgroundColor: colors.blackTransparent, 
-        borderColor: colors.white, 
-        underlayColor: colors.blackTransparent
-      }
-    }
-    if (gameContext.playersInfo.length > i) {
-      gameContext.playersInfo[i] = playerInfo
-    } else {
-      gameContext.playersInfo.push(playerInfo)
-    }
-  }
-  return true
-}
