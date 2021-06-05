@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, Image, ImageBackground, TouchableHighlight, BackHandler, StyleSheet } from 'react-native'
+import { Text, View, Image, ImageBackground, TouchableHighlight, BackHandler, StyleSheet, Dimensions } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import SwitchSelector from 'react-native-switch-selector'
 import Slider from '@react-native-community/slider'
@@ -17,7 +17,11 @@ import { GameContextType } from '../types/types'
 import { calculateRoles, requiredKills } from '../data/Table'
 import VolumeModal from '../components/modals/Volume'
 
+const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
+
 export default function StartScreen () {
+  const [width, setWidth] = useState(100)
+  const [height, setHeight] = useState(300)
   const gameContext = useContext(GameContext)
   const [volumeModalVisible, setVolumeModalVisible] = useState(false)
   const [gameMode, setGameMode] = useState(0)
@@ -30,16 +34,18 @@ export default function StartScreen () {
   useEffect(() => { 
     if (isFocused) {
       ScreenOrientation.lockAsync(OrientationLock.PORTRAIT)
+      // wait for screen to rotate then set background image width
+      sleep(500).then(() => { setBackgroundImageWidth() })
       playMusic()
     }
     BackHandler.addEventListener('hardwareBackPress', () => true)
   }, [isFocused])
 
   return (
-    <View style={{ flex: 1 }}>
-      <ImageBackground style={{ width: '100%', height: '100%' }} source={backgrounds.start}>
-        <View style={{ flex: 3}}/>
-        <View style={{ flex: 7, alignItems: 'center', justifyContent: 'space-evenly'}}>
+    <View style={{flex: 1, backgroundColor: colors.black, justifyContent: 'center'}}>
+      <ImageBackground style={{width: width, height: height}} source={backgrounds.start}>
+        <View style={{flex: 3}}/>
+        <View style={{flex: 7, alignItems: 'center', justifyContent: 'space-evenly'}}>
           <View style={{flex: 2, width: '75%', justifyContent: 'center'}}>
             <TouchableHighlight style={{height: 45, width: 45, borderWidth: 2, borderColor: colors.white, borderRadius: 10, alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center'}} 
             onPress={() => setVolumeModalVisible(true)}>
@@ -184,6 +190,16 @@ export default function StartScreen () {
     }
     return true
   }
+
+  function setBackgroundImageWidth() {  
+    const {width, height} = Image.resolveAssetSource(backgrounds.start);
+    // calculate image width and height 
+    const screenWidth = Dimensions.get('window').width
+    const scaleFactor = width / screenWidth
+    const imageHeight = height / scaleFactor
+    setWidth(screenWidth)
+    setHeight(imageHeight)
+  }
 }
   
 const styles = StyleSheet.create({
@@ -191,3 +207,5 @@ const styles = StyleSheet.create({
     flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center'
   }
 })
+
+const doesNothing = Promise.resolve(0);

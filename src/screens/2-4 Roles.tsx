@@ -75,28 +75,34 @@ function DisplayGuaranteedRoles(gameContext:GameContextType) {
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
         <View style={{flex: 1}}/>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 23, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[0].roles[0]} role={guaranteedRoles[0].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[0].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 23, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[1].roles[0]} role={guaranteedRoles[1].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
-            <Text style={{ ...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[1].count}X</Text>
+            <Text style={{...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[1].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 23, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[2].roles[0]} role={guaranteedRoles[2].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
-            <Text style={{ ...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[2].count}X</Text>
+            <Text style={{...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[2].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
         <View style={{flex: 1}}/>
       </View>
@@ -105,36 +111,44 @@ function DisplayGuaranteedRoles(gameContext:GameContextType) {
     return (
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', marginVertical: '2.5%'}}>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 25, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[0].roles[0]} role={guaranteedRoles[0].roles[0]}/>
           </View>
+          <View style={{flex: 1}}/>
           <View>
-            <Text style={{ ...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[0].count}X</Text>
+            <Text style={{...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[0].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 25, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[1].roles[0]} role={guaranteedRoles[1].roles[0]}/>
           </View>
+          <View style={{flex: 1}}/>
           <View>
-            <Text style={{ ...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[1].count}X</Text>
+            <Text style={{...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[1].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 25, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[2].roles[0]} role={guaranteedRoles[2].roles[0]}/>
           </View>
+          <View style={{flex: 1}}/>
           <View>
-            <Text style={{ ...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[2].count}X</Text>
+            <Text style={{...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[2].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
         <View style={{flex: 1}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 25, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[3].roles[0]} role={guaranteedRoles[3].roles[0]}/>
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>{guaranteedRoles[3].count}X</Text>
           </View>
+          <View style={{flex: 2}}/>
         </View>
       </View>
     )
@@ -142,44 +156,54 @@ function DisplayGuaranteedRoles(gameContext:GameContextType) {
     return (
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 15, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[0].roles[0]} role={guaranteedRoles[0].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{...appStyle.text, textAlign: 'center'}}>{guaranteedRoles[0].count}X</Text>
           </View>
+          <View style={{flex: 5}}/>
         </View>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 15, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[1].roles[0]} role={guaranteedRoles[1].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{...appStyle.text, textAlign: 'center'}}>{guaranteedRoles[1].count}X</Text>
           </View>
+          <View style={{flex: 5}}/>
         </View>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 15, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[2].roles[0]} role={guaranteedRoles[2].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{...appStyle.text, textAlign: 'center'}}>{guaranteedRoles[2].count}X</Text>
           </View>
+          <View style={{flex: 5}}/>
         </View>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 15, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[3].roles[0]} role={guaranteedRoles[3].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{...appStyle.text, textAlign: 'center'}}>{guaranteedRoles[3].count}X</Text>
           </View>
+          <View style={{flex: 5}}/>
         </View>
         <View style={{flex: 2}}>
-          <View style={{flex: 3, marginHorizontal: '5%'}}>
+          <View style={{flex: 15, marginHorizontal: '5%'}}>
             <RoleCards key={guaranteedRoles[4].roles[0]} role={guaranteedRoles[4].roles[0]} />
           </View>
+          <View style={{flex: 1}}/>
           <View>
             <Text style={{...appStyle.text, textAlign: 'center'}}>{guaranteedRoles[4].count}X</Text>
           </View>
+          <View style={{flex: 5}}/>
         </View>
       </View>
     )
@@ -192,7 +216,8 @@ function DisplayRandomRoles(gameContext:GameContextType) {
     if (randomRoles.roles.length === 2) {
       return (
         <View style={{flex: 1}}>
-          <View style={{flex: 2, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 16, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
             <View style={{flex: 1}}/>
             <View style={{flex: 1, marginHorizontal: '2.5%'}}>
               <RoleCards key={randomRoles.roles[0]} role={randomRoles.roles[0]}/>
@@ -205,12 +230,14 @@ function DisplayRandomRoles(gameContext:GameContextType) {
           <View>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {randomRoles.count}</Text>
           </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     } else if (randomRoles.roles.length === 3) {
       return (
         <View style={{flex: 1}}>
-          <View style={{flex: 2, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 22, flexDirection: 'row', alignItems: 'center', marginVertical: '2.5%'}}>
             <View style={{flex: 1}}/>
             <View style={{flex: 2, marginHorizontal: '1%'}}>
               <RoleCards key={randomRoles.roles[0]} role={randomRoles.roles[0]}/>
@@ -226,12 +253,14 @@ function DisplayRandomRoles(gameContext:GameContextType) {
           <View>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {randomRoles.count}</Text>
           </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     } else if (randomRoles.roles.length === 4) {
       return (
         <View style={{flex: 1}}>
-          <View style={{flex: 2, flexDirection: 'row', alignItems: 'center', marginVertical: '1%'}}>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 12, flexDirection: 'row', alignItems: 'center', marginVertical: '1%'}}>
             <View style={{flex: 1, marginHorizontal: '1%'}}>
               <RoleCards key={randomRoles.roles[0]} role={randomRoles.roles[0]}/>
             </View>
@@ -248,12 +277,14 @@ function DisplayRandomRoles(gameContext:GameContextType) {
           <View>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {randomRoles.count}</Text>
           </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     } else if (randomRoles.roles.length === 5) {
       return (
         <View style={{flex: 1}}>
-          <View style={{flex: 2, flexDirection: 'row', alignItems: 'center', marginVertical: '1%'}}>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 5, flexDirection: 'row', alignItems: 'center', marginVertical: '1%'}}>
             <View style={{flex: 1, marginHorizontal: '1%'}}>
               <RoleCards key={randomRoles.roles[0]} role={randomRoles.roles[0]}/>
             </View>
@@ -270,15 +301,17 @@ function DisplayRandomRoles(gameContext:GameContextType) {
               <RoleCards key={randomRoles.roles[4]} role={randomRoles.roles[4]}/>
             </View>
           </View>
-          <View style={{flex: 1, justifyContent: 'flex-start'}}>
+          <View>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {randomRoles.count}</Text>
           </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     }else if (randomRoles.roles.length === 6) {
       return (
         <View style={{flex: 1}}>
-          <View style={{flex: 2, flexDirection: 'row', alignItems: 'center', marginVertical: '1%'}}>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 3, flexDirection: 'row', alignItems: 'center', marginVertical: '1%'}}>
             <View style={{flex: 1, marginHorizontal: '1%'}}>
               <RoleCards key={randomRoles.roles[0]} role={randomRoles.roles[0]}/>
             </View>
@@ -301,6 +334,7 @@ function DisplayRandomRoles(gameContext:GameContextType) {
           <View>
             <Text style={{ ...appStyle.text, textAlign: 'center' }}>Draw {randomRoles.count}</Text>
           </View>
+          <View style={{flex: 1}}/>
         </View>
       )
     }

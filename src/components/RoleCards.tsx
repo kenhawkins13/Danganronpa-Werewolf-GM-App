@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, Image, StyleSheet } from 'react-native'
+import { View, Image } from 'react-native'
 import { roles } from '../assets/RoleCards/roles'
 import { imageStyles } from '../styles/styles'
 
 export default function RoleCards({role}: Props) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-evenly' }}>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
       {getRoleCardImage(role)}
     </View>
   )

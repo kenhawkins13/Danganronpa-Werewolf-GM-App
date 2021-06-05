@@ -36,7 +36,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
-    morningSpeech()
+    setup()
   }}, [isFocused])
 
   return (
@@ -123,6 +123,11 @@ export default function MorningTimeScreen({setTime}:Props) {
         </TouchableHighlight>
       </View>
     )
+  }
+
+  async function setup() {
+    gameContext.easterEggIndex = -1
+    await morningSpeech()
   }
 
   async function morningSpeech() {

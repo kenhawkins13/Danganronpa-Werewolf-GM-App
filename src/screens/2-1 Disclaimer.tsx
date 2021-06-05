@@ -67,7 +67,7 @@ const body1 = 'This app replaces the Monokuma (Gamemaster) role in the Danganron
 card game. So now, all the players can participate in the fun killing game. The summary of the rules can be found here:'
 const body2 = 'The cards for the game can be found here:'
 const body3 = 'We hope this app allows you to share the Danganronpa experience with your friends. Enjoy!'
-const speech = 'This app replaces the Moenoekuma, game master, role in the Dawngawnrownpa 1, 2, Ultimate High School Werewolf \
+const speech = 'This app replaces the Mownohkuma, game master, role in the Dawngawnrownpa 1, 2, Ultimate High School Werewolf \
 card game. So now, all the players can participate in the fun killing game. The summary of the rules can be found here. \
 The cards for the game can be found here. \
 We hope this app allows you to share the Dawngawnrownpa experience with your friends. Enjoy!'

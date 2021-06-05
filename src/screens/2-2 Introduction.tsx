@@ -75,7 +75,7 @@ const body2 = "Now, I'm sure all of you want out of this school as quick as poss
 I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
 academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
 Werewolf for the ultimate students.\n\nHow exciting!"
-const speech = "Ahem students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Moenoekuma! \
+const speech = "Ahem students. Welcome to Hope's Peak Academy! I am your adorable headmaster, Mownohkuma! \
 Now, I'm sure all of you want out of this school as quick as possible, but I can't allow that. \
 I would be failing in my role as headmaster. Instead, to strengthen your bond as students of this \
 academy, you will be playing a game filled with thrills, chills, and kills. A game of ultimate \
