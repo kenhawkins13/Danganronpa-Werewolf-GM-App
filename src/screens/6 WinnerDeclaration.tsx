@@ -33,6 +33,8 @@ export default function WinnerDeclarationScreen() {
         playerInfo.side = 'Despair'
       } else if (playerInfo.role === 'Monomi') {
         playerInfo.side = 'Hope'
+      } else if (playerInfo.role === 'Despair Disease Patient') {
+        playerInfo.side = 'Hope'
       }
       playerInfo.alive = true
       playerInfo.playerButtonStyle.disabled = false
