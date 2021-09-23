@@ -14,16 +14,17 @@ import { backgrounds } from '../assets/backgrounds/backgrounds'
 import { images } from '../assets/images/images'
 import { characters } from '../assets/CharacterCards/characters'
 
-let isMusicPlaying = false
-const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
+
 
 export default function CharactersScreen({setScreen}:Props) {
   const gameContext = useContext(GameContext)
+  const updateMusicStatus = playbackStatus => { gameContext.isMusicPlaying = playbackStatus.isPlaying }
   
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-    if (!isMusicPlaying) { playMusic() }    
+    updateMusicStatus
+    if (!gameContext.isMusicPlaying) { playMusic() }    
   }}, [isFocused])
 
   return (
@@ -62,7 +63,7 @@ export default function CharactersScreen({setScreen}:Props) {
         </View>
         <View style={{flex: 1}}>
           <NavigationBar onPrevious={() => {
-            isMusicPlaying = false
+            gameContext.isMusicPlaying = false
             gameContext.backgroundMusic.unloadAsync()
             gameContext.backgroundMusic = ''
             Speech.stop()

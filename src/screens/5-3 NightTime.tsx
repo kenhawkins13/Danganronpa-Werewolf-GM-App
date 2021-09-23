@@ -26,8 +26,6 @@ const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, millis
 let onPlayerClick = (playerIndex:number) => {}
 let onContinue = () => {}
 let onRevealRoleModalOk = () => {}
-let isMusicPlaying = false
-const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 let intervalId:number
 
 export default function NightTimeScreen({setTime}:Props) {
@@ -40,9 +38,9 @@ export default function NightTimeScreen({setTime}:Props) {
   const [continueButtonColor, setContinueButtonColor] = useState(colors.blackTransparent)
   const [continueButtonTextColor, setContinueButtonTextColor] = useState(colors.blackTransparent)
   const [continueButtonDisabled, setContinueButtonDisabled] = useState(true)
-  // const [playerIndex, setPlayerIndex] = useState(0)
   const [speakerColor, setSpeakerColor] = useState(colors.white)
   const [state, setState] = useState([])
+  const updateMusicStatus = playbackStatus => { gameContext.isMusicPlaying = playbackStatus.isPlaying }
 
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
@@ -500,9 +498,9 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
     setSpeakerColor(colors.greyTransparent)
-    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST / 5) }
+    if (gameContext.backgroundMusic && gameContext.isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST / 5) }
     const callback = async(seconds:number) => {
-      if (gameContext.backgroundMusic && isMusicPlaying) {  await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST) }
+      if (gameContext.backgroundMusic && gameContext.isMusicPlaying) {  await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume * NIGHTTIME_VOLUME_ADJUST) }
       await sleep(seconds * 1000)
       setSpeakerColor(colors.white)
       if (onDone) { onDone() }

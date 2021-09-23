@@ -25,8 +25,6 @@ let onContinue = () => {}
 let onPlayerClick = (playerIndex:number) => {}
 let onDiscussionDone = () => {}
 let onTie = () => {}
-let isMusicPlaying = false
-const updateMusicStatus = playbackStatus => { isMusicPlaying = playbackStatus.isPlaying }
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
 export default function DayTimeScreen({setTime}:Props) {
@@ -42,6 +40,7 @@ export default function DayTimeScreen({setTime}:Props) {
   const [labelClassTrial, setLabelToClassTrial] = useState(false)
   const [speakerColor, setSpeakerColor] = useState(colors.white)
   const [state, setState] = useState([])
+  const updateMusicStatus = playbackStatus => { gameContext.isMusicPlaying = playbackStatus.isPlaying }
 
   const isFocused = useIsFocused()
   useEffect(() => { if (isFocused) {
@@ -425,9 +424,9 @@ export default function DayTimeScreen({setTime}:Props) {
 
   async function speakThenPause(speech:string, seconds:number=0, onDone?:() => void) {
     setSpeakerColor(colors.greyTransparent)
-    if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume / 5) }
+    if (gameContext.backgroundMusic && gameContext.isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume / 5) }
     const callback = async(seconds:number) => {
-      if (gameContext.backgroundMusic && isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume) }
+      if (gameContext.backgroundMusic && gameContext.isMusicPlaying) { await gameContext.backgroundMusic.setVolumeAsync(gameContext.musicVolume) }
       await sleep(seconds * 1000)
       setSpeakerColor(colors.white)
       if (onDone) { onDone() }
