@@ -57,6 +57,7 @@ export default function NightTimeAbilitiesItemsModal({visible, setVisible, playe
                   gameContext.playersInfo[playerIndex].useAbility = ''
                   gameContext.playersInfo[playerIndex].useItem = ''
                   gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.blackTransparent
+                  gameContext.easterEggIndex = -1 
                   setPlayerAbility('')
                   setItemCard('')
                   setVisible(!visible) 
