@@ -142,8 +142,6 @@ export default function NightTimeScreen({setTime}:Props) {
 
   async function setup() {
     gameContext.blackenedAttack = -1
-    gameContext.nekomaruNidaiEscort = -1
-    gameContext.nekomaruNidaiIndex = -1
     const remnantsOfDespair = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Remnants of Despair')
     const blackend = gameContext.playersInfo.find((playerInfo) => playerInfo.role === 'Blackened')
     blackend!.side = remnantsOfDespair && remnantsOfDespair.alive ? 'Hope' : 'Despair'
@@ -163,6 +161,8 @@ export default function NightTimeScreen({setTime}:Props) {
     } else if (gameContext.mode !== 'normal' && gameContext.dayNumber > 0) {
       onPlayerClick = () => { setNightTimeAbilitiesItemsModallVisible(true) }
       onContinue = async () => {
+        gameContext.nekomaruNidaiEscort = -1
+        gameContext.nekomaruNidaiIndex = -1
         setNightTimeLabelVisible(false)
         await playMusic()
         await speakThenPause(nightTimeSpeech().schoolAnnouncement5, 3, async () => {
@@ -172,7 +172,13 @@ export default function NightTimeScreen({setTime}:Props) {
       await speakThenPause(nightTimeSpeech().schoolAnnouncement2, 1, async () => {
         const speech = gameContext.dayNumber === 1 ? nightTimeSpeech().schoolAnnouncement3 : nightTimeSpeech().schoolAnnouncement4
         await speakThenPause(speech, 0, () => {
-          gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
+          gameContext.playersInfo.forEach(playerInfo => {
+            if (playerInfo.playerIndex == gameContext.nekomaruNidaiIndex) {
+              disablePlayerButton(playerInfo)
+            } else {
+              enablePlayerButton(playerInfo)
+            }
+          })
           setContinueButtonColor(colors.blackTransparent)
           setContinueButtonTextColor(colors.white)
           setContinueButtonDisabled(false)
