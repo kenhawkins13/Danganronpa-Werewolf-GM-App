@@ -349,7 +349,7 @@ export default function DayTimeScreen({setTime}:Props) {
             gameContext.winnerSide = 'Ultimate Despair'
             navigate('WinnerDeclarationScreen')
           })
-        } else if (gameContext.killsLeft === 0 && requiredKills(gameContext.playerCount) > 1) {
+        } else if (gameContext.killsLeft === 0) {
           await trialResult()
         } else {
           speech = dayTimeSpeech(votedPlayer).execution1
