@@ -45,7 +45,7 @@ export const nightTimeSpeech = (killsLeft?:number, name?:string) => {
 export const goodMorningSpeech = (dayNumber:number) => {
   const days = ["zeroth", "first", "second", "third", "fourth"]
   if (dayNumber === 1) {
-    return "Good morning, everyone! It is the morning of the " + days[dayNumber] + " day. Get ready to greet another beee-yutiful day"
+    return "Good morning everyone! Please wake up and open your eyes. It is the morning of the " + days[dayNumber] + " day. Get ready to greet another beee-yutiful day"
   } else if (dayNumber < 5) {
     return "Good morning, everyone! It is the morning of the " + days[dayNumber] + " day."
   } else {
