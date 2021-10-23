@@ -39,6 +39,11 @@ export default function WinnerDeclarationScreen() {
       playerInfo.alive = true
       playerInfo.playerButtonStyle.disabled = false
       if (playerInfo.side === gameContext.winnerSide) {
+        if (playerInfo.role !== 'Zakemono' || (playerInfo.role === 'Zakemono' && gameContext.zakemonoDead === false)) {
+          playerInfo.victory = true     
+        }
+      }
+      if (playerInfo.victory === true) {
         playerInfo.playerButtonStyle.textColor = colors.black
         playerInfo.playerButtonStyle.backgroundColor = colors.whiteTransparent
         playerInfo.playerButtonStyle.borderColor = colors.white

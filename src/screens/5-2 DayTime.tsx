@@ -335,6 +335,9 @@ export default function DayTimeScreen({setTime}:Props) {
 
   async function execution() {
     gameContext.playersInfo[votedPlayerIndex].alive = false
+    if (gameContext.playersInfo[votedPlayerIndex].role === 'Zakemono') { 
+      gameContext.zakemonoDead = true
+    }
     if (gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')) {
       gameContext.playersInfo.find((value) => value.role === 'Ultimate Despair')!.side = 'Despair'
     }

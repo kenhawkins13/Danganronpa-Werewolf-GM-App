@@ -319,6 +319,9 @@ export default function MorningTimeScreen({setTime}:Props) {
 
   async function bodyDiscovery() {
     gameContext.playersInfo[gameContext.blackenedAttack].alive = false
+    if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Zakemono') { 
+      gameContext.zakemonoDead = true
+    }
     gameContext.killsLeft -= 1
     const { sound } = await Audio.Sound.createAsync(sounds.despairPollution, {}, async (playbackStatus:any) => {
       if (playbackStatus.didJustFinish) {

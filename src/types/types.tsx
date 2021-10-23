@@ -6,6 +6,7 @@ export type PlayerInfo = {
   role:string,
   side:string,
   alive:boolean,
+  victory:boolean,
   useAbility:string,
   useItem:string,
   playerButtonStyle:PlayerButtonStyle
@@ -26,7 +27,8 @@ export type GameContextType = {
   nekomaruNidaiEscort:number,
   nekomaruNidaiIndex:number,
   vicePlayed:boolean,
-  easterEggIndex:number
+  easterEggIndex:number,
+  zakemonoDead:boolean,
   tieVoteCount:number,
   winnerSide:string,
   backgroundMusic:any,

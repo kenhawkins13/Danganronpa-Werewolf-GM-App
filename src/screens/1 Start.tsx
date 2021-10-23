@@ -158,6 +158,7 @@ export default function StartScreen () {
     gameContext.nekomaruNidaiIndex = -1,
     gameContext.vicePlayed = false,
     gameContext.easterEggIndex = -1,
+    gameContext.zakemonoDead = false
     gameContext.tieVoteCount = 0,
     gameContext.winnerSide = ''
     // Delete existing playerInfo element if more than playerCount
@@ -172,6 +173,7 @@ export default function StartScreen () {
         side: '',
         role: '',
         alive: true,
+        victory: false,
         useAbility: '',
         useItem: '',
         playerButtonStyle: {
