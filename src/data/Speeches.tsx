@@ -68,7 +68,7 @@ export const morningTimeSpeech = (name1?:string, name2?:string, name3?:string) =
     nekomaruNidaiManiax3: "Nope. " + name1 + " was probably taking a shit instead.",
     victim1: name1 + ", discard one Item card.",
     victim2: name1 + ", would you like to use an ability or item to prevent your death? If yes, please declare the ability or item now.",
-    playersAbilities: "Would anybody like to use an ability to protect " + name1 + "? If yes, please declare it now.",
+    playersAbilities: "Would anybody like to use an ability to protect " + name1 + "? If yes, please declare the ability now.",
     giveItems: name2 + " and " + name3 + ", would either of you like to give an item to " + name1 + "? If yes, please give the item now.",
     victim3: name1 + ", would you like to use a gifted item to save yourself? If yes, please declare the item now.",
     bodyDiscovery1: "U pu pu pu pu. " + name1 + " has been killed.",
