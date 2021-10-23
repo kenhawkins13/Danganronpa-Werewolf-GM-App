@@ -343,25 +343,27 @@ export default function NightTimeScreen({setTime}:Props) {
       abilityOrItem = 'Protect'
       setContinueButtonText('Continue')
       onPlayerClick = (playerIndex) => {
-        const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
-        if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
-          gameContext.playersInfo.forEach(playerInfo => {
-            playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent 
-            playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent 
-          })
-          if (playerIndex !== gameContext.monomiProtect) {
-            gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.pinkTransparent
-            gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.blackTransparent
-            gameContext.monomiProtect = playerIndex
-          } else {
-            gameContext.monomiProtect = -1
-          }              
-        }
+        gameContext.playersInfo.forEach(playerInfo => {
+          playerInfo.playerButtonStyle.backgroundColor = colors.blackTransparent 
+          playerInfo.playerButtonStyle.underlayColor = colors.blackTransparent 
+        })
+        if (playerIndex !== gameContext.monomiProtect) {
+          gameContext.playersInfo[playerIndex].playerButtonStyle.backgroundColor = colors.pinkTransparent
+          gameContext.playersInfo[playerIndex].playerButtonStyle.underlayColor = colors.blackTransparent
+          gameContext.monomiProtect = playerIndex
+        } else {
+          gameContext.monomiProtect = -1
+        }    
         setState([]) // re-render screen
       }
       await speakThenPause(nightTimeSpeech().monomi1, 1, async () => {
         await speakThenPause(nightTimeSpeech().monomi2, 0, () => {
-          gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo) })
+          const monomiIndex = gameContext.playersInfo.find((value) => value.role === 'Monomi')?.playerIndex
+          if (monomiIndex && gameContext.playersInfo[monomiIndex].alive === true) {
+            gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo) })
+          } else {
+            gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo) })
+          }
           timerDuration = 15
           onTimerDone = async () => await monomiSleep()
           setTimerVisible(true)

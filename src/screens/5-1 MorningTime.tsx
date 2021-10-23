@@ -182,6 +182,7 @@ export default function MorningTimeScreen({setTime}:Props) {
       speech = morningTimeSpeech().monomi1
       await speakThenPause(speech, 1, async () => {
         if (gameContext.blackenedAttack === gameContext.monomiProtect) {
+          gameContext.monomiProtect = -1
           didMonomiProtect = true
           const monomi = gameContext.playersInfo.find((value) => value.role === 'Monomi')!.playerIndex
           gameContext.monomiExploded = true
@@ -193,7 +194,8 @@ export default function MorningTimeScreen({setTime}:Props) {
             speech = morningTimeSpeech().monomi3
             await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
           })
-        } else {          
+        } else {
+          gameContext.monomiProtect = -1  
           speech = gameContext.dayNumber === 2 ? morningTimeSpeech().monomi4 : morningTimeSpeech().monomi5
           onSpeechDone = async () => await nekomaruNidaiManiax()
           await speakThenPause(speech, 1, onSpeechDone)
