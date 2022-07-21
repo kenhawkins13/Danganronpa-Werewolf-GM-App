@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated"
 import { colors } from "../styles/colors"
 import { appStyle } from "../styles/styles"
 
-let timerFlashingHandle:number
+let timerFlashingHandle:NodeJS.Timer
 
 export default function CountdownTimer({timerKey, duration, onDone}:Props) {
   let lastTimeTimerBackgroundUpdated = 0

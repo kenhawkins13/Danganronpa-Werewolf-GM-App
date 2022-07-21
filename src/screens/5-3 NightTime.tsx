@@ -26,7 +26,7 @@ const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, millis
 let onPlayerClick = (playerIndex:number) => {}
 let onContinue = () => {}
 let onRevealRoleModalOk = () => {}
-let intervalId:number
+let intervalId:NodeJS.Timer
 
 export default function NightTimeScreen({setTime}:Props) {
   const gameContext = useContext(GameContext)

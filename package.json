@@ -13,9 +13,13 @@
     "@react-native-picker/picker": "^1.9.3",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
+    "@types/node": "^18.0.6",
     "expo": "~39.0.2",
     "expo-app-loading": "^1.0.1",
+    "expo-asset": "~8.2.0",
     "expo-av": "~8.6.0",
+    "expo-font": "~8.3.0",
+    "expo-keep-awake": "~8.3.0",
     "expo-screen-orientation": "^2.1.0",
     "expo-speech": "~8.4.0",
     "expo-status-bar": "~1.0.2",
@@ -29,10 +33,7 @@
     "react-native-screens": "~2.10.1",
     "react-native-svg": "^12.1.0",
     "react-native-switch-selector": "^2.0.6",
-    "react-native-web": "~0.13.12",
-    "expo-asset": "~8.2.0",
-    "expo-font": "~8.3.0",
-    "expo-keep-awake": "~8.3.0"
+    "react-native-web": "~0.13.12"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
