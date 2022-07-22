@@ -55,29 +55,7 @@ export default function StartScreen () {
           <View style={{flex: 2}}>
             <Text style={appStyle.text}>  Mode:</Text>
             <View style={{...appStyle.frame, width: 300, height: 50}}>
-              <SwitchSelector
-                initial={0}
-                value={gameMode}
-                onPress={(value) => {
-                  setGameMode(value as number)
-                  gameContext.customizeRolesMode = ''
-                }}
-                textColor={colors.white}
-                textStyle={{ fontSize: 16}}
-                selectedTextStyle={{ fontSize: 16}}
-                selectedColor='#cc0066'
-                buttonColor={colors.white}
-                borderRadius={15}
-                backgroundColor='rgba(0, 0, 0, 0)'
-                hasPadding={false}
-                height={44} // 50 (height) - 3 (top borderwidth) - 3 (bottom borderwidth)
-                style={{width: '100%', height: '100%'}}
-                options={[
-                  { label: 'NORMAL', value: 0 },
-                  { label: 'EXTREME', value: 1 },
-                  { label: 'MANIAX', value: 2 }
-                ]}
-              />
+              {GameModeSwitch(gameMode)}
             </View>
           </View>
           <View style={{flex: 2}}>
@@ -211,3 +189,37 @@ const styles = StyleSheet.create({
 })
 
 const doesNothing = Promise.resolve(0);
+
+// Fix for issue with SwitchSelector https://github.com/jkdrangel/react-native-switch-selector/issues/11
+const GameModeSwitch = (gameMode:number) => {
+  interface SwitchFix extends React.Component {}
+  const Switch = SwitchSelector as any as {
+      new (): SwitchFix
+  }
+
+  const props: any = {
+      initial: 0,
+      value: gameMode,
+      // onPress: {(value) => {
+      //   setGameMode(value as number)
+      //   gameContext.customizeRolesMode = ''
+      // }},
+      textColor: colors.white,
+      textStyle: { fontSize: 16},
+      selectedTextStyle: { fontSize: 16},
+      selectedColor: '#cc0066',
+      buttonColor: colors.white,
+      borderRadius: 15,
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      hasPadding: false,
+      height: 44, // 50 (height) - 3 (top borderwidth) - 3 (bottom borderwidth)
+      style: {width: '100%', height: '100%'},
+      options: [
+        { label: 'NORMAL', value: 0 },
+        { label: 'EXTREME', value: 1 },
+        { label: 'MANIAX', value: 2 }
+      ]
+  }
+
+  return <Switch {...props} />
+}
