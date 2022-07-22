@@ -88,6 +88,7 @@ export default function App() {
           alterEgoAlive: true,
           monomiExploded: false,
           monomiProtect: -1,
+          zakemonoDead: false,
           remnantsOfDespairFound: false,
           nekomaruNidaiEscort: -1,
           nekomaruNidaiIndex: -1,
@@ -95,6 +96,7 @@ export default function App() {
           easterEggIndex: -1,
           tieVoteCount: 0,
           winnerSide: '',
+          isMusicPlaying: false,
           backgroundMusic: '',
           musicVolume: MUSIC_VOLUME_DEFAULT
           }}>
