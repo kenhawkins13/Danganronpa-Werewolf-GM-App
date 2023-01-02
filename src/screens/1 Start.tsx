@@ -55,7 +55,7 @@ export default function StartScreen () {
           <View style={{flex: 2}}>
             <Text style={appStyle.text}>  Mode:</Text>
             <View style={{...appStyle.frame, width: 300, height: 50}}>
-              {GameModeSwitch(gameMode)}
+              {GameModeSwitch(gameMode, setGameMode, gameContext)}
             </View>
           </View>
           <View style={{flex: 2}}>
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
 const doesNothing = Promise.resolve(0);
 
 // Fix for issue with SwitchSelector https://github.com/jkdrangel/react-native-switch-selector/issues/11
-const GameModeSwitch = (gameMode:number) => {
+const GameModeSwitch = (gameMode:number, setGameMode:React.Dispatch<React.SetStateAction<number>>, gameContext:GameContextType) => {
   interface SwitchFix extends React.Component {}
   const Switch = SwitchSelector as any as {
       new (): SwitchFix
@@ -200,10 +200,10 @@ const GameModeSwitch = (gameMode:number) => {
   const props: any = {
       initial: 0,
       value: gameMode,
-      // onPress: {(value) => {
-      //   setGameMode(value as number)
-      //   gameContext.customizeRolesMode = ''
-      // }},
+      onPress: (value:number) => {
+        setGameMode(value)
+        gameContext.customizeRolesMode = ''
+      },
       textColor: colors.white,
       textStyle: { fontSize: 16},
       selectedTextStyle: { fontSize: 16},
