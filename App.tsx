@@ -60,11 +60,7 @@ export default function App() {
   }, [])
 
   if (!appIsReady) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Hi</Text>
-      </View>
-    );
+    return null
   }
 
   return (

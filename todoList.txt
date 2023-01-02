@@ -2,4 +2,6 @@ TODO:
 Status bar was displayed during execution video
 When kill was rotated 6 times via Amulet of Takejin, Monomi's protect didn't work
 Future foundation, "Know what I mean" to "be careful who you give cards to"
+Remove breaks. Before "Who received the most votes"
+Daytime bell and daytime announcement can run at the same time
 Customize roles
