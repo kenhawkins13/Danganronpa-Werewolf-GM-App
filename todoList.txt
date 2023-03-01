@@ -1,5 +1,5 @@
 TODO:
+when asking questions like, would anybody want to use an ability or item, enable the yes / no buttons to quick skip
 When kill was rotated 6 times via Amulet of Takejin, Monomi's protect didn't work
-Remove breaks. Before "Who received the most votes"
 Daytime bell and daytime announcement can run at the same time
 Customize roles

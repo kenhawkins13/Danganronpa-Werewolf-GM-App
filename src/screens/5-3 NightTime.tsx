@@ -169,7 +169,7 @@ export default function NightTimeScreen({setScreen}:Props) {
           await speakThenPause(nightTimeSpeech().schoolAnnouncement7, 3, async () => { await abilitiesOrItems() })
         })
       }
-      await speakThenPause(nightTimeSpeech().schoolAnnouncement2, 1, async () => {
+      await speakThenPause(nightTimeSpeech().schoolAnnouncement2, 0, async () => {
         const speech = gameContext.dayNumber === 1 ? nightTimeSpeech().schoolAnnouncement3 : nightTimeSpeech().schoolAnnouncement4
         await speakThenPause(speech, 0, () => {
           gameContext.playersInfo.forEach(playerInfo => {

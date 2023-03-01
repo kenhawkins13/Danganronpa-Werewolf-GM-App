@@ -134,7 +134,7 @@ export default function MorningTimeScreen({setScreen}:Props) {
     gameContext.vicePlayed = false
     onSpeechDone = async () => await remnantsOfDespairFound()
     speech = goodMorningSpeech(gameContext.dayNumber)
-    await speakThenPause(speech, 1, onSpeechDone)
+    await speakThenPause(speech, 0, onSpeechDone)
   }
 
   async function remnantsOfDespairFound() {
@@ -149,7 +149,7 @@ export default function MorningTimeScreen({setScreen}:Props) {
           await dayTime()
         }
       }
-      await speakThenPause(speech, 2, onSpeechDone)
+      await speakThenPause(speech, 0, onSpeechDone)
     } else {
       if (gameContext.blackenedAttack !== -1) {
         await announceAttack()
@@ -174,13 +174,13 @@ export default function MorningTimeScreen({setScreen}:Props) {
     setState([]) // re-render screen
     onSpeechDone = async () => await monomi()
     speech = gameContext.dayNumber === 1 ? morningTimeSpeech(victim.name).announceAttack1 : morningTimeSpeech(victim.name).announceAttack2
-    await speakThenPause(speech, 1, onSpeechDone)
+    await speakThenPause(speech, 0, onSpeechDone)
   }
 
   async function monomi() {
     if (roleInPlay(gameContext.roleCountAll, 'Monomi') && gameContext.dayNumber > 1 && gameContext.monomiExploded === false  && gameContext.blackenedAttack !== -1) {
       speech = morningTimeSpeech().monomi1
-      await speakThenPause(speech, 1, async () => {
+      await speakThenPause(speech, 0, async () => {
         if (gameContext.blackenedAttack === gameContext.monomiProtect) {
           gameContext.monomiProtect = -1
           didMonomiProtect = true
@@ -190,15 +190,15 @@ export default function MorningTimeScreen({setScreen}:Props) {
           gameContext.playersInfo[monomi].alive = false
           gameContext.killsLeft -= 1
           speech = morningTimeSpeech(victim.name, gameContext.playersInfo[monomi].name).monomi2
-          await speakThenPause(speech, 1, async () => {
+          await speakThenPause(speech, 0, async () => {
             speech = morningTimeSpeech().monomi3
-            await speakThenPause(speech, 1, async () => { await abilitiesOrItems() })
+            await speakThenPause(speech, 0, async () => { await abilitiesOrItems() })
           })
         } else {
           gameContext.monomiProtect = -1  
           speech = gameContext.dayNumber === 2 ? morningTimeSpeech().monomi4 : morningTimeSpeech().monomi5
           onSpeechDone = async () => await nekomaruNidaiManiax()
-          await speakThenPause(speech, 1, onSpeechDone)
+          await speakThenPause(speech, 0, onSpeechDone)
         }
       })
     } else {
@@ -209,14 +209,14 @@ export default function MorningTimeScreen({setScreen}:Props) {
   async function nekomaruNidaiManiax() {
     if (gameContext.nekomaruNidaiEscort != -1) {
       const playerName = gameContext.playersInfo[gameContext.nekomaruNidaiIndex].name
-      await speakThenPause(morningTimeSpeech(playerName).nekomaruNidaiManiax1, 1, async () => {
+      await speakThenPause(morningTimeSpeech(playerName).nekomaruNidaiManiax1, 0, async () => {
         if (gameContext.nekomaruNidaiEscort === gameContext.blackenedAttack) {
           speech = morningTimeSpeech(playerName).nekomaruNidaiManiax2
           gameContext.blackenedAttack = -2
         } else {
           speech = morningTimeSpeech(playerName).nekomaruNidaiManiax3
         }
-        await speakThenPause(speech, 1, async () => {
+        await speakThenPause(speech, 0, async () => {
           await victimActions1()
         })
       })      
@@ -335,7 +335,7 @@ export default function MorningTimeScreen({setScreen}:Props) {
     if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Alter Ego') {
       gameContext.alterEgoAlive = false
       speech = morningTimeSpeech(victim.name).bodyDiscovery2
-      await speakThenPause(speech, 2, async () => { await abilitiesOrItems() })
+      await speakThenPause(speech, 0, async () => { await abilitiesOrItems() })
     } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Blackened') {
       speech = morningTimeSpeech(victim.name).bodyDiscovery3
       await speakThenPause(speech, 0, () => {
@@ -344,9 +344,9 @@ export default function MorningTimeScreen({setScreen}:Props) {
       })
     } else if (gameContext.playersInfo[gameContext.blackenedAttack].role === 'Future Foundation') {
       speech = morningTimeSpeech(victim.name).bodyDiscovery1
-      await speakThenPause(speech, 1, async () => {
+      await speakThenPause(speech, 0, async () => {
         speech = morningTimeSpeech(victim.name).bodyDiscovery4
-        await speakThenPause(speech, 1, async () => { 
+        await speakThenPause(speech, 0, async () => { 
           onContinue = async () => {
             await abilitiesOrItems()
           }
@@ -355,7 +355,7 @@ export default function MorningTimeScreen({setScreen}:Props) {
       })
     } else {
       speech = morningTimeSpeech(victim.name).bodyDiscovery1
-      await speakThenPause(speech, 3, async () => { await abilitiesOrItems() })
+      await speakThenPause(speech, 0, async () => { await abilitiesOrItems() })
     }
   }
 

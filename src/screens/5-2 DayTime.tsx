@@ -221,14 +221,14 @@ export default function DayTimeScreen({setScreen}:Props) {
       const { sound } = await Audio.Sound.createAsync(sounds.dingDongBingBong2, {}, async (playbackStatus:any) => {
         if (playbackStatus.didJustFinish) {
           await sound.unloadAsync()
-          await speakThenPause(speech, 1, onSpeechDone)
+          await speakThenPause(speech, 0, onSpeechDone)
         }
       })
       await sound.setVolumeAsync(gameContext.musicVolume)
       await sound.playAsync()
     } else {
       speech = dayTimeSpeech().daySpeech1
-      await speakThenPause(speech, 1, onSpeechDone)
+      await speakThenPause(speech, 0, onSpeechDone)
     }
   }
 
@@ -293,10 +293,10 @@ export default function DayTimeScreen({setScreen}:Props) {
       }
       if (gameContext.tieVoteCount === 1) {
         speech = dayTimeSpeech().tie1
-        await speakThenPause(speech, 1, onSpeechDone)
+        await speakThenPause(speech, 0, onSpeechDone)
       } else if (gameContext.tieVoteCount === 2) {
         speech = dayTimeSpeech().tie2
-        await speakThenPause(speech, 1, onSpeechDone)
+        await speakThenPause(speech, 0, onSpeechDone)
       } else if (gameContext.tieVoteCount === 3) {
         speech = dayTimeSpeech().tie3
         onSpeechDone = async () => {
@@ -321,7 +321,7 @@ export default function DayTimeScreen({setScreen}:Props) {
       setState([]) // re-render screen
     }
     speech = dayTimeSpeech().vote1
-    await speakThenPause(speech, 2, async () => {
+    await speakThenPause(speech, 0, async () => {
       speech = dayTimeSpeech().vote2
       await speakThenPause(speech, 0, () => {
         gameContext.playersInfo.forEach(playerInfo => {enablePlayerButton(playerInfo)})
@@ -352,7 +352,7 @@ export default function DayTimeScreen({setScreen}:Props) {
         } else {
           speech = dayTimeSpeech(votedPlayer).execution1
           
-          await speakThenPause(speech, 1, () => {
+          await speakThenPause(speech, 0, () => {
             returnFromExecutionVideo = true
             setScreen('PunishmentTimeScreen')
           })
@@ -378,24 +378,24 @@ export default function DayTimeScreen({setScreen}:Props) {
       if (gameContext.playersInfo[votedPlayerIndex].role === 'Alter Ego') {
         gameContext.alterEgoAlive = false
         speech = dayTimeSpeech(votedPlayer).revealRole1
-        await speakThenPause(speech, 1, async () => {
+        await speakThenPause(speech, 0, async () => {
           speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
-          await speakThenPause(speech, 1, abilitiesOrItemsAfterTrial)
+          await speakThenPause(speech, 0, abilitiesOrItemsAfterTrial)
         })
       } else if (gameContext.playersInfo[votedPlayerIndex].role === 'Future Foundation') {
         speech = dayTimeSpeech(votedPlayer).revealRole2
-        await speakThenPause(speech, 1, async () => {
+        await speakThenPause(speech, 0, async () => {
           onContinue = async () => {
             speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
-            await speakThenPause(speech, 1, abilitiesOrItemsAfterTrial)
+            await speakThenPause(speech, 0, abilitiesOrItemsAfterTrial)
           }
           enableContinueButton()
         })
       } else {
         speech = dayTimeSpeech(votedPlayer).revealRole3
-        await speakThenPause(speech, 1, async () => {
+        await speakThenPause(speech, 0, async () => {
           speech = dayTimeSpeech('', gameContext.killsLeft).killsLeft
-          await speakThenPause(speech, 1, abilitiesOrItemsAfterTrial)
+          await speakThenPause(speech, 0, abilitiesOrItemsAfterTrial)
         })
       }
     }

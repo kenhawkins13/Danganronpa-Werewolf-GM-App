@@ -24,7 +24,7 @@ export const nightTimeSpeech = (killsLeft?:number, name?:string) => {
     blackened1: "Blackened, wake up.",
     blackened2: "You need to kill " + killsLeft + " " + personOrPeople(killsLeft!) + " and survive through " + killsLeft + " " +
       trialOrTrials(killsLeft!) + "  to win.",
-    blackened3: "Now select a player. That player will lose one item card. Note, this is not a Blackened attack",
+    blackened3: "Now select a player. That player will lose one item card. To clarify, this is not a Blackened attack",
     blackened4: "Choose a player to attack.",
     blackened5: "Oh no, vice was played this morning so the Blackened can't go murdering tonight. What a shame.",
     blackened6: "Blackened, go back to sleep.",
