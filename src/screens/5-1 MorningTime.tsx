@@ -23,7 +23,7 @@ let onYes = () => {}
 let onNo = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
-export default function MorningTimeScreen({setTime}:Props) {
+export default function MorningTimeScreen({setScreen}:Props) {
   const { navigate } = useNavigation<any>()
   const gameContext = useContext(GameContext)
   const [confirmationVisible, setConfirmationVisible] = useState(false)
@@ -387,7 +387,7 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 
   async function dayTime() {
-    setTime('DayTimeScreen')
+    setScreen('DayTimeScreen')
   }
   
   function enableContinueButton() {
@@ -413,4 +413,4 @@ export default function MorningTimeScreen({setTime}:Props) {
   }
 }
 
-type Props = {setTime:React.Dispatch<any>}
+type Props = {setScreen:React.Dispatch<any>}

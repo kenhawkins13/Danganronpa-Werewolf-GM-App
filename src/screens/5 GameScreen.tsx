@@ -4,6 +4,7 @@ import { backgrounds } from "../assets/backgrounds/backgrounds";
 import DayTimeScreen from "./5-2 DayTime";
 import MorningTimeScreen from "./5-1 MorningTime";
 import NightTimeScreen from "./5-3 NightTime";
+import PunishmentTimeScreen from "./5-4 PunishmentTime";
 
 export default function GameScreen() {
   const [screen, setScreen] = useState('NightTimeScreen')
@@ -19,11 +20,13 @@ export default function GameScreen() {
 
   function Screen() {
     if (screen === 'NightTimeScreen') {
-      return (<NightTimeScreen setTime={setScreen}/>)
+      return (<NightTimeScreen setScreen={setScreen}/>)
     } else if (screen === 'MorningTimeScreen') {
-      return (<MorningTimeScreen setTime={setScreen}/>)
+      return (<MorningTimeScreen setScreen={setScreen}/>)
     } else if (screen === 'DayTimeScreen') {
-      return (<DayTimeScreen setTime={setScreen}/>)
+      return (<DayTimeScreen setScreen={setScreen}/>)
+    } else if (screen === 'PunishmentTimeScreen') {
+      return (<PunishmentTimeScreen setScreen={setScreen}/>)
     } else {
       return (<></>)
     }

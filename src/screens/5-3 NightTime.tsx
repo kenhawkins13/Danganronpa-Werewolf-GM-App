@@ -28,7 +28,7 @@ let onContinue = () => {}
 let onRevealRoleModalOk = () => {}
 let intervalId:NodeJS.Timer
 
-export default function NightTimeScreen({setTime}:Props) {
+export default function NightTimeScreen({setScreen}:Props) {
   const gameContext = useContext(GameContext)
   const [nightTimeAbilitiesItemsModallVisible, setNightTimeAbilitiesItemsModallVisible] = useState(false)
   const [revealRoleModalVisible, setRevealRoleModalVisible] = useState(false)
@@ -495,7 +495,7 @@ export default function NightTimeScreen({setTime}:Props) {
     await gameContext.backgroundMusic.unloadAsync()
     gameContext.backgroundMusic = ''
     gameContext.dayNumber += 1
-    setTime('MorningTimeScreen')
+    setScreen('MorningTimeScreen')
   }
 
   function disableContinueButton() {
@@ -532,4 +532,4 @@ export default function NightTimeScreen({setTime}:Props) {
   }
 }
 
-type Props = {setTime:React.Dispatch<any>}
+type Props = {setScreen:React.Dispatch<any>}

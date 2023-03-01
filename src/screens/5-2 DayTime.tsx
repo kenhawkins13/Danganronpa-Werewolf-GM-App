@@ -12,11 +12,11 @@ import { GameContextType } from '../types/types'
 import { disablePlayerButton, enablePlayerButton } from '../styles/playerButtonStyles'
 import { classTrialMusic, daytimeAggressiveMusic, daytimeCalmMusic, scrumMusic } from '../assets/music/music'
 import { dayTimeSpeech } from '../data/Speeches'
-import PunishmentTimeModal from '../components/modals/PunishmentTime'
 import { sounds } from '../assets/sounds/sounds'
 import { images } from '../assets/images/images'
 import { requiredKills } from '../data/Table'
 
+let returnFromExecutionVideo = false
 let speech = ''
 let votedPlayerIndex = -1
 let votedPlayer = ''
@@ -27,10 +27,9 @@ let onDiscussionDone = () => {}
 let onTie = () => {}
 const sleep = (milliseconds:number) => new Promise(res => setTimeout(res, milliseconds))
 
-export default function DayTimeScreen({setTime}:Props) {
+export default function DayTimeScreen({setScreen}:Props) {
   const { navigate } = useNavigation<any>()
   const gameContext = useContext(GameContext)
-  const [videoVisible, setVideoVisible] = useState(false)
   const [timerVisible, setTimerVisible] = useState(false)
   const [votingTime, setVotingTime] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
@@ -46,7 +45,13 @@ export default function DayTimeScreen({setTime}:Props) {
   useEffect(() => { if (isFocused) {
     gameContext.playersInfo.forEach(playerInfo => {disablePlayerButton(playerInfo)})
     setState([]) // re-render screen
-    daySpeech() 
+    if (returnFromExecutionVideo) {
+      returnFromExecutionVideo = false
+      setLabelToClassTrial(true)
+      trialResult()
+    } else {
+      daySpeech()
+    }     
   }}, [isFocused])
 
 
@@ -136,12 +141,6 @@ export default function DayTimeScreen({setTime}:Props) {
         </View>
       )
     } else {
-      const onVideoDone = async () => {
-        await speakThenPause(dayTimeSpeech(votedPlayer).execution2, 1, () => {
-          setVideoVisible(false)
-          trialResult()
-        })
-      }
       return (
         <View style={{flex: 1}}>
           <View style={{flex: 1}}>
@@ -164,7 +163,6 @@ export default function DayTimeScreen({setTime}:Props) {
             </View>
             <View style={{flex: 2}}/>
           </View>
-          <PunishmentTimeModal visible={videoVisible} onDone={onVideoDone}/>
         </View>
       )
     }
@@ -353,7 +351,11 @@ export default function DayTimeScreen({setTime}:Props) {
           await trialResult()
         } else {
           speech = dayTimeSpeech(votedPlayer).execution1
-          await speakThenPause(speech, 1, () => setVideoVisible(true))
+          
+          await speakThenPause(speech, 1, () => {
+            returnFromExecutionVideo = true
+            setScreen('PunishmentTimeScreen')
+          })
         }
       }
     })
@@ -410,7 +412,7 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 
   async function nightTime() {
-    setTime('NightTimeScreen')
+    setScreen('NightTimeScreen')
   }
 
   function enableContinueButton() {
@@ -457,4 +459,4 @@ export default function DayTimeScreen({setTime}:Props) {
   }
 }
 
-type Props = {setTime:React.Dispatch<any>}
+type Props = {setScreen:React.Dispatch<any>}
